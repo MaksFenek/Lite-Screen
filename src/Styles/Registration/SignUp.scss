@@ -40,6 +40,11 @@ html {
     &-input {
       margin: 10px;
     }
+    p {
+      color: red;
+      display: block;
+      max-width: 200px;
+    }
   }
 }
 

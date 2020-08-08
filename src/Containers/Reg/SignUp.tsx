@@ -1,5 +1,5 @@
 // React
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 // Styles and material ui
 import '../../Styles/Registration/SignUp.scss';
@@ -27,6 +27,9 @@ export default function SignUp() {
     firstName: string;
     secondName: string;
   }
+
+  // Create state for error
+  const [error, setError] = useState<null | string>(null);
 
   // ==== Redux ====
   /**
@@ -71,6 +74,12 @@ export default function SignUp() {
         emailRef.current!.value,
         passwordRef.current!.value
       )
+      .catch((e) => {
+        // Checking if there is an error and then set it in error state for render
+        if (e.code === 'auth/email-already-in-use') {
+          setError('The email address is already in use by another account.');
+        }
+      })
       .then((data) => console.log(data));
   };
 
@@ -113,6 +122,7 @@ export default function SignUp() {
               <Button color='primary' variant='contained' onClick={handleClick}>
                 Send
               </Button>
+              {error ? <p>{error}</p> : null}
             </form>
           </div>
         </div>
