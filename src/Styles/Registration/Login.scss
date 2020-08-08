@@ -45,7 +45,7 @@
 }
 
 @media screen and (max-width: 767px) {
-  .signup {
+  .login {
     &-image {
       display: none;
     }
@@ -60,7 +60,7 @@
 }
 
 @media screen and (max-width: 900px) {
-  .signup {
+  .login {
     &-image {
       margin-bottom: 20px;
     }
