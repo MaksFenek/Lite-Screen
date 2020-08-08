@@ -1,18 +1,15 @@
-// ==== Typescript ====
-interface InitialStateInterface {}
+// Redux
+import { combineReducers } from 'redux';
 
-interface ActionInterface {
-  type: string;
-  payload: number;
+// Another reducers import
+import mainReducer, { InitialStateInterface } from './mainReducer';
+
+// ==== TypeScript ====
+export interface RootReducerInterface {
+  auth: InitialStateInterface;
 }
 
-// ==== Initital state ====
-const initialState: InitialStateInterface = {};
-
-// ==== Reducer
-export default (state = initialState, { type, payload }: ActionInterface) => {
-  switch (type) {
-    default:
-      return state;
-  }
-};
+const rootReducer = combineReducers<RootReducerInterface>({
+  auth: mainReducer,
+});
+export default rootReducer;

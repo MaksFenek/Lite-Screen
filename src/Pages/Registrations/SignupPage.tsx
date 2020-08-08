@@ -1,8 +1,11 @@
+// React
 import React from 'react';
-import Navbar from '../../Components/Navbar';
-import SignUp from '../../Components/SignUp';
 
-function Main() {
+// Components
+import Navbar from '../../Components/Navbar';
+import SignUp from '../../Containers/Reg/SignUp';
+
+function Signup() {
   return (
     <>
       <Navbar title='Login' path='login' />
@@ -11,4 +14,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Signup;

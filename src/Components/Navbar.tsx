@@ -1,12 +1,17 @@
+// React
 import React from 'react';
+
+// Styles and material ui
 import '../Styles/Navbar.scss';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+// ==== TypeScript ====
 interface PropInterface {
   title: string;
   path: string;
 }
+
 export default function Navbar({ title, path }: PropInterface) {
   return (
     <nav className='nav'>
