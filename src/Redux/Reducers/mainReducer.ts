@@ -1,8 +1,7 @@
+// Constants
+import { ADD_FIRST_AND_SECOND_NAMES } from '../Constants';
 // Actions
-import {
-  ADD_FIRST_AND_SECOND_NAMES,
-  AddFirstAndSecondNamesActionInterface,
-} from '../Actions/mainActions';
+import { AddFirstAndSecondNamesActionInterface } from '../Actions/mainActions';
 
 // ====TypeScript ====
 type ActionInterfaces = AddFirstAndSecondNamesActionInterface;

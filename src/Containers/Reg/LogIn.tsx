@@ -24,7 +24,7 @@ export default function LogIn() {
     // Sign in with email and password in firebase
     auth.signInWithEmailAndPassword(email, password).catch((e) => {
       // if there is an error set error state as true for render the error in form
-      setError(true);
+      setError(e.message);
     });
   };
 
@@ -54,7 +54,7 @@ export default function LogIn() {
               <Button color='primary' variant='contained' onClick={handleClick}>
                 Send
               </Button>
-              {error ? <p>There is no such user</p> : null}
+              {error ? <p>{error}</p> : null}
             </form>
           </div>
         </div>

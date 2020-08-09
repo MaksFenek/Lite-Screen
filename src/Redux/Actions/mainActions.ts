@@ -1,5 +1,6 @@
-// ==== Action types ====
-export const ADD_FIRST_AND_SECOND_NAMES = 'ADD_FIRST_AND_SECOND_NAMES';
+// Action constants
+import { ADD_FIRST_AND_SECOND_NAMES } from '../Constants';
+
 // ==== TypeScript ====
 
 export interface AddFirstAndSecondNamesActionInterface {

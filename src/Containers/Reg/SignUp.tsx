@@ -7,12 +7,7 @@ import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 // Redux
-import {
-  // useSelector as useReduxSelector,
-  // TypedUseSelectorHook,
-  useDispatch,
-} from 'react-redux';
-// import { RootReducerInterface } from '../../Redux/Reducers/rootReduser';
+import { useDispatch } from 'react-redux';
 import { AddFirstAndSecondNamesAction } from '../../Redux/Actions/mainActions';
 
 // Firebase
@@ -32,11 +27,7 @@ export default function SignUp() {
   const [error, setError] = useState<null | string>(null);
 
   // ==== Redux ====
-  /**
-  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
-  const state = useSelector((store) => store.auth);
-  
-   */
+
   const dispatch = useDispatch();
 
   // ==== Refs ====
@@ -59,15 +50,6 @@ export default function SignUp() {
     // Dispatch them to store
     dispatch(firstAndSecondNames);
 
-    // email: emailRef.current!.value,
-    // password: passwordRef.current!.value,
-    // firstName: firstNameRef.current!.value,
-    // secondName: secondNameRef.current!.value
-
-    // Set email and password in local storage for initialize ir the user has entered in app before
-    localStorage.setItem('userEmail', emailRef.current!.value);
-    localStorage.setItem('userPass', passwordRef.current!.value);
-
     // Create new user with email and password in firebase
     auth
       .createUserWithEmailAndPassword(
@@ -76,9 +58,7 @@ export default function SignUp() {
       )
       .catch((e) => {
         // Checking if there is an error and then set it in error state for render
-        if (e.code === 'auth/email-already-in-use') {
-          setError('The email address is already in use by another account.');
-        }
+        setError(e.message);
       })
       .then((data) => console.log(data));
   };
