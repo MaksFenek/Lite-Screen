@@ -11,6 +11,7 @@ import {
 import Signup from './Pages/Registrations/SignupPage';
 import Login from './Pages/Registrations/LoginPage';
 import Main from './Pages/User/Main';
+import Profile from './Pages/User/Profile';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -26,13 +27,15 @@ const store = createStore(rootReducer);
 // ==== Main function ====
 function App() {
   // Create state for checking if user is loged in
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any>(undefined);
 
+  const [userId, setUserID] = useState<string | undefined>(undefined);
   // Create dispatch
 
   // If there is a logged in user, set it in user state
   auth.onAuthStateChanged((person) => {
     setUser(person);
+    setUserID(person?.uid);
   });
 
   return (
@@ -40,17 +43,24 @@ function App() {
       {user ? (
         <Router>
           <Switch>
-            <Redirect from='/signup' to='/' />
+            <Redirect exact from='/signup' to='/' />
+            <Route exact path={`/${userId}`}>
+              <Profile setUser={setUser} userId={userId} />
+            </Route>
             <Route exact path='/'>
-              <Main />
+              <Main setUser={setUser} />
             </Route>
           </Switch>
         </Router>
       ) : (
         <Router>
           <Switch>
-            <Route exact path='/' component={Login} />
-            <Route exact path='/signup' component={Signup} />
+            <Route exact path='/'>
+              <Login />
+            </Route>
+            <Route exact path='/signup'>
+              <Signup />
+            </Route>
           </Switch>
         </Router>
       )}

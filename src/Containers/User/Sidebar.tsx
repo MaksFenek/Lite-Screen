@@ -8,6 +8,7 @@ import QuestionAnswerRoundedIcon from '@material-ui/icons/QuestionAnswerRounded'
 import PeopleAltRoundedIcon from '@material-ui/icons/PeopleAltRounded';
 import LibraryBooksRoundedIcon from '@material-ui/icons/LibraryBooksRounded';
 import SettingsRoundedIcon from '@material-ui/icons/SettingsRounded';
+import { Link } from 'react-router-dom';
 
 export default function Sidebar() {
   // Get window width
@@ -20,12 +21,14 @@ export default function Sidebar() {
         width >= 1080 ? (
           <div className='sidebar'>
             <List component='nav'>
-              <ListItem button divider>
-                <ListItemIcon>
-                  <LibraryBooksRoundedIcon />
-                </ListItemIcon>
-                <ListItemText primary='News' />
-              </ListItem>
+              <Link to='/'>
+                <ListItem button divider>
+                  <ListItemIcon>
+                    <LibraryBooksRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary='News' />
+                </ListItem>
+              </Link>
               <ListItem button divider>
                 <ListItemIcon>
                   <QuestionAnswerRoundedIcon />
