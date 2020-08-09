@@ -6,6 +6,7 @@
   left: 0;
   width: 100vw;
   background: #90caf9;
+  z-index: 10;
 
   &bar {
     display: flex;
@@ -19,8 +20,15 @@
   }
   &-buttons {
     margin-right: 30px;
+    margin-left: 20px;
+    button {
+      margin-left: 10px;
+    }
     a {
       text-decoration: none;
+    }
+    .avatar {
+      background: #ffcc80;
     }
   }
 }

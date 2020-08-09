@@ -2,7 +2,7 @@
 import React from 'react';
 
 // Components
-import Navbar from '../../Components/Navbar';
+import Navbar from '../../Containers/Navbar';
 import SignUp from '../../Containers/Reg/SignUp';
 import { Button } from '@material-ui/core';
 import { Link } from 'react-router-dom';
