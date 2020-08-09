@@ -28,23 +28,29 @@ function App() {
   // Create state for checking if user is loged in
   const [user, setUser] = useState<any>(null);
 
+  // Create dispatch
+
   // If there is a logged in user, set it in user state
-  auth.onAuthStateChanged((person) => setUser(person));
+  auth.onAuthStateChanged((person) => {
+    setUser(person);
+  });
 
   return (
     <Provider store={store}>
       {user ? (
         <Router>
           <Switch>
-            <Redirect from='/login' to='/' />
-            <Route exact path='/' component={Main} />
+            <Redirect from='/signup' to='/' />
+            <Route exact path='/'>
+              <Main />
+            </Route>
           </Switch>
         </Router>
       ) : (
         <Router>
           <Switch>
-            <Route exact path='/' component={Signup} />
-            <Route exact path='/login' component={Login} />
+            <Route exact path='/' component={Login} />
+            <Route exact path='/signup' component={Signup} />
           </Switch>
         </Router>
       )}

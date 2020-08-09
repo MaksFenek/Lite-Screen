@@ -19,6 +19,8 @@ const initialState: InitialStateInterface = {
   ages: null,
 };
 
+// Get first name and second name from firebase
+
 // ==== Reducer
 export default (state = initialState, { type, payload }: ActionInterfaces) => {
   switch (type) {

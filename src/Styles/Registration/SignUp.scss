@@ -1,10 +1,10 @@
 html {
-  overflow: hidden;
+  overflow-x: hidden;
 }
 .signup {
   margin: 0 -10px;
   padding-top: 90px;
-  height: calc(100vh - 100px);
+  min-height: calc(100vh - 100px);
   background: linear-gradient(45deg, #fff, #e3f2fd);
   &-body {
     display: flex;

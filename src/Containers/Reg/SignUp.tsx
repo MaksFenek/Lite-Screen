@@ -6,12 +6,8 @@ import '../../Styles/Registration/SignUp.scss';
 import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
-// Redux
-import { useDispatch } from 'react-redux';
-import { AddFirstAndSecondNamesAction } from '../../Redux/Actions/mainActions';
-
 // Firebase
-import { auth } from '../../Firebase';
+import { auth, db } from '../../Firebase';
 
 // ==== Main component ====
 export default function SignUp() {
@@ -22,13 +18,10 @@ export default function SignUp() {
     firstName: string;
     secondName: string;
   }
-
   // Create state for error
   const [error, setError] = useState<null | string>(null);
 
   // ==== Redux ====
-
-  const dispatch = useDispatch();
 
   // ==== Refs ====
   const emailRef = useRef<HTMLInputElement>(null);
@@ -42,14 +35,6 @@ export default function SignUp() {
     const firstName = firstNameRef.current!.value;
     const secondName = secondNameRef.current!.value;
 
-    // Create new action with first and second names
-    const firstAndSecondNames = AddFirstAndSecondNamesAction({
-      firstName,
-      secondName,
-    });
-    // Dispatch them to store
-    dispatch(firstAndSecondNames);
-
     // Create new user with email and password in firebase
     auth
       .createUserWithEmailAndPassword(
@@ -60,7 +45,18 @@ export default function SignUp() {
         // Checking if there is an error and then set it in error state for render
         setError(e.message);
       })
-      .then((data) => console.log(data));
+      .then(() => {
+        // Get a user id
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            // Create new document in users collection with name as user id
+            db.collection('users').doc(user?.uid).set({
+              // Set user information in document
+              userInfo: { firstName, secondName },
+            });
+          }
+        });
+      });
   };
 
   return (

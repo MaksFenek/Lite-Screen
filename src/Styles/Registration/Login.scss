@@ -1,7 +1,7 @@
 .login {
   margin: 0 -10px;
   padding-top: 90px;
-  height: calc(100vh - 100px);
+  min-height: calc(100vh - 90px);
   background: linear-gradient(45deg, #fff, #e3f2fd);
   &-body {
     display: flex;
@@ -9,9 +9,9 @@
     align-items: center;
   }
   &-image {
-    height: 460px;
-    width: 580px;
-    background: url('../Icons/undraw_Waiting__for_you_ldha.svg') center center
+    height: 404px;
+    width: 586px;
+    background: url('../Icons/undraw_authentication_fsn5.svg') center center
       no-repeat;
     background-size: cover;
   }
@@ -38,7 +38,9 @@
       margin: 10px;
     }
     p {
-      line-height: 0;
+      display: block;
+      width: 200px;
+      line-height: 1;
       color: red;
     }
   }

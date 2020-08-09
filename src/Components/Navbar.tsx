@@ -3,16 +3,13 @@ import React from 'react';
 
 // Styles and material ui
 import '../Styles/Navbar.scss';
-import { Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
 
 // ==== TypeScript ====
 interface PropInterface {
-  title: string;
-  path: string;
+  children: any;
 }
 
-export default function Navbar({ title, path }: PropInterface) {
+export default function Navbar({ children }: PropInterface) {
   return (
     <nav className='nav'>
       <div className='container'>
@@ -20,13 +17,7 @@ export default function Navbar({ title, path }: PropInterface) {
           <div className='nav-logo'>
             <Icon />
           </div>
-          <div className='nav-login'>
-            <Link to={`/${path}`}>
-              <Button variant='contained' color='primary'>
-                {title}
-              </Button>
-            </Link>
-          </div>
+          <div className='nav-buttons'>{children}</div>
         </div>
       </div>
     </nav>
