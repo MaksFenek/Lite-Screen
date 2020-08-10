@@ -20,18 +20,18 @@ import {
 import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 
 // Firebase
-import { auth } from '../../Firebase/firebase';
+import { auth } from '../../Firebase';
 
 export default function UserNavbar({ setUser }: any) {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
-  const store = useSelector((store) => store.auth);
+  const store = useSelector((store) => store.auth.userId);
 
   // Create state for menu
   const [state, setState] = useState({
     right: false,
   });
 
-  const [userId, setUserID] = useState<string | undefined>(store.userId);
+  const userId = store;
 
   // Handle for sign out
   const handleSignOut = () => {
@@ -60,14 +60,13 @@ export default function UserNavbar({ setUser }: any) {
           <ExitToAppRoundedIcon />
         </Button>
       </Link>
-      <Button variant='text' color='primary'>
-        <Link to={`${userId}`}>
+      <Link to={`${userId}`}>
+        <Button variant='text'>
           <Avatar className='avatar'>
             <PersonRoundedIcon />
           </Avatar>
-        </Link>
-      </Button>
-
+        </Button>
+      </Link>
       {
         // If window width less than 1080px then we render menu button
         width <= 1080 ? (

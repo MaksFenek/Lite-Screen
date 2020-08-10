@@ -9,7 +9,7 @@ import '../../Styles/Registration/Login.scss';
 // Redux
 
 // Firebase
-import { auth } from '../../Firebase/firebase';
+import { auth } from '../../Firebase';
 
 export default function LogIn() {
   // Create state for error

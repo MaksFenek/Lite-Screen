@@ -24,7 +24,7 @@ import {
 } from '../../Redux/Actions/mainActions';
 
 // Firebase
-import { db } from '../../Firebase/firebase';
+import { db } from '../../Firebase';
 
 export default function Profile() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;

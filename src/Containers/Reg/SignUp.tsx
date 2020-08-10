@@ -7,7 +7,7 @@ import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 // Firebase
-import { auth, db } from '../../Firebase/firebase';
+import { auth, db } from '../../Firebase';
 
 // ==== Main component ====
 export default function SignUp() {
