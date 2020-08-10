@@ -1,34 +1,68 @@
-.content {
-  display: flex;
-  justify-content: space-between;
+.main {
+  .content {
+    display: flex;
+    justify-content: space-between;
 
-  .image {
-    text-align: center;
-    img {
-      display: block;
-      height: 200px;
-      width: 200px;
-      border: 1px solid #69f0ae;
-      border-radius: 50%;
-      margin-bottom: 10px;
+    .fileContainer {
+      padding: 0;
+      box-shadow: none;
+    }
+    .image {
+      text-align: center;
+      .img {
+        background-image: url('../Icons/nophoto.png');
+        background-size: cover;
+        display: block;
+        height: 200px;
+        width: 200px;
+        border: 1px solid #69f0ae;
+        border-radius: 50%;
+        margin-bottom: 10px;
+      }
+    }
+    .info {
+      width: calc(100% - 220px);
+      flex-direction: column;
+
+      .names {
+        padding: 15px;
+        div {
+          padding-right: 10px;
+        }
+      }
+
+      .dls {
+        padding: 15px;
+        div {
+          padding-right: 10px;
+        }
+      }
     }
   }
-  .info {
-    width: calc(100% - 220px);
-    flex-direction: column;
+  .right {
+    display: flex;
+    margin: 0 auto;
+  }
+}
+@media screen and (max-width: 580px) {
+  .main {
+    .content {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
-    .names {
-      padding: 15px;
-      div {
-        padding-right: 10px;
+      .info {
+        width: auto;
+        .names {
+          text-align: center;
+        }
+      }
+      .dls {
+        text-align: center;
       }
     }
-
-    .dls {
-      padding: 15px;
-      div {
-        padding-right: 10px;
-      }
+    .right {
+      margin: 0 auto;
     }
   }
 }

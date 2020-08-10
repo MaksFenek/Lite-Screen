@@ -1,5 +1,9 @@
 // Constants
-import { ADD_FIRST_AND_SECOND_NAMES, ADD_USER_ID } from '../Constants';
+import {
+  ADD_FIRST_AND_SECOND_NAMES,
+  ADD_USER_ID,
+  ADD_USER_DATE,
+} from '../Constants';
 // Actions
 import {
   AddFirstAndSecondNamesActionInterface,
@@ -15,6 +19,7 @@ export interface InitialStateInterface {
   firstName: string;
   secondName: string;
   userId: string;
+  date: string;
 }
 
 // ==== Initial state ====
@@ -22,6 +27,7 @@ const initialState: InitialStateInterface = {
   firstName: '',
   secondName: '',
   userId: '',
+  date: '',
 };
 
 // Get first name and second name from firebase
@@ -40,6 +46,12 @@ export default (state = initialState, { type, payload }: any) => {
       return {
         ...state,
         userId: payload,
+      };
+
+    case ADD_USER_DATE:
+      return {
+        ...state,
+        date: payload,
       };
 
     default:

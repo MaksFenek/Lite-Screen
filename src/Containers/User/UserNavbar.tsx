@@ -20,7 +20,7 @@ import {
 import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 
 // Firebase
-import { auth } from '../../Firebase';
+import { auth } from '../../Firebase/firebase';
 
 export default function UserNavbar({ setUser }: any) {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;

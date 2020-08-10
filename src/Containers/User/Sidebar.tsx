@@ -52,12 +52,14 @@ export default function Sidebar() {
         ) : (
           // If width is less than 1080 we render menu list
           <List className='open-list' component='nav'>
-            <ListItem button divider>
-              <ListItemIcon>
-                <LibraryBooksRoundedIcon />
-              </ListItemIcon>
-              <ListItemText primary='News' />
-            </ListItem>
+            <Link to='/'>
+              <ListItem button divider>
+                <ListItemIcon>
+                  <LibraryBooksRoundedIcon />
+                </ListItemIcon>
+                <ListItemText primary='News' />
+              </ListItem>
+            </Link>
             <ListItem button divider>
               <ListItemIcon>
                 <QuestionAnswerRoundedIcon />

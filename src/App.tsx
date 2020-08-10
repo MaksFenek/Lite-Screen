@@ -20,10 +20,11 @@ import { useDispatch } from 'react-redux';
 import {
   AddUserId,
   AddFirstAndSecondNamesAction,
+  AddUserDate,
 } from './Redux/Actions/mainActions';
 
 // Firebase
-import { auth, db } from './Firebase';
+import { auth, db } from './Firebase/firebase';
 
 // ==== Main function ====
 function App() {
@@ -47,6 +48,7 @@ function App() {
             // Get names from document fields
             const firstName = snapshot.data()?.userInfo.firstName;
             const secondName = snapshot.data()?.userInfo.secondName;
+            const birthday = snapshot.data()?.userInfo.birthday;
 
             // Create new action with first and second names
             // Dispatch action to reducer
@@ -56,6 +58,8 @@ function App() {
                 secondName,
               })
             );
+
+            dispatch(AddUserDate(birthday));
           }
         });
     }
