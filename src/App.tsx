@@ -7,6 +7,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+// Redux
+
 // Pages
 import Signup from './Pages/Registrations/SignupPage';
 import Login from './Pages/Registrations/LoginPage';
@@ -14,57 +16,77 @@ import Main from './Pages/User/Main';
 import Profile from './Pages/User/Profile';
 
 // Redux
-import { Provider } from 'react-redux';
-import rootReducer from './Redux/Reducers/rootReduser';
-import { createStore } from 'redux';
+import { useDispatch } from 'react-redux';
+import {
+  AddUserId,
+  AddFirstAndSecondNamesAction,
+} from './Redux/Actions/mainActions';
 
 // Firebase
-import { auth } from './Firebase';
-
-// Create the redux store with root reducer
-const store = createStore(rootReducer);
+import { auth, db } from './Firebase';
 
 // ==== Main function ====
 function App() {
-  // Create state for checking if user is loged in
-  const [user, setUser] = useState<any>(undefined);
+  const dispatch = useDispatch();
 
   const [userId, setUserID] = useState<string | undefined>(undefined);
   // Create dispatch
 
   // If there is a logged in user, set it in user state
   auth.onAuthStateChanged((person) => {
-    setUser(person);
     setUserID(person?.uid);
+    dispatch(AddUserId(person?.uid));
+
+    if (userId) {
+      db.collection('users')
+        .doc(userId)
+        // Get found document
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            // Get names from document fields
+            const firstName = snapshot.data()?.userInfo.firstName;
+            const secondName = snapshot.data()?.userInfo.secondName;
+
+            // Create new action with first and second names
+            // Dispatch action to reducer
+            dispatch(
+              AddFirstAndSecondNamesAction({
+                firstName,
+                secondName,
+              })
+            );
+          }
+        });
+    }
   });
 
   return (
-    <Provider store={store}>
-      {user ? (
-        <Router>
-          <Switch>
+    <Router>
+      <Switch>
+        {userId ? (
+          <>
             <Redirect exact from='/signup' to='/' />
-            <Route exact path={`/${userId}`}>
-              <Profile setUser={setUser} userId={userId} />
-            </Route>
+
             <Route exact path='/'>
-              <Main setUser={setUser} />
+              <Main />
             </Route>
-          </Switch>
-        </Router>
-      ) : (
-        <Router>
-          <Switch>
+            <Route exact path={`/${userId}`}>
+              <Profile />
+            </Route>
+          </>
+        ) : (
+          <>
             <Route exact path='/'>
               <Login />
             </Route>
             <Route exact path='/signup'>
               <Signup />
             </Route>
-          </Switch>
-        </Router>
-      )}
-    </Provider>
+          </>
+        )}
+      </Switch>
+    </Router>
   );
 }
 

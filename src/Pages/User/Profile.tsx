@@ -1,5 +1,5 @@
 // react
-import React from 'react';
+import React, { useState } from 'react';
 
 // Components
 import Sidebar from '../../Containers/User/Sidebar';
@@ -9,36 +9,24 @@ import UserNavbar from '../../Containers/User/UserNavbar';
 import '../../Styles/User/Profile.scss';
 import TextField from '@material-ui/core/TextField';
 
-// Firebase
-import { db } from '../../Firebase';
+import {
+  useSelector as useReduxSelector,
+  TypedUseSelectorHook,
+} from 'react-redux';
+import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 
-export default function Profile({ setUser, userId }: any) {
+export default function Profile() {
+  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
+  const state = useSelector((store) => store.auth);
+
   // Get window width
   const width = +window.innerWidth;
 
   // Create state for user info
-  const [userInfo, setUserInfo] = React.useState({
-    firstName: '',
-    secondName: '',
+  const [userInfo, setUserInfo] = useState({
+    firstName: state.firstName,
+    secondName: state.secondName,
   });
-
-  if (userInfo.secondName === '') {
-    // Get user info from firebase
-    //Choose collection Users
-    db.collection('users')
-      // Choose document by userId
-      .doc(userId)
-      // Get the info
-      .get()
-      .then((snapshot) => {
-        const data = snapshot.data();
-        // Set info in state
-        setUserInfo({
-          firstName: data?.userInfo.firstName,
-          secondName: data?.userInfo.secondName,
-        });
-      });
-  }
 
   // Handle actions
   const handleImg = (e: any) => {
@@ -50,7 +38,7 @@ export default function Profile({ setUser, userId }: any) {
 
   return (
     <>
-      <UserNavbar setUser={setUser}></UserNavbar>
+      <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
           <div className='content'>
@@ -64,19 +52,27 @@ export default function Profile({ setUser, userId }: any) {
             <div className='info'>
               <div className='names'>
                 <TextField
+                  type='text'
                   required
                   label='First name'
                   value={userInfo.firstName}
                 />
                 <TextField
+                  type='text'
                   required
                   label='Second name'
                   value={userInfo.secondName}
                 />
               </div>
               <div className='dls'>
-                <TextField required label='Age' />
-                <TextField required label='Birthday' />
+                <TextField
+                  type='date'
+                  required
+                  label='Birthday'
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
               </div>
             </div>
           </div>

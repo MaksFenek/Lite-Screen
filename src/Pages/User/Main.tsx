@@ -4,47 +4,16 @@ import Sidebar from '../../Containers/User/Sidebar';
 
 import '../../Styles/User/Main.scss';
 
-import { auth, db } from '../../Firebase';
-
 // Redux
-import { useDispatch } from 'react-redux';
-import { AddFirstAndSecondNamesAction } from '../../Redux/Actions/mainActions';
 import UserNavbar from '../../Containers/User/UserNavbar';
 
-export default function Main({ setUser }: { setUser: any }) {
-  // Redux
-  const dispatch = useDispatch();
-
-  // Take a user object
-  auth.onAuthStateChanged((user) => {
-    // Find in users collection document with user id name
-
-    if (user) {
-      db.collection('users')
-        .doc(user?.uid)
-        // Get found document
-        .get()
-        .then((snapshot) => {
-          // Get names from document fields
-          const firstName = snapshot.get('firstName');
-          const secondName = snapshot.get('secondName');
-          // Create new action with first and second names
-          const firstAndSecondNames = AddFirstAndSecondNamesAction({
-            firstName,
-            secondName,
-          });
-          // Dispatch action to reducer
-          dispatch(firstAndSecondNames);
-        });
-    }
-  });
-
+export default function Main() {
   // Get window width
   const width = +window.innerWidth;
 
   return (
     <>
-      <UserNavbar setUser={setUser}></UserNavbar>
+      <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
           <div className='content'>

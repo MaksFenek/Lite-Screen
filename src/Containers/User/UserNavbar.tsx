@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 //Components
@@ -12,26 +12,32 @@ import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded';
 import MenuIcon from '@material-ui/icons/Menu';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 
+//Redux
+import {
+  useSelector as useReduxSelector,
+  TypedUseSelectorHook,
+} from 'react-redux';
+import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
+
 // Firebase
 import { auth } from '../../Firebase';
 
 export default function UserNavbar({ setUser }: any) {
+  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
+  const store = useSelector((store) => store.auth);
+
   // Create state for menu
-  const [state, setState] = React.useState({
+  const [state, setState] = useState({
     right: false,
   });
 
-  const [userId, setUserID] = React.useState<string | undefined>(undefined);
+  const [userId, setUserID] = useState<string | undefined>(store.userId);
 
   // Handle for sign out
   const handleSignOut = () => {
     auth.signOut();
-    setUser(undefined);
   };
 
-  auth.onAuthStateChanged((user) => {
-    setUserID(user?.uid);
-  });
   // Toggle funtion for menu
   const toggleDrawer = (anchor: any, open: any) => (event: any) => {
     if (
@@ -81,10 +87,8 @@ export default function UserNavbar({ setUser }: any) {
               <Sidebar></Sidebar>
             </Drawer>
           </>
-        ) : (
-          // Else nothing
-          ''
-        )
+        ) : // Else nothing
+        null
       }
     </Navbar>
   );

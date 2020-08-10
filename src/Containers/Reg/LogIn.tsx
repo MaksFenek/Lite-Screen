@@ -6,6 +6,8 @@ import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import '../../Styles/Registration/Login.scss';
 
+// Redux
+
 // Firebase
 import { auth } from '../../Firebase';
 
