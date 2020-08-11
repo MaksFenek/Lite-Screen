@@ -13,7 +13,7 @@ import { auth } from '../../Firebase';
 
 export default function LogIn() {
   // Create state for error
-  const [error, setError] = useState<null | boolean>(null);
+  const [error, setError] = useState<null | string>(null);
   // ==== Refs ====
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);

@@ -24,7 +24,7 @@ import {
 } from '../../Redux/Actions/mainActions';
 
 // Firebase
-import { db } from '../../Firebase';
+import { db, auth } from '../../Firebase';
 
 export default function Profile() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
@@ -51,7 +51,6 @@ export default function Profile() {
   // Handle actions
   const handleImg = (picture: any) => {
     // Get file from input
-    console.log(picture);
   };
 
   // Handle actions
@@ -66,7 +65,7 @@ export default function Profile() {
     dispatch(AddUserDate(birthday));
 
     // Set info in firebase
-    db.collection('users').doc(`${state.userId}`).set({
+    db.collection('users').doc(`${auth.currentUser?.uid}`).set({
       userInfo: {
         firstName,
         secondName,

@@ -16,7 +16,6 @@ import Profile from './Pages/User/Profile';
 // Redux
 import { useDispatch } from 'react-redux';
 import {
-  AddUserId,
   AddFirstAndSecondNamesAction,
   AddUserDate,
 } from './Redux/Actions/mainActions';
@@ -34,7 +33,6 @@ function App() {
   // If there is a logged in user, set it in user state
   auth.onAuthStateChanged((person) => {
     setUserID(person?.uid);
-    dispatch(AddUserId(person?.uid));
   });
   if (userId) {
     db.collection('users')

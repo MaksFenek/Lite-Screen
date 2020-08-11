@@ -1,9 +1,5 @@
 // Action constants
-import {
-  ADD_FIRST_AND_SECOND_NAMES,
-  ADD_USER_ID,
-  ADD_USER_DATE,
-} from '../Constants';
+import { ADD_FIRST_AND_SECOND_NAMES, ADD_USER_DATE } from '../Constants';
 
 // ==== TypeScript ====
 
@@ -13,11 +9,6 @@ export interface AddFirstAndSecondNamesActionInterface {
     firstName: string;
     secondName: string;
   };
-}
-
-export interface AddUserIdInterface {
-  type: typeof ADD_USER_ID;
-  payload: string | undefined;
 }
 
 export interface AddUserDateInterface {
@@ -39,11 +30,6 @@ export const AddFirstAndSecondNamesAction = ({
     firstName,
     secondName,
   },
-});
-
-export const AddUserId = (id: string | undefined): AddUserIdInterface => ({
-  type: ADD_USER_ID,
-  payload: id,
 });
 
 export const AddUserDate = (date: string | undefined) => ({

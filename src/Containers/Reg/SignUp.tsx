@@ -47,14 +47,11 @@ export default function SignUp() {
       })
       .then(() => {
         // Get a user id
-        auth.onAuthStateChanged((user) => {
-          if (user) {
-            // Create new document in users collection with name as user id
-            db.collection('users').doc(user?.uid).set({
-              // Set user information in document
-              userInfo: { firstName, secondName },
-            });
-          }
+        const userId = auth.currentUser?.uid;
+        // Create new document in users collection with name as user id
+        db.collection('users').doc(userId).set({
+          // Set user information in document
+          userInfo: { firstName, secondName },
         });
       });
   };

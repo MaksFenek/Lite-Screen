@@ -1,24 +1,14 @@
 // Constants
-import {
-  ADD_FIRST_AND_SECOND_NAMES,
-  ADD_USER_ID,
-  ADD_USER_DATE,
-} from '../Constants';
+import { ADD_FIRST_AND_SECOND_NAMES, ADD_USER_DATE } from '../Constants';
 // Actions
-import {
-  AddFirstAndSecondNamesActionInterface,
-  AddUserIdInterface,
-} from '../Actions/mainActions';
+import { AddFirstAndSecondNamesActionInterface } from '../Actions/mainActions';
 
 // ====TypeScript ====
-type ActionInterfaces =
-  | AddFirstAndSecondNamesActionInterface
-  | AddUserIdInterface;
+type ActionInterfaces = AddFirstAndSecondNamesActionInterface;
 
 export interface InitialStateInterface {
   firstName: string;
   secondName: string;
-  userId: string;
   date: string;
 }
 
@@ -26,7 +16,6 @@ export interface InitialStateInterface {
 const initialState: InitialStateInterface = {
   firstName: '',
   secondName: '',
-  userId: '',
   date: '',
 };
 
@@ -40,12 +29,6 @@ export default (state = initialState, { type, payload }: any) => {
         ...state,
         firstName: payload.firstName,
         secondName: payload.secondName,
-      };
-
-    case ADD_USER_ID:
-      return {
-        ...state,
-        userId: payload,
       };
 
     case ADD_USER_DATE:

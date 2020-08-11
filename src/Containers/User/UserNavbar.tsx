@@ -13,25 +13,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
 
 //Redux
-import {
-  useSelector as useReduxSelector,
-  TypedUseSelectorHook,
-} from 'react-redux';
-import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 
 // Firebase
 import { auth } from '../../Firebase';
 
 export default function UserNavbar({ setUser }: any) {
-  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
-  const store = useSelector((store) => store.auth.userId);
-
   // Create state for menu
   const [state, setState] = useState({
     right: false,
   });
 
-  const userId = store;
+  const userId = auth.currentUser?.uid;
 
   // Handle for sign out
   const handleSignOut = () => {
