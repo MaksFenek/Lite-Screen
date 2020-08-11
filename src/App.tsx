@@ -22,6 +22,7 @@ import {
 
 // Firebase
 import { auth, db } from './Firebase';
+import UsersProfile from './Pages/OtherUsers/UsersProfile';
 
 // ==== Main function ====
 function App() {
@@ -63,15 +64,17 @@ function App() {
   return (
     <Router>
       <Switch>
-        {userId ? (
+        {auth.currentUser ? (
           <>
-            <Redirect exact from='/signup' to='/' />
-
-            <Route exact path='/'>
-              <Main />
-            </Route>
-            <Route exact path={`/${userId}`}>
-              <Profile />
+            <Route>
+              <Route exact path='/'>
+                <Redirect exact from='/signup' to='/' />
+                <Main />
+              </Route>
+              <Route path={`/${auth.currentUser?.uid}`}>
+                <Profile />
+              </Route>{' '}
+              <Route exact path='/users/*' component={UsersProfile} />
             </Route>
           </>
         ) : (
@@ -79,7 +82,7 @@ function App() {
             <Route exact path='/'>
               <Login />
             </Route>
-            <Route exact path='/signup'>
+            <Route path='/signup'>
               <Signup />
             </Route>
           </>

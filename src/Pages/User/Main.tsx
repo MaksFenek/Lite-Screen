@@ -1,15 +1,12 @@
 import React from 'react';
 
-import Sidebar from '../../Containers/User/Sidebar';
-
 import '../../Styles/User/Main.scss';
 
 // Redux
 import UserNavbar from '../../Containers/User/UserNavbar';
 
 export default function Main() {
-  // Get window width
-  const width = +window.innerWidth;
+  console.log('hi');
 
   return (
     <>
@@ -160,7 +157,6 @@ export default function Main() {
             Eos debitis temporibus saepe incidunt voluptate tempora, assumenda
             dolorem repellendus repudiandae!
           </div>
-          {width <= 1080 ? '' : <Sidebar></Sidebar>}
         </div>
       </div>
     </>

@@ -4,83 +4,69 @@ import { Link } from 'react-router-dom';
 
 //Components
 import Navbar from '../../Containers/Navbar';
-import Sidebar from '../../Containers/User/Sidebar';
 
 // Style and material ui
-import { Button, Avatar, Drawer } from '@material-ui/core';
-import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded';
-import MenuIcon from '@material-ui/icons/Menu';
-import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 
 //Redux
 
 // Firebase
 import { auth } from '../../Firebase';
 
-export default function UserNavbar({ setUser }: any) {
-  // Create state for menu
-  const [state, setState] = useState({
-    right: false,
-  });
-
-  const userId = auth.currentUser?.uid;
+export default function UserNavbar() {
+  const [userId, setUserId] = useState<undefined | string>(
+    auth.currentUser?.uid
+  );
 
   // Handle for sign out
   const handleSignOut = () => {
     auth.signOut();
   };
 
-  // Toggle funtion for menu
-  const toggleDrawer = (anchor: any, open: any) => (event: any) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    setState({ ...state, [anchor]: open });
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  // Get window width
-  const width = +window.innerWidth;
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <Navbar>
-      <Link to='/'>
-        <Button variant='contained' color='primary' onClick={handleSignOut}>
-          <ExitToAppRoundedIcon />
-        </Button>
-      </Link>
-      <Link to={`${userId}`}>
-        <Button variant='text'>
-          <Avatar className='avatar'>
-            <PersonRoundedIcon />
-          </Avatar>
-        </Button>
-      </Link>
-      {
-        // If window width less than 1080px then we render menu button
-        width <= 1080 ? (
-          <>
-            <Button
-              onClick={toggleDrawer('right', true)}
-              variant='contained'
-              color='primary'
-            >
-              <MenuIcon />
-            </Button>
-            <Drawer
-              anchor='right'
-              open={state['right']}
-              onClose={toggleDrawer('right', false)}
-            >
-              <Sidebar></Sidebar>
-            </Drawer>
-          </>
-        ) : // Else nothing
-        null
-      }
+      <IconButton>
+        <Link to='/'>
+          <LibraryBooksIcon />
+        </Link>
+      </IconButton>
+      <IconButton
+        aria-controls='simple-menu'
+        aria-haspopup='true'
+        onClick={handleClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id='simple-menu'
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>
+          <Link to={`/${userId}`}> Profile </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}> Friends </MenuItem>
+        <MenuItem onClick={handleClose}> Groups </MenuItem>
+        <MenuItem onClick={handleClose}> Setting </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to='/' onClick={handleSignOut}>
+            Logout
+          </Link>
+        </MenuItem>
+      </Menu>
     </Navbar>
   );
 }

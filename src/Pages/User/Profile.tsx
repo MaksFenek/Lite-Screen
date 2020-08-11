@@ -2,7 +2,6 @@
 import React, { useState, useRef } from 'react';
 
 // Components
-import Sidebar from '../../Containers/User/Sidebar';
 import UserNavbar from '../../Containers/User/UserNavbar';
 import ImageUploader from 'react-images-upload';
 
@@ -37,9 +36,6 @@ export default function Profile() {
   const firstNameRef = useRef<HTMLInputElement>(null);
   const secondNameRef = useRef<HTMLInputElement>(null);
   const birthdayRef = useRef<HTMLInputElement>(null);
-
-  // Get window width
-  const width = +window.innerWidth;
 
   // Create state for user info
   const [userInfo, setUserInfo] = useState({
@@ -139,7 +135,7 @@ export default function Profile() {
               </div>
             </div>
           </div>
-          {width <= 1080 ? '' : <Sidebar></Sidebar>}
+
           <Button
             onClick={handleClick}
             className='right'
