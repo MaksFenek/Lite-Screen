@@ -8,8 +8,9 @@ import ImageUploader from 'react-images-upload';
 // Style and material ui
 import '../../Styles/User/Profile.scss';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import { Button, Snackbar } from '@material-ui/core';
 import ProfileIcon from '../../Icons/nophoto.png';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 // Redux
 import {
@@ -28,12 +29,24 @@ import {
 import { db, auth } from '../../Firebase';
 
 export default function Profile() {
+  function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant='filled' {...props} />;
+  }
   interface userInfoInterface {
     firstName: string;
     secondName: string;
     birthday: string;
     status: string;
   }
+  const [open, setOpen] = useState(false);
+
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
   const state = useSelector((store) => store.auth);
@@ -70,6 +83,7 @@ export default function Profile() {
     const birthday = birthdayRef.current!.value;
 
     if (firstName !== '' && secondName !== '') {
+      setOpen(true);
       // Set info in store
       dispatch(AddFirstAndSecondNamesAction({ firstName, secondName }));
       dispatch(AddUserDate(birthday));
@@ -154,6 +168,7 @@ export default function Profile() {
               </div>
               <div className='names'>
                 <TextField
+                  className='firstname'
                   inputRef={firstNameRef}
                   onChange={handleChangeFirstName}
                   type='text'
@@ -162,6 +177,7 @@ export default function Profile() {
                   value={userInfo.firstName}
                 />
                 <TextField
+                  className='secondname'
                   inputRef={secondNameRef}
                   onChange={handleChangeSecondName}
                   type='text'
@@ -170,6 +186,7 @@ export default function Profile() {
                   value={userInfo.secondName}
                 />
               </div>
+
               <div className='dls'>
                 <TextField
                   inputRef={birthdayRef}
@@ -194,6 +211,11 @@ export default function Profile() {
           >
             Save
           </Button>
+          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity='success'>
+              All saved
+            </Alert>
+          </Snackbar>
         </div>
       </div>
     </>

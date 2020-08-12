@@ -9,6 +9,9 @@ import Navbar from '../../Containers/Navbar';
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import MessageIcon from '@material-ui/icons/Message';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 //Redux
 
@@ -35,14 +38,26 @@ export default function UserNavbar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  console.log('Nav');
 
   return (
     <Navbar>
       <IconButton>
-        <Link to='/'>
-          <LibraryBooksIcon />
-        </Link>
+        <MessageIcon />
       </IconButton>
+      <IconButton>
+        <NotificationsIcon />
+      </IconButton>
+      <Link to='/'>
+        <IconButton>
+          <LibraryBooksIcon />
+        </IconButton>
+      </Link>
+      <Link to={`/users/${auth.currentUser?.uid}`}>
+        <IconButton>
+          <AccountCircleIcon />
+        </IconButton>{' '}
+      </Link>
       <IconButton
         aria-controls='simple-menu'
         aria-haspopup='true'

@@ -11,7 +11,7 @@ export default function Main() {
       <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
-          <div className='content'>
+          <div className='main-content'>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae
             cupiditate, quis adipisci nemo laborum nostrum ad eligendi.
             Voluptatum deserunt unde, cupiditate inventore repellat nostrum
