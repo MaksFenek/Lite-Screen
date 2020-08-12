@@ -6,8 +6,6 @@ import '../../Styles/User/Main.scss';
 import UserNavbar from '../../Containers/User/UserNavbar';
 
 export default function Main() {
-  console.log('hi');
-
   return (
     <>
       <UserNavbar></UserNavbar>

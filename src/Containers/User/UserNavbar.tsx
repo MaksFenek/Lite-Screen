@@ -25,6 +25,7 @@ export default function UserNavbar() {
     auth.signOut();
   };
 
+  // Create state for menu
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event: any) => {

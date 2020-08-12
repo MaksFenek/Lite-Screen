@@ -9,6 +9,7 @@ import ImageUploader from 'react-images-upload';
 import '../../Styles/User/Profile.scss';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import ProfileIcon from '../../Icons/nophoto.png';
 
 // Redux
 import {
@@ -20,12 +21,20 @@ import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 import {
   AddFirstAndSecondNamesAction,
   AddUserDate,
+  AddUserStatus,
 } from '../../Redux/Actions/mainActions';
 
 // Firebase
 import { db, auth } from '../../Firebase';
 
 export default function Profile() {
+  interface userInfoInterface {
+    firstName: string;
+    secondName: string;
+    birthday: string;
+    status: string;
+  }
+
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
   const state = useSelector((store) => store.auth);
 
@@ -33,15 +42,18 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   // Refs
+  const statusRef = useRef<HTMLInputElement>(null);
   const firstNameRef = useRef<HTMLInputElement>(null);
   const secondNameRef = useRef<HTMLInputElement>(null);
   const birthdayRef = useRef<HTMLInputElement>(null);
 
+  const user: userInfoInterface = JSON.parse(localStorage.getItem('user')!);
   // Create state for user info
-  const [userInfo, setUserInfo] = useState({
-    firstName: state.firstName,
-    secondName: state.secondName,
-    date: state.date,
+  const [userInfo, setUserInfo] = useState<userInfoInterface>({
+    firstName: state.firstName || user.firstName,
+    secondName: state.secondName || user.secondName,
+    birthday: state.date || user.birthday,
+    status: state.status || user.status,
   });
 
   // Handle actions
@@ -52,22 +64,44 @@ export default function Profile() {
   // Handle actions
   const handleClick = () => {
     // Get user info from inputs
+    const status = statusRef.current!.value;
     const firstName = firstNameRef.current!.value;
     const secondName = secondNameRef.current!.value;
     const birthday = birthdayRef.current!.value;
 
-    // Set info in store
-    dispatch(AddFirstAndSecondNamesAction({ firstName, secondName }));
-    dispatch(AddUserDate(birthday));
+    if (firstName !== '' && secondName !== '') {
+      // Set info in store
+      dispatch(AddFirstAndSecondNamesAction({ firstName, secondName }));
+      dispatch(AddUserDate(birthday));
+      dispatch(AddUserStatus(status));
 
-    // Set info in firebase
-    db.collection('users').doc(`${auth.currentUser?.uid}`).set({
-      userInfo: {
-        firstName,
-        secondName,
-        birthday,
-      },
-    });
+      // Set info in firebase
+      db.collection('users').doc(`${auth.currentUser?.uid}`).set({
+        userInfo: {
+          firstName,
+          secondName,
+          birthday,
+          status,
+        },
+      });
+
+      // Set user information to local storage
+      localStorage.setItem(
+        'user',
+        JSON.stringify({
+          firstName,
+          secondName,
+          birthday,
+          status,
+        })
+      );
+    }
+  };
+
+  // Handle actions
+  const handleChangeStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const statusValue = e.currentTarget.value;
+    setUserInfo({ ...userInfo, status: statusValue });
   };
 
   const handleChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,7 +116,7 @@ export default function Profile() {
 
   const handleChangeBirthday = (e: React.ChangeEvent<HTMLInputElement>) => {
     const birthdayValue = e.currentTarget.value;
-    setUserInfo({ ...userInfo, date: birthdayValue });
+    setUserInfo({ ...userInfo, birthday: birthdayValue });
   };
 
   return (
@@ -92,7 +126,7 @@ export default function Profile() {
         <div className='main'>
           <div className='content'>
             <div className='image'>
-              <div className='img'></div>
+              <img src={ProfileIcon} alt='userPhoto' height='200' width='200' />
               <ImageUploader
                 withIcon={false}
                 buttonText='Choose images'
@@ -102,6 +136,22 @@ export default function Profile() {
               />
             </div>
             <div className='info'>
+              <div className='status'>
+                <TextField
+                  fullWidth
+                  multiline
+                  inputRef={statusRef}
+                  onChange={handleChangeStatus}
+                  type='text'
+                  label='Status'
+                  rows='2'
+                  rowsMax='2'
+                  value={userInfo.status}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                />
+              </div>
               <div className='names'>
                 <TextField
                   inputRef={firstNameRef}
@@ -127,7 +177,7 @@ export default function Profile() {
                   type='date'
                   required
                   label='Birthday'
-                  value={userInfo.date}
+                  value={userInfo.birthday}
                   InputLabelProps={{
                     shrink: true,
                   }}

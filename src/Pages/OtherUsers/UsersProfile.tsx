@@ -6,6 +6,7 @@ import UserNavbar from '../../Containers/User/UserNavbar';
 
 // Style and material ui
 import '../../Styles/OtherUsers/Users.scss';
+import ProfileIcon from '../../Icons/nophoto.png';
 
 // Redux
 
@@ -27,6 +28,7 @@ export default function UsersProfile() {
     firstName: '',
     secondName: '',
     date: '',
+    status: '',
   });
 
   if (userId) {
@@ -35,14 +37,14 @@ export default function UsersProfile() {
       .doc(userId)
       .get()
       .then((snapshot) => {
-        if (userInfo.date === '') {
-          if (snapshot.exists) {
-            setUserInfo({
-              firstName: snapshot.data()?.userInfo.firstName,
-              secondName: snapshot.data()?.userInfo.secondName,
-              date: snapshot.data()?.userInfo.birthday,
-            });
-          }
+        // Take an user object and check if the user is exist
+        if (snapshot.exists) {
+          setUserInfo({
+            firstName: snapshot.data()?.userInfo.firstName,
+            secondName: snapshot.data()?.userInfo.secondName,
+            date: snapshot.data()?.userInfo.birthday,
+            status: snapshot.data()?.userInfo.status,
+          });
         }
       });
   }
@@ -54,24 +56,20 @@ export default function UsersProfile() {
         <div className='main'>
           <div className='content bg'>
             <div className='image'>
-              <div className='img'></div>
+              <img src={ProfileIcon} alt='userPhoto' height='200' width='200' />{' '}
             </div>
             <div className='info'>
               <div className='names'>
-                <p>
-                  First Name:
-                  <span> {userInfo.firstName}</span>
-                </p>
-                <p>
-                  Second Name:
-                  <span> {userInfo.secondName}</span>
-                </p>
+                <h3>
+                  {userInfo.firstName} {userInfo.secondName}
+                </h3>
               </div>
+              <div className='status'>
+                <p>{userInfo.status}</p>
+              </div>
+
               <div className='dls'>
-                <p>
-                  Date:
-                  <span> {userInfo.date}</span>
-                </p>
+                <h3>{userInfo.date}</h3>
               </div>
             </div>
           </div>

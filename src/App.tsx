@@ -35,30 +35,43 @@ function App() {
   auth.onAuthStateChanged((person) => {
     setUserID(person?.uid);
   });
-  if (userId) {
-    db.collection('users')
-      .doc(userId)
-      // Get found document
-      .get()
-      .then((snapshot) => {
-        if (snapshot.exists) {
-          // Get names from document fields
-          const firstName = snapshot.data()?.userInfo.firstName;
-          const secondName = snapshot.data()?.userInfo.secondName;
-          const birthday = snapshot.data()?.userInfo.birthday;
+  if (!localStorage.getItem('user')) {
+    if (userId) {
+      db.collection('users')
+        .doc(userId)
+        // Get found document
+        .get()
+        .then((snapshot) => {
+          if (snapshot.exists) {
+            // Get names from document fields
+            const firstName = snapshot.data()?.userInfo.firstName;
+            const secondName = snapshot.data()?.userInfo.secondName;
+            const birthday = snapshot.data()?.userInfo.birthday;
+            const status = snapshot.data()?.userInfo.status;
 
-          // Create new action with first and second names
-          // Dispatch action to reducer
-          dispatch(
-            AddFirstAndSecondNamesAction({
-              firstName,
-              secondName,
-            })
-          );
+            localStorage.setItem(
+              'user',
+              JSON.stringify({
+                firstName,
+                secondName,
+                birthday,
+                status,
+              })
+            );
 
-          dispatch(AddUserDate(birthday));
-        }
-      });
+            // Create new action with first and second names
+            // Dispatch action to reducer
+            dispatch(
+              AddFirstAndSecondNamesAction({
+                firstName,
+                secondName,
+              })
+            );
+
+            dispatch(AddUserDate(birthday));
+          }
+        });
+    }
   }
 
   return (
@@ -66,16 +79,14 @@ function App() {
       <Switch>
         {auth.currentUser ? (
           <>
-            <Route>
-              <Route exact path='/'>
-                <Redirect exact from='/signup' to='/' />
-                <Main />
-              </Route>
-              <Route path={`/${auth.currentUser?.uid}`}>
-                <Profile />
-              </Route>{' '}
-              <Route exact path='/users/*' component={UsersProfile} />
+            <Route exact path='/'>
+              <Redirect exact from='/signup' to='/' />
+              <Main />
             </Route>
+            <Route path={`/${auth.currentUser?.uid}`}>
+              <Profile />
+            </Route>
+            <Route path='/users/*' component={UsersProfile} />
           </>
         ) : (
           <>
@@ -86,7 +97,7 @@ function App() {
               <Signup />
             </Route>
           </>
-        )}
+        )}{' '}
       </Switch>
     </Router>
   );

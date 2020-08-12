@@ -21,8 +21,6 @@ export default function SignUp() {
   // Create state for error
   const [error, setError] = useState<null | string>(null);
 
-  // ==== Redux ====
-
   // ==== Refs ====
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
