@@ -22,11 +22,8 @@
 
 @media screen and (max-width: 360px) {
   .nav {
-    &-buttons {
-      button {
-        height: 40px;
-        width: 40px;
-      }
+    &-logo {
+      display: none;
     }
   }
 }

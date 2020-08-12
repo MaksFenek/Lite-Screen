@@ -111,12 +111,7 @@ export default function UsersProfile() {
               </div>
             </div>
 
-            <div className='posts'>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quo
-              architecto necessitatibus minus amet officia autem corrupti a,
-              placeat tempora iste reiciendis, ex molestiae porro dolore impedit
-              alias, debitis soluta.
-            </div>
+            <div className='posts'></div>
           </div>
         </div>
       </div>

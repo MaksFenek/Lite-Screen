@@ -29,21 +29,17 @@
         'names';
 
       .status {
-        grid-area: 'status';
+        grid-area: status;
         padding: 10px;
       }
 
       .names {
-        grid-area: 'names';
+        grid-area: names;
         display: grid;
         grid-template-columns: 1fr 1fr;
         padding: 10px;
         .firstname {
-          grid-area: 'firstname';
           margin-right: 10px;
-        }
-        .secondname {
-          grid-area: 'secondname';
         }
       }
 
@@ -68,6 +64,9 @@
       grid-template-columns: 1fr;
       .image {
         margin: 0 auto;
+      }
+      .info {
+        margin-left: 0;
       }
     }
   }
