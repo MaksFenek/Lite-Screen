@@ -18,9 +18,15 @@
     height: 48px;
     width: 48px;
   }
-  &-buttons {
-    button {
-      margin-left: 5px;
+}
+
+@media screen and (max-width: 360px) {
+  .nav {
+    &-buttons {
+      button {
+        height: 40px;
+        width: 40px;
+      }
     }
   }
 }

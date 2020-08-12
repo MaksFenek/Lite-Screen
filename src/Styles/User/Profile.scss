@@ -65,22 +65,10 @@
 @media screen and (max-width: 580px) {
   .main {
     .content {
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      .info {
-        width: auto;
-        .names {
-          text-align: center;
-        }
-      }
-      .dls {
-        text-align: center;
+      grid-template-columns: 1fr;
+      .image {
+        margin: 0 auto;
       }
     }
-  }
-  .right {
-    margin: 0 auto;
   }
 }

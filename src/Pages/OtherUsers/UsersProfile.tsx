@@ -102,8 +102,6 @@ export default function UsersProfile() {
                 inputProps={{ 'aria-label': 'search' }}
               />
             </div>
-          </div>
-          <div className='third-row'>
             <div className='column'>
               <Button className='messages' variant='contained' color='primary'>
                 Messages
@@ -113,7 +111,12 @@ export default function UsersProfile() {
               </div>
             </div>
 
-            <div className='posts'></div>
+            <div className='posts'>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis quo
+              architecto necessitatibus minus amet officia autem corrupti a,
+              placeat tempora iste reiciendis, ex molestiae porro dolore impedit
+              alias, debitis soluta.
+            </div>
           </div>
         </div>
       </div>
