@@ -1,22 +1,17 @@
 import React from 'react';
 
-import Sidebar from '../../Containers/User/Sidebar';
-
 import '../../Styles/User/Main.scss';
 
 // Redux
 import UserNavbar from '../../Containers/User/UserNavbar';
 
 export default function Main() {
-  // Get window width
-  const width = +window.innerWidth;
-
   return (
     <>
       <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
-          <div className='content'>
+          <div className='main-content'>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Quae
             cupiditate, quis adipisci nemo laborum nostrum ad eligendi.
             Voluptatum deserunt unde, cupiditate inventore repellat nostrum
@@ -160,7 +155,6 @@ export default function Main() {
             Eos debitis temporibus saepe incidunt voluptate tempora, assumenda
             dolorem repellendus repudiandae!
           </div>
-          {width <= 1080 ? '' : <Sidebar></Sidebar>}
         </div>
       </div>
     </>

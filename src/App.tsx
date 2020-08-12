@@ -7,8 +7,6 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-// Redux
-
 // Pages
 import Signup from './Pages/Registrations/SignupPage';
 import Login from './Pages/Registrations/LoginPage';
@@ -18,25 +16,26 @@ import Profile from './Pages/User/Profile';
 // Redux
 import { useDispatch } from 'react-redux';
 import {
-  AddUserId,
   AddFirstAndSecondNamesAction,
+  AddUserDate,
 } from './Redux/Actions/mainActions';
 
 // Firebase
 import { auth, db } from './Firebase';
+import UsersProfile from './Pages/OtherUsers/UsersProfile';
 
 // ==== Main function ====
 function App() {
+  // Create dispatch
   const dispatch = useDispatch();
 
   const [userId, setUserID] = useState<string | undefined>(undefined);
-  // Create dispatch
 
   // If there is a logged in user, set it in user state
   auth.onAuthStateChanged((person) => {
     setUserID(person?.uid);
-    dispatch(AddUserId(person?.uid));
-
+  });
+  if (!localStorage.getItem('user')) {
     if (userId) {
       db.collection('users')
         .doc(userId)
@@ -47,6 +46,18 @@ function App() {
             // Get names from document fields
             const firstName = snapshot.data()?.userInfo.firstName;
             const secondName = snapshot.data()?.userInfo.secondName;
+            const birthday = snapshot.data()?.userInfo.birthday;
+            const status = snapshot.data()?.userInfo.status;
+
+            localStorage.setItem(
+              'user',
+              JSON.stringify({
+                firstName,
+                secondName,
+                birthday,
+                status,
+              })
+            );
 
             // Create new action with first and second names
             // Dispatch action to reducer
@@ -56,35 +67,37 @@ function App() {
                 secondName,
               })
             );
+
+            dispatch(AddUserDate(birthday));
           }
         });
     }
-  });
+  }
 
   return (
     <Router>
       <Switch>
-        {userId ? (
+        {auth.currentUser ? (
           <>
-            <Redirect exact from='/signup' to='/' />
-
             <Route exact path='/'>
+              <Redirect exact from='/signup' to='/' />
               <Main />
             </Route>
-            <Route exact path={`/${userId}`}>
+            <Route path={`/${auth.currentUser?.uid}`}>
               <Profile />
             </Route>
+            <Route path='/users/*' component={UsersProfile} />
           </>
         ) : (
           <>
             <Route exact path='/'>
               <Login />
             </Route>
-            <Route exact path='/signup'>
+            <Route path='/signup'>
               <Signup />
             </Route>
           </>
-        )}
+        )}{' '}
       </Switch>
     </Router>
   );

@@ -4,92 +4,85 @@ import { Link } from 'react-router-dom';
 
 //Components
 import Navbar from '../../Containers/Navbar';
-import Sidebar from '../../Containers/User/Sidebar';
 
 // Style and material ui
-import { Button, Avatar, Drawer } from '@material-ui/core';
-import ExitToAppRoundedIcon from '@material-ui/icons/ExitToAppRounded';
-import MenuIcon from '@material-ui/icons/Menu';
-import PersonRoundedIcon from '@material-ui/icons/PersonRounded';
+import { IconButton, Menu, MenuItem } from '@material-ui/core';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
+import MessageIcon from '@material-ui/icons/Message';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 
 //Redux
-import {
-  useSelector as useReduxSelector,
-  TypedUseSelectorHook,
-} from 'react-redux';
-import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 
 // Firebase
 import { auth } from '../../Firebase';
 
-export default function UserNavbar({ setUser }: any) {
-  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
-  const store = useSelector((store) => store.auth);
-
-  // Create state for menu
-  const [state, setState] = useState({
-    right: false,
-  });
-
-  const [userId, setUserID] = useState<string | undefined>(store.userId);
+export default function UserNavbar() {
+  const [userId, setUserId] = useState<undefined | string>(
+    auth.currentUser?.uid
+  );
 
   // Handle for sign out
   const handleSignOut = () => {
     auth.signOut();
   };
 
-  // Toggle funtion for menu
-  const toggleDrawer = (anchor: any, open: any) => (event: any) => {
-    if (
-      event.type === 'keydown' &&
-      (event.key === 'Tab' || event.key === 'Shift')
-    ) {
-      return;
-    }
+  // Create state for menu
+  const [anchorEl, setAnchorEl] = useState(null);
 
-    setState({ ...state, [anchor]: open });
+  const handleClick = (event: any) => {
+    setAnchorEl(event.currentTarget);
   };
 
-  // Get window width
-  const width = +window.innerWidth;
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  console.log('Nav');
 
   return (
     <Navbar>
+      <IconButton>
+        <MessageIcon />
+      </IconButton>
+      <IconButton>
+        <NotificationsIcon />
+      </IconButton>
       <Link to='/'>
-        <Button variant='contained' color='primary' onClick={handleSignOut}>
-          <ExitToAppRoundedIcon />
-        </Button>
+        <IconButton>
+          <LibraryBooksIcon />
+        </IconButton>
       </Link>
-      <Button variant='text' color='primary'>
-        <Link to={`${userId}`}>
-          <Avatar className='avatar'>
-            <PersonRoundedIcon />
-          </Avatar>
-        </Link>
-      </Button>
-
-      {
-        // If window width less than 1080px then we render menu button
-        width <= 1080 ? (
-          <>
-            <Button
-              onClick={toggleDrawer('right', true)}
-              variant='contained'
-              color='primary'
-            >
-              <MenuIcon />
-            </Button>
-            <Drawer
-              anchor='right'
-              open={state['right']}
-              onClose={toggleDrawer('right', false)}
-            >
-              <Sidebar></Sidebar>
-            </Drawer>
-          </>
-        ) : // Else nothing
-        null
-      }
+      <Link to={`/users/${auth.currentUser?.uid}`}>
+        <IconButton>
+          <AccountCircleIcon />
+        </IconButton>{' '}
+      </Link>
+      <IconButton
+        aria-controls='simple-menu'
+        aria-haspopup='true'
+        onClick={handleClick}
+      >
+        <MoreVertIcon />
+      </IconButton>
+      <Menu
+        id='simple-menu'
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>
+          <Link to={`/${userId}`}> Profile </Link>
+        </MenuItem>
+        <MenuItem onClick={handleClose}> Friends </MenuItem>
+        <MenuItem onClick={handleClose}> Groups </MenuItem>
+        <MenuItem onClick={handleClose}> Setting </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Link to='/' onClick={handleSignOut}>
+            Logout
+          </Link>
+        </MenuItem>
+      </Menu>
     </Navbar>
   );
 }

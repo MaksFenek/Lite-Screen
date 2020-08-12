@@ -1,16 +1,6 @@
 .main {
-  position: relative;
   margin-top: 80px;
-  .content {
-    margin-right: 320px;
+  .main-content {
     z-index: -1;
-  }
-}
-
-@media screen and (max-width: 1080px) {
-  .main {
-    .content {
-      margin-right: 0;
-    }
   }
 }

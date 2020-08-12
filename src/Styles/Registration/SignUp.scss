@@ -1,11 +1,7 @@
-html {
-  overflow-x: hidden;
-}
 .signup {
-  margin: 0 -10px;
+  margin: 0 10px;
   padding-top: 90px;
   min-height: calc(100vh - 100px);
-  background: linear-gradient(45deg, #fff, #e3f2fd);
   &-body {
     display: flex;
     justify-content: space-between;
@@ -14,14 +10,13 @@ html {
   &-image {
     height: 410px;
     width: 600px;
-    background: url('../Icons/undraw_friendship_mni7.svg') center center
+    background: url('../../Icons/undraw_friendship_mni7.svg') center center
       no-repeat;
     background-size: cover;
   }
 
   &-forms {
     padding: 30px 20px;
-    margin-right: 20px;
     background: #bbdefb;
     border: 1px solid #64b5f6;
     border-radius: 10px;
