@@ -31,7 +31,7 @@
       margin-left: 20px;
       grid-area: info;
       display: grid;
-      grid-template-rows: 50px 140px 1fr;
+      grid-template-rows: 50px 1fr 50px;
 
       grid-template-areas:
         'names'

@@ -1,5 +1,5 @@
 // React
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 //Components
@@ -19,9 +19,11 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { auth } from '../../Firebase';
 
 export default function UserNavbar() {
-  const [userId, setUserId] = useState<undefined | string>(
-    auth.currentUser?.uid
-  );
+  const [userId, setUserId] = useState<undefined | string>(undefined);
+
+  useEffect(() => {
+    setUserId(auth.currentUser?.uid);
+  }, []);
 
   // Handle for sign out
   const handleSignOut = () => {
@@ -29,16 +31,15 @@ export default function UserNavbar() {
   };
 
   // Create state for menu
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log('Nav');
 
   return (
     <Navbar>
@@ -56,7 +57,7 @@ export default function UserNavbar() {
       <Link to={`/users/${auth.currentUser?.uid}`}>
         <IconButton>
           <AccountCircleIcon />
-        </IconButton>{' '}
+        </IconButton>
       </Link>
       <IconButton
         aria-controls='simple-menu'
@@ -66,6 +67,7 @@ export default function UserNavbar() {
         <MoreVertIcon />
       </IconButton>
       <Menu
+        keepMounted
         id='simple-menu'
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -77,6 +79,7 @@ export default function UserNavbar() {
         <MenuItem onClick={handleClose}> Friends </MenuItem>
         <MenuItem onClick={handleClose}> Groups </MenuItem>
         <MenuItem onClick={handleClose}> Setting </MenuItem>
+
         <MenuItem onClick={handleClose}>
           <Link to='/' onClick={handleSignOut}>
             Logout

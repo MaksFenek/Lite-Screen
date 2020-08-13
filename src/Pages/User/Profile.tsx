@@ -1,5 +1,5 @@
 // react
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Components
 import UserNavbar from '../../Containers/User/UserNavbar';
@@ -54,21 +54,24 @@ export default function Profile() {
   // Create dispatch
   const dispatch = useDispatch();
 
-  // Refs
-  const statusRef = useRef<HTMLInputElement>(null);
-  const firstNameRef = useRef<HTMLInputElement>(null);
-  const secondNameRef = useRef<HTMLInputElement>(null);
-  const birthdayRef = useRef<HTMLInputElement>(null);
-
-  const user: userInfoInterface = JSON.parse(localStorage.getItem('user')!);
   // Create state for user info
   const [userInfo, setUserInfo] = useState<userInfoInterface>({
-    firstName: state.firstName || user.firstName,
-    secondName: state.secondName || user.secondName,
-    birthday: state.date || user.birthday,
-    status: state.status || user.status,
+    firstName: '',
+    secondName: '',
+    birthday: '',
+    status: '',
   });
 
+  useEffect(() => {
+    if (state.firstName !== '') {
+      setUserInfo({
+        firstName: state.firstName,
+        secondName: state.secondName,
+        birthday: state.date,
+        status: state.status,
+      });
+    }
+  }, [state]);
   // Handle actions
   const handleImg = (picture: any) => {
     // Get file from input
@@ -77,10 +80,10 @@ export default function Profile() {
   // Handle actions
   const handleClick = () => {
     // Get user info from inputs
-    const status = statusRef.current!.value;
-    const firstName = firstNameRef.current!.value;
-    const secondName = secondNameRef.current!.value;
-    const birthday = birthdayRef.current!.value;
+    const status = userInfo.status;
+    const firstName = userInfo.firstName;
+    const secondName = userInfo.secondName;
+    const birthday = userInfo.birthday;
 
     if (firstName !== '' && secondName !== '') {
       setOpen(true);
@@ -89,26 +92,17 @@ export default function Profile() {
       dispatch(AddUserDate(birthday));
       dispatch(AddUserStatus(status));
 
-      // Set info in firebase
-      db.collection('users').doc(`${auth.currentUser?.uid}`).set({
-        userInfo: {
-          firstName,
-          secondName,
-          birthday,
-          status,
-        },
-      });
-
-      // Set user information to local storage
-      localStorage.setItem(
-        'user',
-        JSON.stringify({
-          firstName,
-          secondName,
-          birthday,
-          status,
-        })
-      );
+      if (auth.currentUser?.uid) {
+        // Set info in firebase
+        db.collection('users').doc(`${auth.currentUser?.uid}`).set({
+          userInfo: {
+            firstName,
+            secondName,
+            birthday,
+            status,
+          },
+        });
+      }
     }
   };
 
@@ -154,11 +148,9 @@ export default function Profile() {
                 <TextField
                   fullWidth
                   multiline
-                  inputRef={statusRef}
                   onChange={handleChangeStatus}
                   type='text'
                   label='Status'
-                  rows='2'
                   rowsMax='2'
                   value={userInfo.status}
                   InputLabelProps={{
@@ -169,7 +161,6 @@ export default function Profile() {
               <div className='names'>
                 <TextField
                   className='firstname'
-                  inputRef={firstNameRef}
                   onChange={handleChangeFirstName}
                   type='text'
                   required
@@ -178,7 +169,6 @@ export default function Profile() {
                 />
                 <TextField
                   className='secondname'
-                  inputRef={secondNameRef}
                   onChange={handleChangeSecondName}
                   type='text'
                   required
@@ -189,7 +179,6 @@ export default function Profile() {
 
               <div className='dls'>
                 <TextField
-                  inputRef={birthdayRef}
                   onChange={handleChangeBirthday}
                   type='date'
                   required
@@ -202,7 +191,6 @@ export default function Profile() {
               </div>
             </div>
           </div>
-
           <Button
             onClick={handleClick}
             className='right'
