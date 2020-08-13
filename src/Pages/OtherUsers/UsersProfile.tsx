@@ -1,5 +1,5 @@
 // react
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Components
 import UserNavbar from '../../Containers/User/UserNavbar';
@@ -19,13 +19,7 @@ import { db } from '../../Firebase';
 
 export default function UsersProfile() {
   // Create state for user ID
-  const [userId, setUserId] = useState<undefined | string>(
-    // Get pathname of the page and delele '/'
-    document.location.pathname
-      .split('')
-      .filter((item, index) => index > 6 && item)
-      .join('')
-  );
+  const [userId, setUserId] = useState<undefined | string>(undefined);
 
   // Create state for user info
   const [userInfo, setUserInfo] = useState({
@@ -34,26 +28,34 @@ export default function UsersProfile() {
     date: '',
     status: '',
   });
-
-  if (userId) {
-    if (userInfo.firstName === '') {
-      // Get the users collection
-      db.collection('users')
-        .doc(userId)
-        .get()
-        .then((snapshot) => {
-          // Take an user object and check if the user is exist
-          if (snapshot.exists) {
-            setUserInfo({
-              firstName: snapshot.data()?.userInfo.firstName,
-              secondName: snapshot.data()?.userInfo.secondName,
-              date: snapshot.data()?.userInfo.birthday,
-              status: snapshot.data()?.userInfo.status,
-            });
-          }
-        });
+  useEffect(() => {
+    setUserId(
+      // Get pathname of the page and delele '/users/'
+      document.location.pathname
+        .split('')
+        .filter((item, index) => index > 6 && item)
+        .join('')
+    );
+    if (userId) {
+      if (userInfo.firstName === '') {
+        // Get the users collection
+        db.collection('users')
+          .doc(userId)
+          .get()
+          .then((snapshot) => {
+            // Take an user object and check if the user is exist
+            if (snapshot.exists) {
+              setUserInfo({
+                firstName: snapshot.data()?.userInfo.firstName,
+                secondName: snapshot.data()?.userInfo.secondName,
+                date: snapshot.data()?.userInfo.birthday,
+                status: snapshot.data()?.userInfo.status,
+              });
+            }
+          });
+      }
     }
-  }
+  }, [userId, userInfo.firstName]);
 
   return (
     <>
@@ -71,9 +73,11 @@ export default function UsersProfile() {
                 </h3>
                 <span>Offline</span>
               </div>
-              <div className='status'>
-                <p>{userInfo.status || 'There is no status'}</p>
-              </div>
+              {userInfo.status ? (
+                <div className='status'>
+                  <p>{userInfo.status}</p>
+                </div>
+              ) : null}
 
               <div className='people'>
                 <div className='friends'>

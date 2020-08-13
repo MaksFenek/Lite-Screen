@@ -39,18 +39,21 @@ export default function SignUp() {
         emailRef.current!.value,
         passwordRef.current!.value
       )
+
+      .then(() => {
+        if (auth.currentUser?.uid) {
+          // Get a user id
+          const userId = auth.currentUser?.uid;
+          // Create new document in users collection with name as user id
+          db.collection('users').doc(userId).set({
+            // Set user information in document
+            userInfo: { firstName, secondName },
+          });
+        }
+      })
       .catch((e) => {
         // Checking if there is an error and then set it in error state for render
         setError(e.message);
-      })
-      .then(() => {
-        // Get a user id
-        const userId = auth.currentUser?.uid;
-        // Create new document in users collection with name as user id
-        db.collection('users').doc(userId).set({
-          // Set user information in document
-          userInfo: { firstName, secondName },
-        });
       });
   };
 

@@ -1,5 +1,5 @@
 // React and react-router
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,22 +7,25 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-// Pages
-import Signup from './Pages/Registrations/SignupPage';
-import Login from './Pages/Registrations/LoginPage';
-import Main from './Pages/User/Main';
-import Profile from './Pages/User/Profile';
-
 // Redux
 import { useDispatch } from 'react-redux';
 import {
   AddFirstAndSecondNamesAction,
   AddUserDate,
+  AddUserStatus,
 } from './Redux/Actions/mainActions';
 
 // Firebase
 import { auth, db } from './Firebase';
-import UsersProfile from './Pages/OtherUsers/UsersProfile';
+
+// Pages
+const Signup = React.lazy(() => import('./Pages/Registrations/SignupPage'));
+const Login = React.lazy(() => import('./Pages/Registrations/LoginPage'));
+const Main = React.lazy(() => import('./Pages/User/Main'));
+const Profile = React.lazy(() => import('./Pages/User/Profile'));
+const UsersProfile = React.lazy(() =>
+  import('./Pages/OtherUsers/UsersProfile')
+);
 
 // ==== Main function ====
 function App() {
@@ -30,12 +33,16 @@ function App() {
   const dispatch = useDispatch();
 
   const [userId, setUserID] = useState<string | undefined>(undefined);
+  const [loaded, setLoaded] = useState<boolean | undefined>(undefined);
 
-  // If there is a logged in user, set it in user state
-  auth.onAuthStateChanged((person) => {
-    setUserID(person?.uid);
-  });
-  if (!localStorage.getItem('user')) {
+  useEffect(() => {
+    setUserID(auth.currentUser?.uid);
+
+    // If there is a logged in user, set it in user state
+    auth.onAuthStateChanged((person) => {
+      setUserID(person?.uid);
+      setLoaded(true);
+    });
     if (userId) {
       db.collection('users')
         .doc(userId)
@@ -49,17 +56,7 @@ function App() {
             const birthday = snapshot.data()?.userInfo.birthday;
             const status = snapshot.data()?.userInfo.status;
 
-            localStorage.setItem(
-              'user',
-              JSON.stringify({
-                firstName,
-                secondName,
-                birthday,
-                status,
-              })
-            );
-
-            // Create new action with first and second names
+            // Create new action with user info
             // Dispatch action to reducer
             dispatch(
               AddFirstAndSecondNamesAction({
@@ -67,39 +64,47 @@ function App() {
                 secondName,
               })
             );
-
             dispatch(AddUserDate(birthday));
+            dispatch(AddUserStatus(status));
           }
         });
     }
-  }
+  }, [userId, dispatch]);
 
   return (
-    <Router>
-      <Switch>
-        {auth.currentUser ? (
-          <>
-            <Route exact path='/'>
-              <Redirect exact from='/signup' to='/' />
-              <Main />
-            </Route>
-            <Route path={`/${auth.currentUser?.uid}`}>
-              <Profile />
-            </Route>
-            <Route path='/users/*' component={UsersProfile} />
-          </>
-        ) : (
-          <>
-            <Route exact path='/'>
-              <Login />
-            </Route>
-            <Route path='/signup'>
-              <Signup />
-            </Route>
-          </>
-        )}{' '}
-      </Switch>
-    </Router>
+    <React.Suspense fallback={<></>}>
+      <Router>
+        <Switch>
+          {loaded ? (
+            <>
+              {auth.currentUser && loaded ? (
+                <>
+                  <Route exact path='/'>
+                    <Redirect exact from='/signup' to='/' />
+                    <Main />
+                  </Route>
+                  <Route path={`/${auth.currentUser?.uid}`}>
+                    <Profile />
+                  </Route>
+                  <Route path='/users/*' component={UsersProfile} />
+                </>
+              ) : (
+                <>
+                  <Route exact path='/'>
+                    <Login />
+                  </Route>
+                  <Route path='/signup'>
+                    <Signup />
+                  </Route>
+                </>
+              )}
+            </>
+          ) : (
+            ''
+          )}
+        </Switch>
+      </Router>
+    </React.Suspense>
   );
 }
 
