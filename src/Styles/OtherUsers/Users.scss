@@ -61,6 +61,7 @@
       }
 
       .status {
+        height: min-content;
         grid-area: status;
         background: #bbdefb;
         margin-top: 10px;
@@ -73,7 +74,6 @@
           padding: 2px;
           background: #e0f2f1;
           border-radius: 5px;
-          height: 80%;
         }
       }
       .people {
@@ -171,6 +171,11 @@
       }
       .info {
         margin-left: 0;
+        .names {
+          h3 {
+            font-size: 24px;
+          }
+        }
       }
     }
     .second-row {

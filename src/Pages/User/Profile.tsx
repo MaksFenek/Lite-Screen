@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 
 // Components
-import UserNavbar from '../../Containers/User/UserNavbar';
 import ImageUploader from 'react-images-upload';
 
 // Style and material ui
@@ -129,7 +128,6 @@ export default function Profile() {
 
   return (
     <>
-      <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
           <div className='content'>

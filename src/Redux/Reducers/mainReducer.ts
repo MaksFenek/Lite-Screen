@@ -5,10 +5,8 @@ import {
   ADD_USER_STATUS,
 } from '../Constants';
 // Actions
-import { AddFirstAndSecondNamesActionInterface } from '../Actions/mainActions';
 
 // ====TypeScript ====
-type ActionInterfaces = AddFirstAndSecondNamesActionInterface;
 
 export interface InitialStateInterface {
   firstName: string;

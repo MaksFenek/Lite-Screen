@@ -12,6 +12,8 @@ import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import MessageIcon from '@material-ui/icons/Message';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import SearchIcon from '@material-ui/icons/Search';
+import Tooltip from '@material-ui/core/Tooltip';
 
 //Redux
 
@@ -43,21 +45,37 @@ export default function UserNavbar() {
 
   return (
     <Navbar>
-      <IconButton>
-        <MessageIcon />
-      </IconButton>
-      <IconButton>
-        <NotificationsIcon />
-      </IconButton>
-      <Link to='/'>
+      <Link to='/search'>
+        <Tooltip title='Search'>
+          <IconButton>
+            <SearchIcon />
+          </IconButton>
+        </Tooltip>
+      </Link>
+
+      <Tooltip title='Messages'>
         <IconButton>
-          <LibraryBooksIcon />
+          <MessageIcon />
         </IconButton>
+      </Tooltip>
+      <Tooltip title='Notifications'>
+        <IconButton>
+          <NotificationsIcon />
+        </IconButton>
+      </Tooltip>
+      <Link to='/'>
+        <Tooltip title='News'>
+          <IconButton>
+            <LibraryBooksIcon />
+          </IconButton>
+        </Tooltip>
       </Link>
       <Link to={`/users/${auth.currentUser?.uid}`}>
-        <IconButton>
-          <AccountCircleIcon />
-        </IconButton>
+        <Tooltip title='Profile'>
+          <IconButton>
+            <AccountCircleIcon />
+          </IconButton>
+        </Tooltip>
       </Link>
       <IconButton
         aria-controls='simple-menu'
@@ -73,18 +91,15 @@ export default function UserNavbar() {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>
-          <Link to={`/${userId}`}> Profile </Link>
-        </MenuItem>
+        <Link to={`/${userId}`}>
+          <MenuItem onClick={handleClose}>Edit profile</MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}> Friends </MenuItem>
         <MenuItem onClick={handleClose}> Groups </MenuItem>
         <MenuItem onClick={handleClose}> Setting </MenuItem>
-
-        <MenuItem onClick={handleClose}>
-          <Link to='/' onClick={handleSignOut}>
-            Logout
-          </Link>
-        </MenuItem>
+        <Link to='/' onClick={handleSignOut}>
+          <MenuItem onClick={handleClose}>Logout</MenuItem>
+        </Link>
       </Menu>
     </Navbar>
   );

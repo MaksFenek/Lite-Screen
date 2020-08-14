@@ -20,12 +20,12 @@
   }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 400px) {
   .nav {
     &-buttons {
       width: 100%;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
     }
     &-logo {
       display: none;

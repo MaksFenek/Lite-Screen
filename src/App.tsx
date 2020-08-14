@@ -7,6 +7,8 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+import UserNavbar from './Containers/User/UserNavbar';
+
 // Redux
 import { useDispatch } from 'react-redux';
 import {
@@ -17,6 +19,7 @@ import {
 
 // Firebase
 import { auth, db } from './Firebase';
+import UsersSearch from './Pages/OtherUsers/UsersSearch';
 
 // Pages
 const Signup = React.lazy(() => import('./Pages/Registrations/SignupPage'));
@@ -79,12 +82,16 @@ function App() {
             <>
               {auth.currentUser && loaded ? (
                 <>
+                  <UserNavbar />
                   <Route exact path='/'>
                     <Redirect exact from='/signup' to='/' />
                     <Main />
                   </Route>
                   <Route path={`/${auth.currentUser?.uid}`}>
                     <Profile />
+                  </Route>
+                  <Route path='/search'>
+                    <UsersSearch />
                   </Route>
                   <Route path='/users/*' component={UsersProfile} />
                 </>

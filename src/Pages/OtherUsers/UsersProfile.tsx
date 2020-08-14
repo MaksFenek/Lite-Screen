@@ -1,9 +1,6 @@
 // react
 import React, { useState, useEffect } from 'react';
 
-// Components
-import UserNavbar from '../../Containers/User/UserNavbar';
-
 // Style and material ui
 import '../../Styles/OtherUsers/Users.scss';
 import ProfileIcon from '../../Icons/nophoto.png';
@@ -59,7 +56,6 @@ export default function UsersProfile() {
 
   return (
     <>
-      <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main-users'>
           <div className='content bg'>

@@ -3,12 +3,10 @@ import React from 'react';
 import '../../Styles/User/Main.scss';
 
 // Redux
-import UserNavbar from '../../Containers/User/UserNavbar';
 
 export default function Main() {
   return (
     <>
-      <UserNavbar></UserNavbar>
       <div className='container'>
         <div className='main'>
           <div className='main-content'>
