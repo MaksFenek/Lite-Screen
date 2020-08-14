@@ -2,13 +2,11 @@
 import React, { useState, useEffect } from 'react';
 
 // Components
-import ImageUploader from 'react-images-upload';
 
 // Style and material ui
 import '../../Styles/User/Profile.scss';
 import TextField from '@material-ui/core/TextField';
 import { Button, Snackbar } from '@material-ui/core';
-import ProfileIcon from '../../Icons/nophoto.png';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 // Redux
@@ -25,7 +23,7 @@ import {
 } from '../../Redux/Actions/mainActions';
 
 // Firebase
-import { db, auth } from '../../Firebase';
+import { db, auth, storageRef } from '../../Firebase';
 
 export default function Profile() {
   function Alert(props: AlertProps) {
@@ -60,8 +58,10 @@ export default function Profile() {
     birthday: '',
     status: '',
   });
+  const [photo, setPhoto] = useState<string | undefined>(undefined);
 
   useEffect(() => {
+    // Set user information
     if (state.firstName !== '') {
       setUserInfo({
         firstName: state.firstName,
@@ -70,10 +70,34 @@ export default function Profile() {
         status: state.status,
       });
     }
+
+    // Create ref to user photo
+    const userPhotoRef = storageRef
+      .child(`${auth.currentUser?.uid}`)
+      .child('photo');
+
+    // Get user info and set it to state
+    userPhotoRef.getDownloadURL().then((img) => {
+      setPhoto(img);
+    });
   }, [state]);
   // Handle actions
-  const handleImg = (picture: any) => {
-    // Get file from input
+  const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Get image from input
+    const img = e.currentTarget.files![0];
+
+    // Create ref to user photo
+    const userPhotoRef = storageRef
+      .child(`${auth.currentUser?.uid}`)
+      .child('photo');
+
+    // Send user photo to firebase storage
+    userPhotoRef.put(img).then(() => {
+      // Set user photo to state
+      userPhotoRef.getDownloadURL().then((img) => {
+        setPhoto(img);
+      });
+    });
   };
 
   // Handle actions
@@ -132,14 +156,22 @@ export default function Profile() {
         <div className='main'>
           <div className='content'>
             <div className='image'>
-              <img src={ProfileIcon} alt='userPhoto' height='200' width='200' />
-              <ImageUploader
-                withIcon={false}
-                buttonText='Choose images'
+              <div className='user-image'>
+                <img src={photo} alt='' />
+              </div>
+
+              <input
+                accept='image/*'
+                className='img-input'
+                id='contained-button-file'
+                type='file'
                 onChange={handleImg}
-                imgExtension={['.jpg', '.gif', '.png', '.gif']}
-                maxFileSize={5242880}
               />
+              <label htmlFor='contained-button-file'>
+                <Button variant='contained' color='primary' component='span'>
+                  Upload
+                </Button>
+              </label>
             </div>
             <div className='info'>
               <div className='status'>

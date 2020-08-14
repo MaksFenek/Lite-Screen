@@ -82,9 +82,11 @@ function App() {
             <>
               {auth.currentUser && loaded ? (
                 <>
+                  <Route path='/signup'>
+                    <Redirect exact from='/signup' to='/' />
+                  </Route>
                   <UserNavbar />
                   <Route exact path='/'>
-                    <Redirect exact from='/signup' to='/' />
                     <Main />
                   </Route>
                   <Route path={`/${auth.currentUser?.uid}`}>

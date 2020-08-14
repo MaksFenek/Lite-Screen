@@ -5,14 +5,20 @@ export interface PostAction {
   payload: {
     name: string;
     link: string;
+    photo: string;
   };
 }
 
-export const AddUserInSearch = (name: string, link: string): PostAction => ({
+export const AddUserInSearch = (
+  name: string,
+  link: string,
+  photo: string
+): PostAction => ({
   type: ADD_USER_IN_SEARCH,
   payload: {
     name,
     link,
+    photo,
   },
 });
 

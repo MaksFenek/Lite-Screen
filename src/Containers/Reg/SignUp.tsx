@@ -7,8 +7,7 @@ import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 // Firebase
-import { auth, db } from '../../Firebase';
-
+import { auth, db, storageRef } from '../../Firebase';
 // ==== Main component ====
 export default function SignUp() {
   // ==== TypeScript ====
@@ -49,6 +48,13 @@ export default function SignUp() {
             // Set user information in document
             userInfo: { firstName, secondName },
           });
+          fetch('https://semantic-ui.com/images/wireframe/white-image.png')
+            .then(function (response) {
+              return response.blob();
+            })
+            .then(function (blob) {
+              storageRef.child(`${userId}`).child('photo').put(blob);
+            });
         }
       })
       .catch((e) => {

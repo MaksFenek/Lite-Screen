@@ -13,18 +13,21 @@
       padding: 0;
       box-shadow: none;
     }
-    .image {
-      grid-area: image;
-      text-align: center;
-
+    .user-image {
+      display: block;
+      height: 250px;
+      width: 250px;
+      margin-bottom: 10px;
+      position: relative;
+      overflow: hidden;
       img {
-        background-size: cover;
-        display: block;
-        height: 250px;
-        width: 250px;
-        border: 1px solid #69f0ae;
-        margin-bottom: 10px;
-        box-shadow: 2px 3px 10px #e0e0e0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 400px;
+        max-height: 400px;
+        z-index: -10;
       }
     }
     .info {

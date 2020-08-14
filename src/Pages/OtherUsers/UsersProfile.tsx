@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 
 // Style and material ui
 import '../../Styles/OtherUsers/Users.scss';
-import ProfileIcon from '../../Icons/nophoto.png';
 import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 
@@ -12,7 +11,7 @@ import SearchIcon from '@material-ui/icons/Search';
 // Redux
 
 // Firebase
-import { db } from '../../Firebase';
+import { db, storageRef } from '../../Firebase';
 
 export default function UsersProfile() {
   // Create state for user ID
@@ -25,7 +24,18 @@ export default function UsersProfile() {
     date: '',
     status: '',
   });
+  const [photo, setPhoto] = useState<string>('');
+
   useEffect(() => {
+    if (userId) {
+      const userPhotoRef = storageRef.child(`${userId}`).child('photo');
+
+      // Get user info and set it to state
+      userPhotoRef.getDownloadURL().then((img) => {
+        setPhoto(img);
+      });
+    }
+
     setUserId(
       // Get pathname of the page and delele '/users/'
       document.location.pathname
@@ -60,7 +70,9 @@ export default function UsersProfile() {
         <div className='main-users'>
           <div className='content bg'>
             <div className='image'>
-              <img src={ProfileIcon} alt='userPhoto' height='200' width='200' />{' '}
+              <div className='user-image'>
+                <img src={photo} alt='userPhoto' />
+              </div>
             </div>
             <div className='info'>
               <div className='names'>

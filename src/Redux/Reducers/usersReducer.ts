@@ -1,15 +1,17 @@
 import { ADD_USER_IN_SEARCH, ADD_LOADED } from '../Constants';
 
 export interface InitialUsersStateInterface {
-  posts: any;
+  users: any;
   count: number;
   loaded: boolean;
+  photo: string;
 }
 
 const initialState: InitialUsersStateInterface = {
-  posts: [],
+  users: [],
   count: 0,
   loaded: false,
+  photo: '',
 };
 
 export default (
@@ -19,7 +21,10 @@ export default (
   switch (type) {
     case ADD_USER_IN_SEARCH:
       return Object.assign({}, state, {
-        posts: [...state.posts, { name: payload.name, link: payload.link }],
+        users: [
+          ...state.users,
+          { name: payload.name, link: payload.link, photo: payload.photo },
+        ],
         count: 1 + state.count,
       });
 
