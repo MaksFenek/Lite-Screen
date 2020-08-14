@@ -19,7 +19,6 @@ import {
 
 // Firebase
 import { auth, db } from './Firebase';
-import UsersSearch from './Pages/OtherUsers/UsersSearch';
 
 // Pages
 const Signup = React.lazy(() => import('./Pages/Registrations/SignupPage'));
@@ -29,6 +28,8 @@ const Profile = React.lazy(() => import('./Pages/User/Profile'));
 const UsersProfile = React.lazy(() =>
   import('./Pages/OtherUsers/UsersProfile')
 );
+const Friends = React.lazy(() => import('./Pages/User/Friends'));
+const UsersSearch = React.lazy(() => import('./Pages/OtherUsers/UsersSearch'));
 
 // ==== Main function ====
 function App() {
@@ -71,9 +72,31 @@ function App() {
             dispatch(AddUserStatus(status));
           }
         });
+
+      // Get the current user document from firebase
+      db.collection('users')
+        .doc(userId)
+        .get()
+        .then((user) => {
+          if (user.exists) {
+            if (
+              // Check if  friends in user document in firebase is not equel to friends array in local storage
+              // to not load again the friends array from firebase
+              user.data()?.friends !==
+                JSON.parse(localStorage.getItem('friends')!) &&
+              // And that there is friends array is exist
+              JSON.parse(localStorage.getItem('friends')!) !== undefined &&
+              user.data()?.friends !== undefined
+            )
+              // Set friends in local storage
+              localStorage.setItem(
+                'friends',
+                JSON.stringify(user.data()?.friends)
+              );
+          }
+        });
     }
   }, [userId, dispatch]);
-
   return (
     <React.Suspense fallback={<></>}>
       <Router>
@@ -82,10 +105,10 @@ function App() {
             <>
               {auth.currentUser && loaded ? (
                 <>
+                  <UserNavbar />
                   <Route path='/signup'>
                     <Redirect exact from='/signup' to='/' />
                   </Route>
-                  <UserNavbar />
                   <Route exact path='/'>
                     <Main />
                   </Route>
@@ -94,6 +117,10 @@ function App() {
                   </Route>
                   <Route path='/search'>
                     <UsersSearch />
+                  </Route>
+                  <Route path='/messages'></Route>
+                  <Route path='/friends'>
+                    <Friends />
                   </Route>
                   <Route path='/users/*' component={UsersProfile} />
                 </>

@@ -1,5 +1,6 @@
 // react
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 // Style and material ui
 import '../../Styles/OtherUsers/Users.scss';
@@ -11,7 +12,9 @@ import SearchIcon from '@material-ui/icons/Search';
 // Redux
 
 // Firebase
-import { db, storageRef } from '../../Firebase';
+import { db, storageRef, auth } from '../../Firebase';
+import { firestore } from 'firebase';
+// import { AddFriend } from '../../Containers/Functions/UsersFunctions';
 
 export default function UsersProfile() {
   // Create state for user ID
@@ -24,9 +27,34 @@ export default function UsersProfile() {
     date: '',
     status: '',
   });
+
+  // Create photo for user photo
   const [photo, setPhoto] = useState<string>('');
 
+  // Create state for initialize a friend
+  const [isFriend, setIsFriend] = useState<boolean>(false);
+
+  let location = useLocation();
+
   useEffect(() => {
+    db.collection('users')
+      .doc(auth.currentUser?.uid)
+      .get()
+      .then((user) => {
+        if (user.exists) {
+          if (user.data()?.friends) {
+            if (
+              user.data()?.friends.find((friend: any) => friend.user === userId)
+            ) {
+              setIsFriend(true); //
+            }
+          }
+          if (userId === auth.currentUser?.uid) {
+            setIsFriend(true);
+          }
+        }
+      });
+
     if (userId) {
       const userPhotoRef = storageRef.child(`${userId}`).child('photo');
 
@@ -62,7 +90,73 @@ export default function UsersProfile() {
           });
       }
     }
-  }, [userId, userInfo.firstName]);
+  }, [userId, userInfo, location]);
+
+  useEffect(() => {
+    setUserInfo({ firstName: '', secondName: '', date: '', status: '' });
+  }, [location]);
+
+  const AddFriend = () => {
+    // Get current user ID
+    const currentUserID = auth.currentUser?.uid;
+
+    // Find user in users collections and get him
+    db.collection('users')
+      .doc(userId)
+      .get()
+      .then((userData) => {
+        if (userData.exists) {
+          // Add in current user document new friend
+          db.collection('users')
+            .doc(currentUserID)
+            .update({
+              friends: firestore.FieldValue.arrayUnion({
+                user: userId,
+                name: `${userData.data()?.userInfo.firstName} ${
+                  userData.data()?.userInfo.secondName
+                }`,
+                photo,
+              }),
+            });
+          // Set is friend
+          setIsFriend(true);
+
+          // Get all friends from local storage
+          const friends = JSON.parse(localStorage.getItem('friends')!);
+
+          if (localStorage.getItem('friends')) {
+            // Add new friend to friends array in local storage
+            localStorage.setItem(
+              'friends',
+              JSON.stringify([
+                ...friends,
+                {
+                  user: userId,
+                  name: `${userData.data()?.userInfo.firstName} ${
+                    userData.data()?.userInfo.secondName
+                  }`,
+                  photo,
+                },
+              ])
+            );
+          } else {
+            // Create an array of friends in local storage
+            localStorage.setItem(
+              'friends',
+              JSON.stringify([
+                {
+                  user: userId,
+                  name: `${userData.data()?.userInfo.firstName} ${
+                    userData.data()?.userInfo.secondName
+                  }`,
+                  photo,
+                },
+              ])
+            );
+          }
+        }
+      });
+  };
 
   return (
     <>
@@ -101,9 +195,26 @@ export default function UsersProfile() {
             </div>
           </div>
           <div className='second-row'>
-            <Button className='subscribe' variant='contained' color='primary'>
-              Subscribe
-            </Button>
+            {isFriend ? (
+              <Button
+                className='subscribe'
+                variant='contained'
+                color='default'
+                disabled
+              >
+                Friend
+              </Button>
+            ) : (
+              <Button
+                onClick={AddFriend}
+                className='subscribe'
+                variant='contained'
+                color='primary'
+              >
+                Subscribe
+              </Button>
+            )}
+
             <div className='search'>
               <div className='search-icon'>
                 <SearchIcon />

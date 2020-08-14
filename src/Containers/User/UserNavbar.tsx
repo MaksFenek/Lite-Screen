@@ -10,7 +10,6 @@ import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import MessageIcon from '@material-ui/icons/Message';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -58,11 +57,6 @@ export default function UserNavbar() {
           <MessageIcon />
         </IconButton>
       </Tooltip>
-      <Tooltip title='Notifications'>
-        <IconButton>
-          <NotificationsIcon />
-        </IconButton>
-      </Tooltip>
       <Link to='/'>
         <Tooltip title='News'>
           <IconButton>
@@ -94,7 +88,9 @@ export default function UserNavbar() {
         <Link to={`/${userId}`}>
           <MenuItem onClick={handleClose}>Edit profile</MenuItem>
         </Link>
-        <MenuItem onClick={handleClose}> Friends </MenuItem>
+        <Link to='/friends'>
+          <MenuItem onClick={handleClose}> Friends </MenuItem>
+        </Link>
         <MenuItem onClick={handleClose}> Groups </MenuItem>
         <MenuItem onClick={handleClose}> Setting </MenuItem>
         <Link to='/' onClick={handleSignOut}>

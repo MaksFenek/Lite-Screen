@@ -1,22 +1,26 @@
+// React
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
+// Styles and material ui
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import '../../Styles/OtherUsers/Search.scss';
-
 import AddIcon from '@material-ui/icons/Add';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { IconButton } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { db, storageRef } from '../../Firebase';
-import { AddLoaded, AddUserInSearch } from '../../Redux/Actions/usersActions';
 
+// Redux
+import { AddLoaded, AddUserInSearch } from '../../Redux/Actions/usersActions';
 import {
   useSelector as useReduxSelector,
   TypedUseSelectorHook,
   useDispatch,
 } from 'react-redux';
 import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
+
+// Firebase
+import { db, storageRef } from '../../Firebase';
 
 export default function UsersSearch() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
@@ -35,19 +39,25 @@ export default function UsersSearch() {
     if (!loaded) {
       setLoaded(true);
       dispatch(AddLoaded);
+      // Get the users collection from firebase
       db.collection('users')
         .get()
         .then((doc) => {
           doc.docs.forEach((doc) => {
+            // Get name from user info
             const name = `${doc.data().userInfo.firstName} ${
               doc.data().userInfo.secondName
             }`;
+            //Get user id
             const id = doc.id;
+
+            // Get user photo
             storageRef
               .child(`${id}/`)
               .child('photo')
               .getDownloadURL()
               .then((url) => {
+                // Create new user in search page
                 dispatch(AddUserInSearch(name, id, url));
               });
           });
