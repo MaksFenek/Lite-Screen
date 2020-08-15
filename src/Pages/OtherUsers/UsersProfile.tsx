@@ -13,8 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 // Firebase
 import { db, storageRef, auth } from '../../Firebase';
-import { firestore } from 'firebase';
-// import { AddFriend } from '../../Containers/Functions/UsersFunctions';
+import { AddFriend } from '../../lib/Functions';
 
 export default function UsersProfile() {
   // Create state for user ID
@@ -37,6 +36,11 @@ export default function UsersProfile() {
   let location = useLocation();
 
   useEffect(() => {
+    if (localStorage.getItem('friends')) {
+      JSON.parse(localStorage.getItem('friends')!).forEach((friend: any) => {
+        friend.name === userId ? setIsFriend(true) : setIsFriend(false);
+      });
+    }
     db.collection('users')
       .doc(auth.currentUser?.uid)
       .get()
@@ -96,68 +100,6 @@ export default function UsersProfile() {
     setUserInfo({ firstName: '', secondName: '', date: '', status: '' });
   }, [location]);
 
-  const AddFriend = () => {
-    // Get current user ID
-    const currentUserID = auth.currentUser?.uid;
-
-    // Find user in users collections and get him
-    db.collection('users')
-      .doc(userId)
-      .get()
-      .then((userData) => {
-        if (userData.exists) {
-          // Add in current user document new friend
-          db.collection('users')
-            .doc(currentUserID)
-            .update({
-              friends: firestore.FieldValue.arrayUnion({
-                user: userId,
-                name: `${userData.data()?.userInfo.firstName} ${
-                  userData.data()?.userInfo.secondName
-                }`,
-                photo,
-              }),
-            });
-          // Set is friend
-          setIsFriend(true);
-
-          // Get all friends from local storage
-          const friends = JSON.parse(localStorage.getItem('friends')!);
-
-          if (localStorage.getItem('friends')) {
-            // Add new friend to friends array in local storage
-            localStorage.setItem(
-              'friends',
-              JSON.stringify([
-                ...friends,
-                {
-                  user: userId,
-                  name: `${userData.data()?.userInfo.firstName} ${
-                    userData.data()?.userInfo.secondName
-                  }`,
-                  photo,
-                },
-              ])
-            );
-          } else {
-            // Create an array of friends in local storage
-            localStorage.setItem(
-              'friends',
-              JSON.stringify([
-                {
-                  user: userId,
-                  name: `${userData.data()?.userInfo.firstName} ${
-                    userData.data()?.userInfo.secondName
-                  }`,
-                  photo,
-                },
-              ])
-            );
-          }
-        }
-      });
-  };
-
   return (
     <>
       <div className='container'>
@@ -206,6 +148,8 @@ export default function UsersProfile() {
               </Button>
             ) : (
               <Button
+                name={userId}
+                value={photo}
                 onClick={AddFriend}
                 className='subscribe'
                 variant='contained'

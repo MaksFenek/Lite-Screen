@@ -18,7 +18,7 @@ import {
 } from './Redux/Actions/mainActions';
 
 // Firebase
-import { auth, db } from './Firebase';
+import { auth, db, storageRef } from './Firebase';
 
 // Pages
 const Signup = React.lazy(() => import('./Pages/Registrations/SignupPage'));
@@ -79,20 +79,59 @@ function App() {
         .get()
         .then((user) => {
           if (user.exists) {
+            // Get the friends from local storage
+            const friends = JSON.parse(localStorage.getItem('friends')!);
+            if (user.data()?.friends) {
+              // Take every friend
+              user.data()?.friends.map((friend: any) => {
+                // Get friend photo
+                storageRef
+                  .child(friend.user)
+                  .child('photo')
+                  .getDownloadURL()
+                  .then((photo) => {
+                    // Check if the friend photo is not the same as before
+                    if (photo !== friend.photo) {
+                      db.collection('users')
+                        .doc(userId)
+                        .update({
+                          // Update the friend photo if array of friends in
+                          friends: friends.map((item: any) =>
+                            item.name === friend.name
+                              ? {
+                                  name: item.name,
+                                  user: item.user,
+                                  photo: photo,
+                                }
+                              : item
+                          ),
+                        })
+                        .then(() => {
+                          // Set new array of friends in local storage
+                          localStorage.setItem(
+                            'friends',
+                            JSON.stringify(user.data()?.friends)
+                          );
+                        });
+                    }
+                  });
+              });
+            }
+
             if (
               // Check if  friends in user document in firebase is not equel to friends array in local storage
               // to not load again the friends array from firebase
-              user.data()?.friends !==
-                JSON.parse(localStorage.getItem('friends')!) &&
+              user.data()?.friends !== friends &&
               // And that there is friends array is exist
-              JSON.parse(localStorage.getItem('friends')!) !== undefined &&
+              friends !== undefined &&
               user.data()?.friends !== undefined
-            )
+            ) {
               // Set friends in local storage
               localStorage.setItem(
                 'friends',
                 JSON.stringify(user.data()?.friends)
               );
+            }
           }
         });
     }

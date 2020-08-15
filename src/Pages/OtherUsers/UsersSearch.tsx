@@ -22,6 +22,8 @@ import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 // Firebase
 import { db, storageRef } from '../../Firebase';
 
+import { AddFriend } from '../../lib/Functions';
+
 export default function UsersSearch() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
   const state = useSelector((store) => store.users);
@@ -100,7 +102,11 @@ export default function UsersSearch() {
                       <IconButton>
                         <MailOutlineIcon />
                       </IconButton>
-                      <IconButton>
+                      <IconButton
+                        name={user.link}
+                        value={user.photo}
+                        onClick={AddFriend}
+                      >
                         <AddIcon />
                       </IconButton>
                     </div>

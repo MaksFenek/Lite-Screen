@@ -1,12 +1,12 @@
 // React
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 // Styles and material ui
 import '../Styles/Navbar.scss';
 
 // ==== TypeScript ====
 interface PropInterface {
-  children: any;
+  children: ReactNode;
 }
 
 export default function Navbar({ children }: PropInterface) {
