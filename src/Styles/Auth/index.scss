@@ -1,18 +1,19 @@
-.login {
-  // margin: 0 10px;
+.auth {
+  margin: 0 10px;
   padding-top: 90px;
-  min-height: calc(100vh - 90px);
+  min-height: calc(100vh - 100px);
   &-body {
     display: flex;
     justify-content: space-between;
     align-items: center;
   }
-  &-image {
+  .signup-image {
+    height: 410px;
+    width: 600px;
+  }
+  .login-image {
     height: 404px;
     width: 586px;
-    background: url('../../Icons/undraw_authentication_fsn5.svg') center center
-      no-repeat;
-    background-size: cover;
   }
 
   &-forms {
@@ -20,6 +21,8 @@
     background: #bbdefb;
     border: 1px solid #64b5f6;
     border-radius: 10px;
+    box-shadow: 2px 3px 6px #e0e0e0;
+
     h3 {
       font-size: 25px;
       text-align: center;
@@ -36,17 +39,17 @@
       margin: 10px;
     }
     p {
-      display: block;
-      width: 200px;
-      line-height: 1;
       color: red;
+      display: block;
+      max-width: 200px;
     }
   }
 }
 
 @media screen and (max-width: 767px) {
-  .login {
-    &-image {
+  .auth {
+    .signup-image,
+    .login-image {
       display: none;
     }
     &-body {
@@ -60,8 +63,9 @@
 }
 
 @media screen and (max-width: 900px) {
-  .login {
-    &-image {
+  .auth {
+    .signup-image,
+    .login-image {
       margin-bottom: 20px;
     }
     &-body {

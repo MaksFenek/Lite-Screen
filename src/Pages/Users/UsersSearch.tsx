@@ -1,14 +1,9 @@
 // React
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 // Styles and material ui
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
-import '../../Styles/OtherUsers/Search.scss';
-import AddIcon from '@material-ui/icons/Add';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
-import { IconButton } from '@material-ui/core';
 
 // Redux
 import { AddLoaded, AddUserInSearch } from '../../Redux/Actions/usersActions';
@@ -22,7 +17,9 @@ import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 // Firebase
 import { db, storageRef } from '../../Firebase';
 
-import { AddFriend } from '../../lib/Functions';
+import { IUserSearch } from '../../_Types/appTypes';
+
+import UserListItem from '../../Containers/User/UserListItem';
 
 export default function UsersSearch() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
@@ -30,7 +27,7 @@ export default function UsersSearch() {
 
   const dispatch = useDispatch();
   // Create state for array of users
-  const [users, setUsers] = useState<Array<any> | undefined>(undefined);
+  const [users, setUsers] = useState<IUserSearch[] | undefined>(undefined);
 
   // Create state loaded for stop loading from database
   const [loaded, setLoaded] = useState<boolean>(state.loaded);
@@ -44,14 +41,14 @@ export default function UsersSearch() {
       // Get the users collection from firebase
       db.collection('users')
         .get()
-        .then((doc) => {
-          doc.docs.forEach((doc) => {
+        .then((snapshot) => {
+          snapshot.docs.forEach((doc) => {
             // Get name from user info
-            const name = `${doc.data().userInfo.firstName} ${
+            const name: string = `${doc.data().userInfo.firstName} ${
               doc.data().userInfo.secondName
             }`;
             //Get user id
-            const id = doc.id;
+            const id: string = doc.id;
 
             // Get user photo
             storageRef
@@ -84,33 +81,12 @@ export default function UsersSearch() {
           {users !== undefined
             ? users!.map((user, index) => {
                 return (
-                  <div className='post' key={index}>
-                    <Link to={`/users/${user.link}`}>
-                      <div className='user-image'>
-                        <img
-                          className='post-img'
-                          src={user.photo}
-                          alt='userPhoto'
-                        />
-                      </div>
-                    </Link>
-                    <div className='post-name'>
-                      <h4>{user.name}</h4>
-                    </div>
-
-                    <div className='post-btn'>
-                      <IconButton>
-                        <MailOutlineIcon />
-                      </IconButton>
-                      <IconButton
-                        name={user.link}
-                        value={user.photo}
-                        onClick={AddFriend}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                    </div>
-                  </div>
+                  <UserListItem
+                    name={user.name}
+                    id={user.id}
+                    photo={user.photo}
+                    isFriend={false}
+                  />
                 );
               })
             : ''}

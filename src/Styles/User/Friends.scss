@@ -17,6 +17,8 @@
       align-items: center;
       background: #90caf9;
       border-radius: 5px;
+      box-shadow: 2px 3px 6px #e0e0e0;
+
       &-icon {
         margin: 0 10px;
         cursor: pointer;
@@ -35,6 +37,8 @@
         padding: 0 10px;
         display: flex;
         align-items: center;
+        box-shadow: 2px 3px 6px #e0e0e0;
+
         .user-image {
           display: block;
           height: 48px;

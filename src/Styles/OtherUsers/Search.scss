@@ -7,6 +7,8 @@
     'search'
     'posts';
   .search {
+    box-shadow: 2px 3px 6px #e0e0e0;
+
     grid-area: search;
     display: flex;
     align-items: center;
@@ -25,11 +27,13 @@
 
   .posts {
     margin-top: 20px;
+
     .post {
       margin-top: 10px;
       padding: 0 10px;
       display: flex;
       align-items: center;
+      box-shadow: 2px 3px 6px #e0e0e0;
       .user-image {
         display: block;
         height: 48px;

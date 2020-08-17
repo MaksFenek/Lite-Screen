@@ -1,14 +1,13 @@
 // React
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 
 // Styles and material ui
-import '../../Styles/User/Friends.scss';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
-import { IconButton } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import MailOutlineIcon from '@material-ui/icons/MailOutline';
+
+import { IFriend } from '../../_Types/appTypes';
+
+import UserListItem from '../../Containers/User/UserListItem';
 
 export default function Friends() {
   const [users, setUsers] = useState<any>(null);
@@ -33,31 +32,15 @@ export default function Friends() {
           </div>
           <div className='friends'>
             {users !== null
-              ? users!.map((user: any, index: any) => {
+              ? users!.map((user: IFriend, index: number) => {
                   return (
-                    <div className='post' key={index}>
-                      <Link to={`/users/${user.user}`}>
-                        <div className='user-image'>
-                          <img
-                            className='post-img'
-                            src={user.photo}
-                            alt='userPhoto'
-                          />
-                        </div>
-                      </Link>
-                      <div className='post-name'>
-                        <h4>{user.name}</h4>
-                      </div>
-
-                      <div className='post-btn'>
-                        <IconButton>
-                          <MailOutlineIcon />
-                        </IconButton>
-                        <IconButton>
-                          <CloseIcon />
-                        </IconButton>
-                      </div>
-                    </div>
+                    <UserListItem
+                      key={index}
+                      name={user.name}
+                      id={user.user}
+                      photo={user.photo}
+                      isFriend={true}
+                    />
                   );
                 })
               : ''}

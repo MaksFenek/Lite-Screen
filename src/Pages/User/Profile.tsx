@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 // Components
 
 // Style and material ui
-import '../../Styles/User/Profile.scss';
 import TextField from '@material-ui/core/TextField';
 import { Button, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
@@ -24,17 +23,13 @@ import {
 
 // Firebase
 import { db, auth, storageRef } from '../../Firebase';
+import { IUserInfo } from '../../_Types/appTypes';
 
 export default function Profile() {
   function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant='filled' {...props} />;
   }
-  interface userInfoInterface {
-    firstName: string;
-    secondName: string;
-    birthday: string;
-    status: string;
-  }
+
   const [open, setOpen] = useState(false);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
@@ -52,7 +47,7 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   // Create state for user info
-  const [userInfo, setUserInfo] = useState<userInfoInterface>({
+  const [userInfo, setUserInfo] = useState<IUserInfo>({
     firstName: '',
     secondName: '',
     birthday: '',
@@ -82,7 +77,7 @@ export default function Profile() {
     });
   }, [state]);
   // Handle actions
-  const handleImg = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImg = (e: React.ChangeEvent<HTMLInputElement>): void => {
     // Get image from input
     const img = e.currentTarget.files![0];
 
@@ -101,12 +96,12 @@ export default function Profile() {
   };
 
   // Handle actions
-  const handleClick = () => {
+  const handleClick = (): void => {
     // Get user info from inputs
-    const status = userInfo.status;
-    const firstName = userInfo.firstName;
-    const secondName = userInfo.secondName;
-    const birthday = userInfo.birthday;
+    const status: string = userInfo.status;
+    const firstName: string = userInfo.firstName;
+    const secondName: string = userInfo.secondName;
+    const birthday: string = userInfo.birthday;
 
     if (firstName !== '' && secondName !== '') {
       setOpen(true);
@@ -131,22 +126,22 @@ export default function Profile() {
 
   // Handle actions
   const handleChangeStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const statusValue = e.currentTarget.value;
+    const statusValue: string = e.currentTarget.value;
     setUserInfo({ ...userInfo, status: statusValue });
   };
 
   const handleChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const firstNameValue = e.currentTarget.value;
+    const firstNameValue: string = e.currentTarget.value;
     setUserInfo({ ...userInfo, firstName: firstNameValue });
   };
 
   const handleChangeSecondName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const secondNameValue = e.currentTarget.value;
+    const secondNameValue: string = e.currentTarget.value;
     setUserInfo({ ...userInfo, secondName: secondNameValue });
   };
 
   const handleChangeBirthday = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const birthdayValue = e.currentTarget.value;
+    const birthdayValue: string = e.currentTarget.value;
     setUserInfo({ ...userInfo, birthday: birthdayValue });
   };
 

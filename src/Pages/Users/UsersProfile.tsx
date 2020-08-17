@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // Style and material ui
-import '../../Styles/OtherUsers/Users.scss';
 import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 
@@ -14,16 +13,17 @@ import SearchIcon from '@material-ui/icons/Search';
 // Firebase
 import { db, storageRef, auth } from '../../Firebase';
 import { AddFriend } from '../../lib/Functions';
+import { IUserInfo, IFriend } from '../../_Types/appTypes';
 
 export default function UsersProfile() {
   // Create state for user ID
   const [userId, setUserId] = useState<undefined | string>(undefined);
 
   // Create state for user info
-  const [userInfo, setUserInfo] = useState({
+  const [userInfo, setUserInfo] = useState<IUserInfo>({
     firstName: '',
     secondName: '',
-    date: '',
+    birthday: '',
     status: '',
   });
 
@@ -36,11 +36,15 @@ export default function UsersProfile() {
   let location = useLocation();
 
   useEffect(() => {
+    // Check if there is array of friends in local storage
     if (localStorage.getItem('friends')) {
+      // Get all friends
       JSON.parse(localStorage.getItem('friends')!).forEach((friend: any) => {
+        // Set flag {isFriend}
         friend.name === userId ? setIsFriend(true) : setIsFriend(false);
       });
     }
+    // Get current user document in firebase
     db.collection('users')
       .doc(auth.currentUser?.uid)
       .get()
@@ -48,9 +52,11 @@ export default function UsersProfile() {
         if (user.exists) {
           if (user.data()?.friends) {
             if (
-              user.data()?.friends.find((friend: any) => friend.user === userId)
+              user
+                .data()
+                ?.friends.find((friend: IFriend) => friend.user === userId)
             ) {
-              setIsFriend(true); //
+              setIsFriend(true);
             }
           }
           if (userId === auth.currentUser?.uid) {
@@ -72,7 +78,7 @@ export default function UsersProfile() {
       // Get pathname of the page and delele '/users/'
       document.location.pathname
         .split('')
-        .filter((item, index) => index > 6 && item)
+        .filter((item: string, index: number) => index > 6 && item)
         .join('')
     );
     if (userId) {
@@ -87,7 +93,7 @@ export default function UsersProfile() {
               setUserInfo({
                 firstName: snapshot.data()?.userInfo.firstName,
                 secondName: snapshot.data()?.userInfo.secondName,
-                date: snapshot.data()?.userInfo.birthday,
+                birthday: snapshot.data()?.userInfo.birthday,
                 status: snapshot.data()?.userInfo.status,
               });
             }
@@ -97,7 +103,7 @@ export default function UsersProfile() {
   }, [userId, userInfo, location]);
 
   useEffect(() => {
-    setUserInfo({ firstName: '', secondName: '', date: '', status: '' });
+    setUserInfo({ firstName: '', secondName: '', birthday: '', status: '' });
   }, [location]);
 
   return (
@@ -174,7 +180,7 @@ export default function UsersProfile() {
                 Messages
               </Button>
               <div className='dls'>
-                <div className='date'>Date: {userInfo.date}</div>
+                <div className='date'>Date: {userInfo.birthday}</div>
               </div>
             </div>
 

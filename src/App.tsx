@@ -7,7 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import UserNavbar from './Containers/User/UserNavbar';
+import Navbar from './Containers/Generic/Navbar';
 
 // Redux
 import { useDispatch } from 'react-redux';
@@ -20,16 +20,15 @@ import {
 // Firebase
 import { auth, db, storageRef } from './Firebase';
 
+import { IFriend } from './_Types/appTypes';
+
 // Pages
-const Signup = React.lazy(() => import('./Pages/Registrations/SignupPage'));
-const Login = React.lazy(() => import('./Pages/Registrations/LoginPage'));
+const Auth = React.lazy(() => import('./Pages/Auth'));
 const Main = React.lazy(() => import('./Pages/User/Main'));
 const Profile = React.lazy(() => import('./Pages/User/Profile'));
-const UsersProfile = React.lazy(() =>
-  import('./Pages/OtherUsers/UsersProfile')
-);
+const UsersProfile = React.lazy(() => import('./Pages/Users/UsersProfile'));
 const Friends = React.lazy(() => import('./Pages/User/Friends'));
-const UsersSearch = React.lazy(() => import('./Pages/OtherUsers/UsersSearch'));
+const UsersSearch = React.lazy(() => import('./Pages/Users/UsersSearch'));
 
 // ==== Main function ====
 function App() {
@@ -54,11 +53,11 @@ function App() {
         .get()
         .then((snapshot) => {
           if (snapshot.exists) {
-            // Get names from document fields
-            const firstName = snapshot.data()?.userInfo.firstName;
-            const secondName = snapshot.data()?.userInfo.secondName;
-            const birthday = snapshot.data()?.userInfo.birthday;
-            const status = snapshot.data()?.userInfo.status;
+            // Get data from document fields
+            const firstName: string = snapshot.data()?.userInfo.firstName;
+            const secondName: string = snapshot.data()?.userInfo.secondName;
+            const birthday: string = snapshot.data()?.userInfo.birthday;
+            const status: string = snapshot.data()?.userInfo.status;
 
             // Create new action with user info
             // Dispatch action to reducer
@@ -83,7 +82,7 @@ function App() {
             const friends = JSON.parse(localStorage.getItem('friends')!);
             if (user.data()?.friends) {
               // Take every friend
-              user.data()?.friends.map((friend: any) => {
+              user.data()?.friends.map((friend: IFriend) => {
                 // Get friend photo
                 storageRef
                   .child(friend.user)
@@ -96,7 +95,7 @@ function App() {
                         .doc(userId)
                         .update({
                           // Update the friend photo if array of friends in
-                          friends: friends.map((item: any) =>
+                          friends: friends.map((item: IFriend) =>
                             item.name === friend.name
                               ? {
                                   name: item.name,
@@ -144,7 +143,7 @@ function App() {
             <>
               {auth.currentUser && loaded ? (
                 <>
-                  <UserNavbar />
+                  <Navbar />
                   <Route path='/signup'>
                     <Redirect exact from='/signup' to='/' />
                   </Route>
@@ -166,10 +165,10 @@ function App() {
               ) : (
                 <>
                   <Route exact path='/'>
-                    <Login />
+                    <Auth type='login' />
                   </Route>
                   <Route path='/signup'>
-                    <Signup />
+                    <Auth type='signup' />
                   </Route>
                 </>
               )}

@@ -1,7 +1,13 @@
 import { ADD_USER_IN_SEARCH, ADD_LOADED } from '../Constants';
 
+interface IUsers {
+  name: string;
+  id: string;
+  photo: string;
+}
+
 export interface InitialUsersStateInterface {
-  users: any;
+  users: IUsers[];
   count: number;
   loaded: boolean;
   photo: string;
@@ -23,7 +29,7 @@ export default (
       return Object.assign({}, state, {
         users: [
           ...state.users,
-          { name: payload.name, link: payload.link, photo: payload.photo },
+          { name: payload.name, id: payload.link, photo: payload.photo },
         ],
         count: 1 + state.count,
       });
