@@ -1,10 +1,13 @@
+// React
 import React from 'react';
 
-import { auth, db, storageRef } from '../../Firebase';
-import { FirebaseError } from 'firebase';
-
+// Material ui
 import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+
+// Firebase
+import { auth, db, storageRef } from '../../Firebase';
+import { FirebaseError } from 'firebase';
 
 interface IAuthForm {
   type: 'login' | 'signup';

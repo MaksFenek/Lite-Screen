@@ -143,7 +143,7 @@ function App() {
             <>
               {auth.currentUser && loaded ? (
                 <>
-                  <Navbar />
+                  <Navbar user={userId} />
                   <Route path='/signup'>
                     <Redirect exact from='/signup' to='/' />
                   </Route>

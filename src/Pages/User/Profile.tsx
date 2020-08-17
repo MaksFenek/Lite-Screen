@@ -25,7 +25,7 @@ import {
 import { db, auth, storageRef } from '../../Firebase';
 import { IUserInfo } from '../../_Types/appTypes';
 
-export default function Profile() {
+const Profile = () => {
   function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant='filled' {...props} />;
   }
@@ -233,4 +233,6 @@ export default function Profile() {
       </div>
     </>
   );
-}
+};
+
+export default Profile;

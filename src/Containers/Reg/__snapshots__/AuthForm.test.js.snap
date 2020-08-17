@@ -1,0 +1,185 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<AuthForm/> should render correctly 1`] = `
+<div
+  className="auth-forms"
+>
+  <h3>
+    Login
+  </h3>
+  <form
+    className="auth-form"
+    noValidate={true}
+  >
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="Email"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="E-mail"
+        required={true}
+        type="text"
+      />
+    </div>
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="Password"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="Password"
+        required={true}
+        type="password"
+      />
+    </div>
+    
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Send
+      </span>
+    </button>
+  </form>
+</div>
+`;
+
+exports[`<AuthForm/> should render correctly 2`] = `
+<div
+  className="auth-forms"
+>
+  <h3>
+    Sign Up
+  </h3>
+  <form
+    className="auth-form"
+    noValidate={true}
+  >
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="Email"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="E-mail"
+        required={true}
+        type="text"
+      />
+    </div>
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="Password"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="Password"
+        required={true}
+        type="password"
+      />
+    </div>
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="FirstName"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="First name"
+        required={true}
+        type="text"
+      />
+    </div>
+    <div
+      className="MuiInputBase-root MuiInput-root MuiInput-underline auth-form-input"
+      onClick={[Function]}
+      required={true}
+    >
+      <input
+        aria-label="SecondName"
+        className="MuiInputBase-input MuiInput-input"
+        onAnimationStart={[Function]}
+        onBlur={[Function]}
+        onChange={[Function]}
+        onFocus={[Function]}
+        placeholder="Second name"
+        required={true}
+        type="text"
+      />
+    </div>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onDragLeave={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Send
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+  </form>
+</div>
+`;

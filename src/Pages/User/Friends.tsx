@@ -1,12 +1,14 @@
 // React
 import React, { useEffect, useState } from 'react';
 
-// Styles and material ui
+// Material ui
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
+// Types
 import { IFriend } from '../../_Types/appTypes';
 
+// Components
 import UserListItem from '../../Containers/User/UserListItem';
 
 export default function Friends() {
@@ -14,7 +16,8 @@ export default function Friends() {
 
   useEffect(() => {
     // Get all friends from local storage
-    setUsers(JSON.parse(localStorage.getItem('friends')!));
+    const friends = JSON.parse(localStorage.getItem('friends')!);
+    setUsers(friends);
   }, []);
   return (
     <div className='container'>

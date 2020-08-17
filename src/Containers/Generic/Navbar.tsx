@@ -10,13 +10,15 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
 
+// Firebase
 import { auth } from '../../Firebase';
 
 interface INavbarChildren {
   children?: React.ReactNode;
+  user?: string;
 }
 
-const Navbar: React.FC<INavbarChildren> = ({ children }) => {
+const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
   const [userId, setUserId] = useState<undefined | string>(undefined);
 
   // Create state for menu
@@ -27,8 +29,8 @@ const Navbar: React.FC<INavbarChildren> = ({ children }) => {
   };
 
   useEffect((): void => {
-    setUserId(auth.currentUser?.uid);
-  }, []);
+    setUserId(user);
+  }, [user]);
 
   // Handle for sign out
   const handleSignOut = (): void => {
