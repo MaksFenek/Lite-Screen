@@ -3,7 +3,7 @@ import {
   AddUserDate,
   AddUserStatus,
 } from './mainActions';
-import { AddUserInSearch } from './usersActions';
+import { AddUserInSearch } from './searchActions';
 
 import {
   ADD_FIRST_AND_SECOND_NAMES,

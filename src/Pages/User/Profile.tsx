@@ -15,14 +15,10 @@ import {
   useDispatch,
 } from 'react-redux';
 import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
-import {
-  AddFirstAndSecondNamesAction,
-  AddUserDate,
-  AddUserStatus,
-} from '../../Redux/Actions/mainActions';
+import { SetUserInfoThunk } from '../../Redux/Actions/mainActions';
 
 // Firebase
-import { db, auth, storageRef } from '../../Firebase';
+import { auth, storageRef } from '../../Firebase';
 import { IUserInfo } from '../../_Types/appTypes';
 
 const Profile = () => {
@@ -52,28 +48,17 @@ const Profile = () => {
     secondName: '',
     birthday: '',
     status: '',
+    photo: '',
   });
-  const [photo, setPhoto] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     // Set user information
-    if (state.firstName !== '') {
-      setUserInfo({
-        firstName: state.firstName,
-        secondName: state.secondName,
-        birthday: state.date,
-        status: state.status,
-      });
-    }
-
-    // Create ref to user photo
-    const userPhotoRef = storageRef
-      .child(`${auth.currentUser?.uid}`)
-      .child('photo');
-
-    // Get user info and set it to state
-    userPhotoRef.getDownloadURL().then((img) => {
-      setPhoto(img);
+    setUserInfo({
+      firstName: state.firstName,
+      secondName: state.secondName,
+      birthday: state.date,
+      status: state.status,
+      photo: state.photo,
     });
   }, [state]);
   // Handle actions
@@ -88,9 +73,8 @@ const Profile = () => {
 
     // Send user photo to firebase storage
     userPhotoRef.put(img).then(() => {
-      // Set user photo to state
-      userPhotoRef.getDownloadURL().then((img) => {
-        setPhoto(img);
+      userPhotoRef.getDownloadURL().then((photo) => {
+        setUserInfo({ ...userInfo, photo });
       });
     });
   };
@@ -105,22 +89,8 @@ const Profile = () => {
 
     if (firstName !== '' && secondName !== '') {
       setOpen(true);
-      // Set info in store
-      dispatch(AddFirstAndSecondNamesAction({ firstName, secondName }));
-      dispatch(AddUserDate(birthday));
-      dispatch(AddUserStatus(status));
 
-      if (auth.currentUser?.uid) {
-        // Set info in firebase
-        db.collection('users').doc(`${auth.currentUser?.uid}`).set({
-          userInfo: {
-            firstName,
-            secondName,
-            birthday,
-            status,
-          },
-        });
-      }
+      dispatch(SetUserInfoThunk(firstName, secondName, birthday, status));
     }
   };
 
@@ -152,7 +122,7 @@ const Profile = () => {
           <div className='content'>
             <div className='image'>
               <div className='user-image'>
-                <img src={photo} alt='' />
+                <img src={userInfo.photo} alt='' />
               </div>
 
               <input

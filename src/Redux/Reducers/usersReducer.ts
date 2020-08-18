@@ -1,41 +1,52 @@
-import { ADD_USER_IN_SEARCH, ADD_LOADED } from '../Constants';
+import {
+  ADD_USERS_FIRST_AND_SECOND_NAMES,
+  ADD_USERS_DATE,
+  ADD_USERS_STATUS,
+  ADD_USERS_PHOTO,
+} from '../Constants';
 
-interface IUsers {
-  name: string;
-  id: string;
+export interface IUsersInitialState {
+  firstName: string;
+  secondName: string;
+  date: string;
+  status: string;
   photo: string;
 }
 
-export interface InitialUsersStateInterface {
-  users: IUsers[];
-  count: number;
-  loaded: boolean;
-  photo: string;
-}
-
-const initialState: InitialUsersStateInterface = {
-  users: [],
-  count: 0,
-  loaded: false,
+const initialState: IUsersInitialState = {
+  firstName: '',
+  secondName: '',
+  date: '',
+  status: '',
   photo: '',
 };
 
-export default (
-  state = initialState,
-  { type, payload }: any
-): InitialUsersStateInterface => {
+export default (state = initialState, { type, payload }: any) => {
   switch (type) {
-    case ADD_USER_IN_SEARCH:
-      return Object.assign({}, state, {
-        users: [
-          ...state.users,
-          { name: payload.name, id: payload.link, photo: payload.photo },
-        ],
-        count: 1 + state.count,
-      });
+    case ADD_USERS_FIRST_AND_SECOND_NAMES:
+      return {
+        ...state,
+        firstName: payload.firstName,
+        secondName: payload.secondName,
+      };
 
-    case ADD_LOADED:
-      return { ...state, loaded: true };
+    case ADD_USERS_DATE:
+      return {
+        ...state,
+        date: payload,
+      };
+
+    case ADD_USERS_STATUS:
+      return {
+        ...state,
+        status: payload,
+      };
+
+    case ADD_USERS_PHOTO:
+      return {
+        ...state,
+        photo: payload,
+      };
 
     default:
       return state;

@@ -10,12 +10,24 @@ import SearchIcon from '@material-ui/icons/Search';
 
 // Redux
 
+import {
+  useSelector as useReduxSelector,
+  TypedUseSelectorHook,
+  useDispatch,
+} from 'react-redux';
+import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 // Firebase
-import { db, storageRef, auth } from '../../Firebase';
 import { AddFriend } from '../../lib/Functions';
-import { IUserInfo, IFriend } from '../../_Types/appTypes';
+import { IUserInfo } from '../../_Types/appTypes';
+import { GetUsersThunk } from '../../Redux/Actions/usersActions';
 
 export default function UsersProfile() {
+  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
+  const state = useSelector((store) => store);
+  const userState = state.auth;
+  const otherUsersState = state.users;
+
+  const dispatch = useDispatch();
   // Create state for user ID
   const [userId, setUserId] = useState<undefined | string>(undefined);
 
@@ -25,10 +37,8 @@ export default function UsersProfile() {
     secondName: '',
     birthday: '',
     status: '',
+    photo: '',
   });
-
-  // Create photo for user photo
-  const [photo, setPhoto] = useState<string>('');
 
   // Create state for initialize a friend
   const [isFriend, setIsFriend] = useState<boolean>(false);
@@ -36,44 +46,6 @@ export default function UsersProfile() {
   let location = useLocation();
 
   useEffect(() => {
-    // Check if there is array of friends in local storage
-    if (localStorage.getItem('friends')) {
-      // Get all friends
-      JSON.parse(localStorage.getItem('friends')!).forEach((friend: any) => {
-        // Set flag {isFriend}
-        friend.name === userId ? setIsFriend(true) : setIsFriend(false);
-      });
-    }
-    // Get current user document in firebase
-    db.collection('users')
-      .doc(auth.currentUser?.uid)
-      .get()
-      .then((user) => {
-        if (user.exists) {
-          if (user.data()?.friends) {
-            if (
-              user
-                .data()
-                ?.friends.find((friend: IFriend) => friend.user === userId)
-            ) {
-              setIsFriend(true);
-            }
-          }
-          if (userId === auth.currentUser?.uid) {
-            setIsFriend(true);
-          }
-        }
-      });
-
-    if (userId) {
-      const userPhotoRef = storageRef.child(`${userId}`).child('photo');
-
-      // Get user info and set it to state
-      userPhotoRef.getDownloadURL().then((img) => {
-        setPhoto(img);
-      });
-    }
-
     setUserId(
       // Get pathname of the page and delele '/users/'
       document.location.pathname
@@ -81,29 +53,64 @@ export default function UsersProfile() {
         .filter((item: string, index: number) => index > 6 && item)
         .join('')
     );
-    if (userId) {
-      if (userInfo.firstName === '') {
-        // Get the users collection
-        db.collection('users')
-          .doc(userId)
-          .get()
-          .then((snapshot) => {
-            // Take an user object and check if the user is exist
-            if (snapshot.exists) {
-              setUserInfo({
-                firstName: snapshot.data()?.userInfo.firstName,
-                secondName: snapshot.data()?.userInfo.secondName,
-                birthday: snapshot.data()?.userInfo.birthday,
-                status: snapshot.data()?.userInfo.status,
-              });
-            }
-          });
+
+    // Check if there is array of friends in local storage
+    if (localStorage.getItem('friends')) {
+      // Get all friends
+      if (
+        JSON.parse(localStorage.getItem('friends')!).find(
+          (friend: any) => friend.user === userId
+        )
+      ) {
+        setIsFriend(true);
       }
     }
-  }, [userId, userInfo, location]);
+    if (userId === userState.userId) {
+      setIsFriend(true);
+    }
+  }, [location, userId, userState]);
 
   useEffect(() => {
-    setUserInfo({ firstName: '', secondName: '', birthday: '', status: '' });
+    dispatch(GetUsersThunk(userId));
+  }, [location, dispatch, userId]);
+
+  useEffect(() => {
+    if (userInfo.firstName === '' || userInfo.photo === '') {
+      if (userId !== userState.userId) {
+        setUserInfo({
+          firstName: otherUsersState.firstName,
+          secondName: otherUsersState.secondName,
+          birthday: otherUsersState.date,
+          status: otherUsersState.status,
+          photo: otherUsersState.photo,
+        });
+      } else {
+        setUserInfo({
+          firstName: userState.firstName,
+          secondName: userState.secondName,
+          birthday: userState.date,
+          status: userState.status,
+          photo: userState.photo,
+        });
+      }
+    }
+  }, [
+    userId,
+    userInfo,
+    otherUsersState,
+    userState,
+    dispatch,
+    location.pathname,
+  ]);
+
+  useEffect(() => {
+    setUserInfo({
+      firstName: '',
+      secondName: '',
+      birthday: '',
+      status: '',
+      photo: '',
+    });
   }, [location]);
 
   return (
@@ -113,7 +120,7 @@ export default function UsersProfile() {
           <div className='content bg'>
             <div className='image'>
               <div className='user-image'>
-                <img src={photo} alt='userPhoto' />
+                <img src={userInfo.photo} alt='' />
               </div>
             </div>
             <div className='info'>
@@ -155,7 +162,7 @@ export default function UsersProfile() {
             ) : (
               <Button
                 name={userId}
-                value={photo}
+                value={otherUsersState.photo}
                 onClick={AddFriend}
                 className='subscribe'
                 variant='contained'

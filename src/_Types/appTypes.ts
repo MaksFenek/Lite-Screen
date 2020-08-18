@@ -9,6 +9,7 @@ export interface IUserInfo {
   secondName: string;
   birthday: string;
   status: string;
+  photo: string;
 }
 
 export interface IUserSearch {
