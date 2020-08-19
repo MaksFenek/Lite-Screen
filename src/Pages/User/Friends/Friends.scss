@@ -1,0 +1,49 @@
+.main-friends-content {
+  margin-top: 70px;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  grid-template-areas: 'main filters';
+  .main-friends {
+    grid-area: main;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 50px 1fr;
+    grid-template-areas:
+      'search'
+      'friends';
+    .search {
+      grid-area: search;
+      display: flex;
+      align-items: center;
+      background: #90caf9;
+      border-radius: 5px;
+      box-shadow: 2px 3px 6px #e0e0e0;
+
+      &-icon {
+        margin: 0 10px;
+        cursor: pointer;
+      }
+
+      &-input {
+        width: 100%;
+        margin: 0 10px;
+      }
+    }
+    .friends {
+      grid-area: friends;
+      margin-top: 20px;
+    }
+  }
+  .filters {
+    grid-area: filters;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .main-friends-content {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'filters'
+      'main';
+  }
+}

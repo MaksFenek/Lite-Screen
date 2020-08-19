@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // Style and material ui
+import './UsersProfile.scss';
 import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 
@@ -15,11 +16,11 @@ import {
   TypedUseSelectorHook,
   useDispatch,
 } from 'react-redux';
-import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
+import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 // Firebase
-import { AddFriend } from '../../lib/Functions';
-import { IUserInfo } from '../../_Types/appTypes';
-import { GetUsersThunk } from '../../Redux/Actions/usersActions';
+import { AddFriend } from '../../../lib/Functions';
+import { IUserInfo } from '../../../_Types/appTypes';
+import { GetUsersThunk } from '../../../Redux/Actions/usersActions';
 
 export default function UsersProfile() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;

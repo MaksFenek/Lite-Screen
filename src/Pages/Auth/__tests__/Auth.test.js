@@ -1,5 +1,5 @@
 import React from 'react';
-import Auth from './index';
+import Auth from '../Auth';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';
 

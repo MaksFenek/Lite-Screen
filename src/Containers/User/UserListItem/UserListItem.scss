@@ -1,0 +1,63 @@
+.post {
+  margin-top: 10px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  box-shadow: 2px 3px 6px #e0e0e0;
+  .user-image {
+    display: block;
+    height: 48px;
+    width: 48px;
+    position: relative;
+    overflow: hidden;
+    border: 0px solid black;
+    border-radius: 50%;
+    img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 68px;
+      max-height: 68px;
+    }
+  }
+
+  background: #bbdefb;
+  border-radius: 5px;
+  a {
+    display: block;
+    height: 48px;
+    width: 48px;
+  }
+
+  &-name {
+    margin-left: 20px;
+    h4 {
+      font-size: 20px;
+    }
+  }
+  &-btn {
+    margin-left: auto;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .post {
+    &-name {
+      margin-left: 10px;
+      h4 {
+        font-size: 14px;
+      }
+    }
+    &-btn {
+      button {
+        height: 24px;
+        width: 24px;
+        margin-right: 10px;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import UserListItem from './UserListItem';
+import UserListItem from '../UserListItem';
 import { mount } from 'enzyme';
 import renderer from 'react-test-renderer';
 import { MemoryRouter } from 'react-router-dom';

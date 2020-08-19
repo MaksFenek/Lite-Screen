@@ -1,15 +1,16 @@
 // React
 import React, { useEffect, useState } from 'react';
 
-// Material ui
+// Styles and Material ui
+import './Friends.scss';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
 // Types
-import { IFriend } from '../../_Types/appTypes';
+import { IFriend } from '../../../_Types/appTypes';
 
 // Components
-import UserListItem from '../../Containers/User/UserListItem';
+import UserListItem from '../../../Containers/User/UserListItem/UserListItem';
 
 export default function Friends() {
   const [users, setUsers] = useState<any>(null);

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 // Components
 
 // Style and material ui
+import './Profile.scss';
 import TextField from '@material-ui/core/TextField';
 import { Button, Snackbar } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
@@ -14,12 +15,12 @@ import {
   TypedUseSelectorHook,
   useDispatch,
 } from 'react-redux';
-import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
-import { SetUserInfoThunk } from '../../Redux/Actions/mainActions';
+import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
+import { SetUserInfoThunk } from '../../../Redux/Actions/mainActions';
 
 // Firebase
-import { auth, storageRef } from '../../Firebase';
-import { IUserInfo } from '../../_Types/appTypes';
+import { auth, storageRef } from '../../../Firebase';
+import { IUserInfo } from '../../../_Types/appTypes';
 
 const Profile = () => {
   function Alert(props: AlertProps) {

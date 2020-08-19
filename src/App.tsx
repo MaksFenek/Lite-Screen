@@ -7,7 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import Navbar from './Containers/Generic/Navbar';
+import Navbar from './Containers/Generic/Navbar/Navbar';
 
 // Redux
 import {
@@ -21,12 +21,16 @@ import { GetUserThunk } from './Redux/Actions/mainActions';
 // Firebase
 import { auth } from './Firebase';
 // Pages
-const Auth = React.lazy(() => import('./Pages/Auth'));
-const Main = React.lazy(() => import('./Pages/User/Main'));
-const Profile = React.lazy(() => import('./Pages/User/Profile'));
-const UsersProfile = React.lazy(() => import('./Pages/Users/UsersProfile'));
-const Friends = React.lazy(() => import('./Pages/User/Friends'));
-const UsersSearch = React.lazy(() => import('./Pages/Users/UsersSearch'));
+const Auth = React.lazy(() => import('./Pages/Auth/Auth'));
+const Main = React.lazy(() => import('./Pages/User/Main/Main'));
+const Profile = React.lazy(() => import('./Pages/User/Profile/Profile'));
+const UsersProfile = React.lazy(() =>
+  import('./Pages/Users/UsersProfile/UsersProfile')
+);
+const Friends = React.lazy(() => import('./Pages/User/Friends/Friends'));
+const UsersSearch = React.lazy(() =>
+  import('./Pages/Users/UsersSearch/UsersSearch')
+);
 
 // ==== Main function ====
 function App() {

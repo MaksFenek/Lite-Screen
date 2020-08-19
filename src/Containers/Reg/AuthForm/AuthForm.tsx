@@ -1,12 +1,13 @@
 // React
 import React from 'react';
 
-// Material ui
+// Styles and Material ui
+import './AuthForm.scss';
 import { Input } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 
 // Firebase
-import { auth, db, storageRef } from '../../Firebase';
+import { auth, db, storageRef } from '../../../Firebase';
 import { FirebaseError } from 'firebase';
 
 interface IAuthForm {

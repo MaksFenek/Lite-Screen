@@ -3,14 +3,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import AuthForm from '../../Containers/Reg/AuthForm';
-import Navbar from '../../Containers/Generic/Navbar';
+import AuthForm from '../../Containers/Reg/AuthForm/AuthForm';
+import Navbar from '../../Containers/Generic/Navbar/Navbar';
 
 // Images
 import LoginImg from '../../Icons/undraw_authentication_fsn5.svg';
 import SignupImg from '../../Icons/undraw_friendship_mni7.svg';
 
-// Material ui
+// Styles and Material ui
+import './Auth.scss';
 import { Button } from '@material-ui/core';
 
 interface IAuth {

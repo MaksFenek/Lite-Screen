@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Styles and material ui
+import './Navbar.scss';
+
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
@@ -11,7 +13,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
 
 // Firebase
-import { auth } from '../../Firebase';
+import { auth } from '../../../Firebase';
 
 interface INavbarChildren {
   children?: React.ReactNode;

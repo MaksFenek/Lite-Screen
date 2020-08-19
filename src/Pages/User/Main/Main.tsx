@@ -1,6 +1,7 @@
 import React from 'react';
 
-// Redux
+// Styles and material ui
+import './Main.scss';
 
 export default function Main() {
   return (

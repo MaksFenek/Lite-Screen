@@ -2,21 +2,22 @@
 import React, { useEffect, useState } from 'react';
 
 // Styles and material ui
+import './UsersSearch.scss';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 
 // Redux
-import { AddUserInSearchThunk } from '../../Redux/Actions/searchActions';
+import { AddUserInSearchThunk } from '../../../Redux/Actions/searchActions';
 import {
   useSelector as useReduxSelector,
   TypedUseSelectorHook,
   useDispatch,
 } from 'react-redux';
-import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
+import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 
-import { IUserSearch } from '../../_Types/appTypes';
+import { IUserSearch } from '../../../_Types/appTypes';
 
-import UserListItem from '../../Containers/User/UserListItem';
+import UserListItem from '../../../Containers/User/UserListItem/UserListItem';
 
 export default function UsersSearch() {
   const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
@@ -29,8 +30,6 @@ export default function UsersSearch() {
   // Create state loaded for stop loading from database
   const [loaded] = useState<boolean>(state.loaded);
 
-  console.log(loaded);
-
   useEffect(() => {
     if (!loaded) {
       dispatch(AddUserInSearchThunk());
@@ -38,8 +37,6 @@ export default function UsersSearch() {
   }, [dispatch, loaded]);
 
   useEffect(() => {
-    console.log('user');
-
     setUsers(state.users);
   }, [state]);
 

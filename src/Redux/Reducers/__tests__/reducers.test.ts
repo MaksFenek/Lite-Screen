@@ -1,12 +1,12 @@
-import mainReducer from './mainReducer';
-import usersReducer from './searchReducer';
+import mainReducer from '../mainReducer';
+import usersReducer from '../searchReducer';
 
 import {
   AddFirstAndSecondNamesAction,
   AddUserDate,
   AddUserStatus,
-} from '../Actions/mainActions';
-import { AddLoaded, AddUserInSearch } from '../Actions/searchActions';
+} from '../../Actions/mainActions';
+import { AddLoaded, AddUserInSearch } from '../../Actions/searchActions';
 
 describe('Reducer should return the state', () => {
   const initialState = {

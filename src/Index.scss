@@ -1,13 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
-@import './Navbar.scss';
-@import './Auth/index.scss';
-@import './User/Main.scss';
-@import './User/Profile.scss';
-@import './User/Friends.scss';
-@import './OtherUsers/Users.scss';
-@import './OtherUsers/Search.scss';
-
 html {
   background: linear-gradient(45deg, #fff, #e3f2fd);
   min-height: 100vh;

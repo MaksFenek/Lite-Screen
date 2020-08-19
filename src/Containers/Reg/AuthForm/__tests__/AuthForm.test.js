@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AuthForm from './AuthForm';
+import AuthForm from '../AuthForm';
 import { shallow } from 'enzyme';
 import renderer from 'react-test-renderer';
 

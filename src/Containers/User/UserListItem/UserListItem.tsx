@@ -2,14 +2,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-// MAterial ui
+// Styles Material ui
+import './UserListItem.scss';
 import AddIcon from '@material-ui/icons/Add';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 
 // Utilits
-import { AddFriend, DeleteFriend } from '../../lib/Functions';
+import { AddFriend, DeleteFriend } from '../../../lib/Functions';
 
 // ==== Typescript ====
 interface IUserListItem {
@@ -41,7 +42,7 @@ const UserListItem: React.FC<IUserListItem> = (props) => {
           <MailOutlineIcon />
         </IconButton>
         {isFriend ? (
-          <IconButton value={photo} name={name} onClick={DeleteFriend}>
+          <IconButton value={photo} name={id} onClick={DeleteFriend}>
             <CloseIcon />
           </IconButton>
         ) : (

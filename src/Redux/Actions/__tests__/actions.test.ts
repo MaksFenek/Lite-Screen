@@ -2,15 +2,15 @@ import {
   AddFirstAndSecondNamesAction,
   AddUserDate,
   AddUserStatus,
-} from './mainActions';
-import { AddUserInSearch } from './searchActions';
+} from '../mainActions';
+import { AddUserInSearch } from '../searchActions';
 
 import {
   ADD_FIRST_AND_SECOND_NAMES,
   ADD_USER_DATE,
   ADD_USER_STATUS,
   ADD_USER_IN_SEARCH,
-} from '../Constants';
+} from '../../Constants';
 
 describe('Action should return ', () => {
   const firstName = 'Arthur ';
