@@ -59,12 +59,14 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                     </IconButton>
                   </Tooltip>
                 </Link>
+                <Link to='/messages'>
+                  <Tooltip title='Messages'>
+                    <IconButton>
+                      <MessageIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Link>
 
-                <Tooltip title='Messages'>
-                  <IconButton>
-                    <MessageIcon />
-                  </IconButton>
-                </Tooltip>
                 <Link to='/'>
                   <Tooltip title='News'>
                     <IconButton>

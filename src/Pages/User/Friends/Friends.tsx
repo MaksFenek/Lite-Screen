@@ -18,6 +18,7 @@ export default function Friends() {
   useEffect(() => {
     // Get all friends from local storage
     const friends = JSON.parse(localStorage.getItem('friends')!);
+
     setUsers(friends);
   }, []);
   return (

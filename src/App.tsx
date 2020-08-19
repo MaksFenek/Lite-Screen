@@ -20,6 +20,8 @@ import { GetUserThunk } from './Redux/Actions/mainActions';
 
 // Firebase
 import { auth } from './Firebase';
+import Messages from './Pages/Messages/Messages';
+import Chat from './Pages/Messages/Chat/Chat';
 // Pages
 const Auth = React.lazy(() => import('./Pages/Auth/Auth'));
 const Main = React.lazy(() => import('./Pages/User/Main/Main'));
@@ -73,10 +75,13 @@ function App() {
                   <Route path='/search'>
                     <UsersSearch />
                   </Route>
-                  <Route path='/messages'></Route>
+                  <Route exact path='/messages'>
+                    <Messages />
+                  </Route>
                   <Route path='/friends'>
                     <Friends />
                   </Route>
+                  <Route path='/messages/*' component={Chat} />
                   <Route path='/users/*' component={UsersProfile} />
                 </>
               ) : (

@@ -11,6 +11,9 @@ export const AddFriend = (
   const userId: string = event.currentTarget.name;
   const photo: string = event.currentTarget.value;
 
+  // Get all friends from local storage
+  const friends: IFriend[] = JSON.parse(localStorage.getItem('friends')!);
+
   if (currentUserID !== userId) {
     // Find user in users collections and get him
     db.collection('users')
@@ -30,13 +33,9 @@ export const AddFriend = (
                 photo,
               }),
             });
-          // Get all friends from local storage
-          const friends: IFriend[] = JSON.parse(
-            localStorage.getItem('friends')!
-          );
 
           if (localStorage.getItem('friends')) {
-            if (!friends.find((friend: IFriend) => friend.user !== userId)) {
+            if (!friends.find((friend: IFriend) => friend.user === userId)) {
               // Add new friend to friends array in local storage
               localStorage.setItem(
                 'friends',

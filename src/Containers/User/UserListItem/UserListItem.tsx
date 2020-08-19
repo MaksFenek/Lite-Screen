@@ -8,6 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import { IconButton } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
+import Avatar from '@material-ui/core/Avatar';
 
 // Utilits
 import { AddFriend, DeleteFriend } from '../../../lib/Functions';
@@ -20,18 +21,16 @@ interface IUserListItem {
   photo: string;
 }
 
-const UserListItem: React.FC<IUserListItem> = (props) => {
-  const id = props.id;
-  const name = props.name;
-  const photo = props.photo;
-  const isFriend = props.isFriend;
-
+const UserListItem: React.FC<IUserListItem> = ({
+  id,
+  name,
+  photo,
+  isFriend,
+}) => {
   return (
     <div className='post'>
       <Link to={`/users/${id}`}>
-        <div className='user-image'>
-          <img className='post-img' src={photo} alt='userPhoto' />
-        </div>
+        <Avatar src={photo} className='user-image' />
       </Link>
       <div className='post-name'>
         <h4>{name}</h4>
@@ -55,4 +54,4 @@ const UserListItem: React.FC<IUserListItem> = (props) => {
   );
 };
 
-export default React.memo(UserListItem);
+export default UserListItem;
