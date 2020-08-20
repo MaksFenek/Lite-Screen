@@ -1,7 +1,7 @@
 import React from 'react';
 import Navbar from '../Navbar';
-import { mount } from 'enzyme';
-import renderer from 'react-test-renderer';
+import { mount } from '../../../../components/UserListItem/__tests__/node_modules/enzyme';
+import renderer from '../../../../components/UserListItem/__tests__/node_modules/react-test-renderer';
 import { MemoryRouter } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 

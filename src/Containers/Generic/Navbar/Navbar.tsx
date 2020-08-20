@@ -1,9 +1,9 @@
+// React
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Styles and material ui
 import './Navbar.scss';
-
 import { IconButton, Menu, MenuItem } from '@material-ui/core';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
@@ -12,9 +12,10 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import SearchIcon from '@material-ui/icons/Search';
 import Tooltip from '@material-ui/core/Tooltip';
 
-// Firebase
-import { auth } from '../../../Firebase';
+// API
+import { auth } from '../../../api/firebaseAPI';
 
+// ==== TypeScript ====
 interface INavbarChildren {
   children?: React.ReactNode;
   user?: string;
@@ -24,7 +25,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
   const [userId, setUserId] = useState<undefined | string>(undefined);
 
   // Create state for menu
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -74,7 +75,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                     </IconButton>
                   </Tooltip>
                 </Link>
-                <Link to={`/users/${auth.currentUser?.uid}`}>
+                <Link to={`/users/${userId}`}>
                   <Tooltip title='Profile'>
                     <IconButton>
                       <AccountCircleIcon />

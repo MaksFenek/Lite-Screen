@@ -2,7 +2,7 @@ import {
   AddFirstAndSecondNamesAction,
   AddUserDate,
   AddUserStatus,
-} from '../mainActions';
+} from '../currentUserActions';
 import { AddUserInSearch } from '../searchActions';
 
 import {

@@ -10,14 +10,12 @@ export interface InitialUsersStateInterface {
   users: IUsers[];
   count: number;
   loaded: boolean;
-  photo: string;
 }
 
 const initialState: InitialUsersStateInterface = {
   users: [],
   count: 0,
   loaded: false,
-  photo: '',
 };
 
 export default (

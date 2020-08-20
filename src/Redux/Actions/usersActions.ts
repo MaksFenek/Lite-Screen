@@ -6,7 +6,7 @@ import {
   ADD_USERS_PHOTO,
 } from '../Constants';
 
-import { db, storageRef } from '../../Firebase';
+import { getUserDoc, getUserPhoto } from '../../api/firebaseAPI';
 
 // ==== TypeScript ====
 
@@ -76,8 +76,7 @@ export const GetUsersThunk = (userId: string | undefined) => (
   dispatch(AddUsersPhoto(''));
 
   if (userId) {
-    db.collection('users')
-      .doc(userId)
+    getUserDoc(userId)
       // Get found document
       .get()
       .then((snapshot) => {
@@ -102,12 +101,8 @@ export const GetUsersThunk = (userId: string | undefined) => (
           // Get user info and set it to state
         }
       });
-    storageRef
-      .child(`${userId}`)
-      .child('photo')
-      .getDownloadURL()
-      .then((img) => {
-        dispatch(AddUsersPhoto(img));
-      });
+    getUserPhoto(userId).then((img) => {
+      dispatch(AddUsersPhoto(img));
+    });
   }
 };

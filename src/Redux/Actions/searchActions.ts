@@ -1,4 +1,4 @@
-import { db, storageRef } from '../../Firebase';
+import { getUserPhoto, getUsersCollection } from '../../api/firebaseAPI';
 import { ADD_USER_IN_SEARCH, ADD_USER_SEARCH_LOADED } from '../Constants';
 
 export interface PostAction {
@@ -31,26 +31,20 @@ export const AddUserInSearchThunk = () => (dispatch: any) => {
   dispatch(AddUserSearchLoaded);
 
   // Get the users collection from firebase
-  db.collection('users')
-    .get()
-    .then((snapshot) => {
-      snapshot.docs.forEach((doc) => {
-        // Get name from user info
-        const name: string = `${doc.data().userInfo.firstName} ${
-          doc.data().userInfo.secondName
-        }`;
-        //Get user id
-        const id: string = doc.id;
+  getUsersCollection.get().then((snapshot) => {
+    snapshot.docs.forEach((doc) => {
+      // Get name from user info
+      const name: string = `${doc.data().userInfo.firstName} ${
+        doc.data().userInfo.secondName
+      }`;
+      //Get user id
+      const id: string = doc.id;
 
-        // Get user photo
-        storageRef
-          .child(`${id}/`)
-          .child('photo')
-          .getDownloadURL()
-          .then((url) => {
-            // Create new user in search page
-            dispatch(AddUserInSearch(name, id, url));
-          });
+      // Get user photo
+      getUserPhoto(id).then((url) => {
+        // Create new user in search page
+        dispatch(AddUserInSearch(name, id, url));
       });
     });
+  });
 };

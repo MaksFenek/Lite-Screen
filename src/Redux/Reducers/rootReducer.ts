@@ -4,7 +4,7 @@ import { createStore } from 'redux';
 import thunk from 'redux-thunk';
 
 // Another reducers import
-import mainReducer, { InitialStateInterface } from './mainReducer';
+import mainReducer, { InitialStateInterface } from './currentUserReducer';
 import searchReducer, { InitialUsersStateInterface } from './searchReducer';
 import usersReducer, { IUsersInitialState } from './usersReducer';
 
@@ -20,4 +20,6 @@ const rootReducer = combineReducers<RootReducerInterface>({
   search: searchReducer,
   users: usersReducer,
 });
-export default createStore(rootReducer, applyMiddleware(thunk));
+
+const store = createStore(rootReducer, applyMiddleware(thunk));
+export default store;

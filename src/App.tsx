@@ -7,37 +7,36 @@ import {
   Redirect,
 } from 'react-router-dom';
 
-import Navbar from './Containers/Generic/Navbar/Navbar';
+import Navbar from './containers/Generic/Navbar/Navbar';
 
 // Redux
-import {
-  useSelector as useReduxSelector,
-  TypedUseSelectorHook,
-  useDispatch,
-} from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootReducerInterface } from './Redux/Reducers/rootReducer';
-import { GetUserThunk } from './Redux/Actions/mainActions';
+import { GetUserThunk } from './Redux/Actions/currentUserActions';
 
 // Firebase
-import { auth } from './Firebase';
-import Messages from './Pages/Messages/Messages';
-import Chat from './Pages/Messages/Chat/Chat';
+import { auth } from './api/firebaseAPI';
+import Messages from './containers/MessagesList/MessagesList';
+import Chat from './components/UserChatItem/Chat/Chat';
 // Pages
-const Auth = React.lazy(() => import('./Pages/Auth/Auth'));
-const Main = React.lazy(() => import('./Pages/User/Main/Main'));
-const Profile = React.lazy(() => import('./Pages/User/Profile/Profile'));
+const Auth = React.lazy(() => import('./containers/Auth/Auth'));
+const Main = React.lazy(() => import('./containers/News/News'));
+const Profile = React.lazy(() => import('./containers/Profile/Profile'));
 const UsersProfile = React.lazy(() =>
-  import('./Pages/Users/UsersProfile/UsersProfile')
+  import('./containers/Users/UsersProfile/UsersProfile')
 );
-const Friends = React.lazy(() => import('./Pages/User/Friends/Friends'));
+const Friends = React.lazy(() =>
+  import('./components/CurrentUser/Friends/Friends')
+);
 const UsersSearch = React.lazy(() =>
-  import('./Pages/Users/UsersSearch/UsersSearch')
+  import('./containers/Users/UsersSearch/UsersSearch')
 );
 
 // ==== Main function ====
 function App() {
-  const useSelector: TypedUseSelectorHook<RootReducerInterface> = useReduxSelector;
-  const state = useSelector((store) => store.auth);
+  console.log('hi');
+
+  const state = useSelector((store: RootReducerInterface) => store.auth);
   // Create dispatch
   const dispatch = useDispatch();
 
