@@ -9,7 +9,7 @@ import SendIcon from '@material-ui/icons/Send';
 // Components
 import Message from '../Message/Message';
 
-export default function Chat() {
+const Chat = () => {
   return (
     <div className='main'>
       <div className='container'>
@@ -31,4 +31,6 @@ export default function Chat() {
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(Chat);

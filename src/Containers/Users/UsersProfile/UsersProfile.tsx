@@ -1,6 +1,7 @@
 // React
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // Style and material ui
 import './UsersProfile.scss';
@@ -28,13 +29,17 @@ import {
   getUserStatusSelector,
 } from '../../../Redux/Selectors/usersSelector';
 // API
-import { AddFriend } from '../../../api/friendsAPI';
+import {
+  AddFriend,
+  getFollowingCount,
+  getFriendsCount,
+} from '../../../api/friendsAPI';
 import { getStorageItem } from '../../../api/localstorageAPI';
 
 // Types
 import { IUserInfo } from '../../../_Types/appTypes';
 
-export default function UsersProfile() {
+const UsersProfile = () => {
   const state = useSelector((store: RootReducerInterface) => store);
   const userState = state.auth;
   const otherUsersState = state.users;
@@ -55,7 +60,18 @@ export default function UsersProfile() {
   // Create state for initialize a friend
   const [isFriend, setIsFriend] = useState<boolean>(false);
 
+  const [friendsCount, setFriendsCount] = useState<number>(0);
+  const [followingCount, setFollowingCount] = useState<number>(0);
+
   let location = useLocation();
+
+  useEffect(() => {
+    getFriendsCount(userId!).then((count) => setFriendsCount(count!));
+    getFollowingCount(
+      userId!,
+      userInfo.firstName + ' ' + userInfo.secondName
+    ).then((count) => setFollowingCount(count!));
+  }, [userId, userInfo.firstName, userInfo.secondName]);
 
   useEffect(() => {
     setUserId(
@@ -77,7 +93,7 @@ export default function UsersProfile() {
     if (userId === getCurrentUserIdSelector(userState)) {
       setIsFriend(true);
     }
-  }, [location, userId, userState]);
+  }, [location, userInfo, userId, userState]);
 
   useEffect(() => {
     dispatch(GetUsersThunk(userId));
@@ -147,10 +163,15 @@ export default function UsersProfile() {
 
               <div className='people'>
                 <div className='friends'>
-                  <p>Friends</p>
+                  <Link to={`/following/${userId}`}>
+                    <p>{friendsCount} Following</p>
+                  </Link>
                 </div>
+
                 <div className='subscribers'>
-                  <p>Subscribers</p>
+                  <Link to={`/followers/${userId}`}>
+                    <p>{followingCount} Followers</p>
+                  </Link>
                 </div>
                 <div className='groups'>
                   <p>Groups</p>
@@ -206,4 +227,6 @@ export default function UsersProfile() {
       </div>
     </>
   );
-}
+};
+
+export default React.memo(UsersProfile);

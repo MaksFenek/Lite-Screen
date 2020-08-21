@@ -12,21 +12,20 @@ import Avatar from '@material-ui/core/Avatar';
 
 // API
 import { AddFriend, DeleteFriend } from '../../api/friendsAPI';
+import { getUserPhoto } from '../../api/firebaseAPI';
 
 // ==== Typescript ====
 interface IUserListItem {
   isFriend: boolean;
   name: string;
   id: string;
-  photo: string;
 }
 
-const UserListItem: React.FC<IUserListItem> = ({
-  id,
-  name,
-  photo,
-  isFriend,
-}) => {
+const UserListItem: React.FC<IUserListItem> = ({ id, name, isFriend }) => {
+  const [photo, setPhoto] = React.useState<string>('');
+  getUserPhoto(id).then((url) => {
+    setPhoto(url);
+  });
   return (
     <div className='post'>
       <Link to={`/users/${id}`}>
@@ -54,4 +53,4 @@ const UserListItem: React.FC<IUserListItem> = ({
   );
 };
 
-export default UserListItem;
+export default React.memo(UserListItem);

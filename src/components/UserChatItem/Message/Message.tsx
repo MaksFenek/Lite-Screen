@@ -19,4 +19,4 @@ const Message: React.FC<IMessage> = ({ text, date }) => {
   );
 };
 
-export default Message;
+export default React.memo(Message);

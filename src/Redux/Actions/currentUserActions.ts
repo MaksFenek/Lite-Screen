@@ -116,31 +116,7 @@ export const GetUserThunk = (userId: string | undefined) => (dispatch: any) => {
           const friends = getStorageItem('friends');
           if (user.data()?.friends) {
             // Take every friend
-            user.data()?.friends.map((friend: IFriend) => {
-              // Get friend photo
-              getUserPhoto(friend.user).then((photo) => {
-                // Check if the friend photo is not the same as before
-                if (photo !== friend.photo) {
-                  getUserDoc(userId)
-                    .update({
-                      // Update the friend photo if array of friends in
-                      friends: friends.map((item: IFriend) =>
-                        item.name === friend.name
-                          ? {
-                              name: item.name,
-                              user: item.user,
-                              photo: photo,
-                            }
-                          : item
-                      ),
-                    })
-                    .then(() => {
-                      // Set new array of friends in local storage
-                      setStorageItem('friends', user.data()?.friends);
-                    });
-                }
-              });
-            });
+            user.data()?.friends.map((friend: IFriend) => {});
           }
 
           if (

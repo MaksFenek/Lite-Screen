@@ -62,7 +62,6 @@ export default function UsersSearch() {
                     key={index}
                     name={user.name}
                     id={user.id}
-                    photo={user.photo}
                     isFriend={false}
                   />
                 );

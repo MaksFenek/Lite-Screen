@@ -99,7 +99,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                   <Link to={`/${userId}`}>
                     <MenuItem onClick={handleClose}>Edit profile</MenuItem>
                   </Link>
-                  <Link to='/friends'>
+                  <Link to={`/following/${userId}`}>
                     <MenuItem onClick={handleClose}> Friends </MenuItem>
                   </Link>
                   <MenuItem onClick={handleClose}> Groups </MenuItem>
@@ -119,7 +119,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
   );
 };
 
-export default Navbar;
+export default React.memo(Navbar);
 
 function Icon() {
   return (

@@ -34,3 +34,6 @@ export const putUserPhoto = (userId: string, file: any) =>
   storageRef.child(userId).child('photo').put(file);
 export const getUserPhoto = (userId: string) =>
   storageRef.child(userId).child('photo').getDownloadURL();
+
+export const getUserPhotoRef = (userId: string) =>
+  storageRef.child(userId).child('photo');

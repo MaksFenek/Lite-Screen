@@ -18,6 +18,8 @@ import { GetUserThunk } from './Redux/Actions/currentUserActions';
 import { auth } from './api/firebaseAPI';
 import Messages from './containers/MessagesList/MessagesList';
 import Chat from './components/UserChatItem/Chat/Chat';
+import Followers from './containers/Users/Followers/Followers';
+import Following from './containers/Users/Followers/Following';
 // Pages
 const Auth = React.lazy(() => import('./containers/Auth/Auth'));
 const Main = React.lazy(() => import('./containers/News/News'));
@@ -25,17 +27,12 @@ const Profile = React.lazy(() => import('./containers/Profile/Profile'));
 const UsersProfile = React.lazy(() =>
   import('./containers/Users/UsersProfile/UsersProfile')
 );
-const Friends = React.lazy(() =>
-  import('./components/CurrentUser/Friends/Friends')
-);
 const UsersSearch = React.lazy(() =>
   import('./containers/Users/UsersSearch/UsersSearch')
 );
 
 // ==== Main function ====
 function App() {
-  console.log('hi');
-
   const state = useSelector((store: RootReducerInterface) => store.auth);
   // Create dispatch
   const dispatch = useDispatch();
@@ -44,20 +41,22 @@ function App() {
   const [loaded, setLoaded] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
-    setUserID(auth.currentUser?.uid);
-    // If there is a logged in user, set it in user state
     auth.onAuthStateChanged((person) => {
       setUserID(person?.uid);
     });
+    setUserID(auth.currentUser?.uid);
+    // If there is a logged in user, set it in user state
     dispatch(GetUserThunk(userId));
+  }, [userId, dispatch]);
 
+  useEffect(() => {
     setLoaded(state.loaded);
-  }, [userId, state.loaded, dispatch]);
+  }, [state.loaded]);
   return (
     <React.Suspense fallback={<></>}>
       <Router>
         <Switch>
-          {loaded ? (
+          {loaded && (
             <>
               {auth.currentUser ? (
                 <>
@@ -77,11 +76,14 @@ function App() {
                   <Route exact path='/messages'>
                     <Messages />
                   </Route>
-                  <Route path='/friends'>
-                    <Friends />
+                  <Route path='/followers/:id'>
+                    <Followers />
                   </Route>
-                  <Route path='/messages/*' component={Chat} />
-                  <Route path='/users/*' component={UsersProfile} />
+                  <Route path='/following/:id'>
+                    <Following />
+                  </Route>
+                  <Route path='/messages/:id' component={Chat} />
+                  <Route path='/users/:id' component={UsersProfile} />
                 </>
               ) : (
                 <>
@@ -94,8 +96,6 @@ function App() {
                 </>
               )}
             </>
-          ) : (
-            <></>
           )}
         </Switch>
       </Router>

@@ -7,10 +7,29 @@
     grid-area: main;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 50px 1fr;
+    grid-template-rows: 50px 50px 1fr;
     grid-template-areas:
+      'header'
       'search'
       'friends';
+
+    .friend-header {
+      grid-area: header;
+      display: flex;
+      align-items: center;
+      line-height: 0;
+      color: #616161;
+      background: #e3f2fd;
+      padding: 0px 10px;
+      border-radius: 5px;
+      box-shadow: 2px 3px 6px #e0e0e0;
+      margin-bottom: 10px;
+      span {
+        margin-left: 20px;
+        font-size: 20px;
+        font-family: sans-serif;
+      }
+    }
     .search {
       grid-area: search;
       display: flex;

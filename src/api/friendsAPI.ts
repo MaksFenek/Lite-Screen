@@ -1,4 +1,4 @@
-import { auth, firestore, getUserDoc } from './firebaseAPI';
+import { auth, firestore, getUserDoc, getUsersCollection } from './firebaseAPI';
 import { getStorageItem, setStorageItem } from './localstorageAPI';
 
 import { IFriend } from '../_Types/appTypes';
@@ -10,7 +10,6 @@ export const AddFriend = (
   const currentUserID: string | undefined = auth.currentUser?.uid;
 
   const userId: string = event.currentTarget.name;
-  const photo: string = event.currentTarget.value;
 
   // Get all friends from local storage
   const friends: IFriend[] = getStorageItem('friends');
@@ -28,7 +27,6 @@ export const AddFriend = (
               name: `${userData.data()?.userInfo.firstName} ${
                 userData.data()?.userInfo.secondName
               }`,
-              photo,
             }),
           });
 
@@ -42,7 +40,6 @@ export const AddFriend = (
                   name: `${userData.data()?.userInfo.firstName} ${
                     userData.data()?.userInfo.secondName
                   }`,
-                  photo,
                 },
               ]);
             }
@@ -54,7 +51,6 @@ export const AddFriend = (
                 name: `${userData.data()?.userInfo.firstName} ${
                   userData.data()?.userInfo.secondName
                 }`,
-                photo,
               },
             ]);
           }
@@ -70,7 +66,6 @@ export const DeleteFriend = (
   const currentUserID = auth.currentUser?.uid;
 
   const userId = e.currentTarget.name;
-  const photo = e.currentTarget.value;
   // Find user in users collections and get him
 
   getUserDoc(userId)
@@ -84,7 +79,6 @@ export const DeleteFriend = (
             name: `${userData.data()?.userInfo.firstName} ${
               userData.data()?.userInfo.secondName
             }`,
-            photo,
           }),
         });
       }
@@ -101,4 +95,67 @@ export const DeleteFriend = (
         );
       }
     });
+};
+
+export const getFriendsCount = async (userId: string) => {
+  if (userId) {
+    let count = 0;
+    // Get user doucment by id
+    await getUserDoc(userId)
+      .get()
+      .then((user) => {
+        // Get friends array length
+        count = user.data()?.friends.length;
+      });
+    return count;
+  }
+};
+
+export const getAllFriends = (userId: string) => {
+  if (userId) {
+    // Get user document by id
+    return getUserDoc(userId)
+      .get()
+      .then((user) => user.data()?.friends);
+  }
+};
+
+export const getFollowingCount = async (userId: string, name: string) => {
+  if (userId) {
+    let count = 0;
+    // Get collection 'users'
+    await getUsersCollection
+      // Search an user which has a searching user in friends array
+      .where('friends', 'array-contains', {
+        name: name,
+        user: userId,
+      })
+      .get()
+      .then((user) => {
+        // Set followers array length
+        count = user.docs.length;
+        console.log(name);
+      });
+
+    return count;
+  }
+};
+
+export const getAllFollowing = (userId: string, name: string) => {
+  if (userId) {
+    // Get collection 'users'
+    return (
+      getUsersCollection
+        // Search an user which has a searching user in friends array
+        .where('friends', 'array-contains', {
+          name: name,
+          user: userId,
+        })
+        .get()
+        .then((user) => {
+          // Return the users
+          return user.docs;
+        })
+    );
+  }
 };
