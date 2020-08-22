@@ -22,6 +22,7 @@ export const storage = firebase.storage();
 export const storageRef = storage.ref().child('users');
 
 export const getUsersCollection = db.collection('users');
+export const getUsersChatCollection = db.collection('usersChat');
 export const signout = auth.signOut;
 
 export const getUserDoc = (userId: string) =>

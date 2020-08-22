@@ -13,6 +13,7 @@ import Avatar from '@material-ui/core/Avatar';
 // API
 import { AddFriend, DeleteFriend } from '../../api/friendsAPI';
 import { getUserPhoto } from '../../api/firebaseAPI';
+import { createChat } from '../../api/messagesAPI';
 
 // ==== Typescript ====
 interface IUserListItem {
@@ -36,9 +37,11 @@ const UserListItem: React.FC<IUserListItem> = ({ id, name, isFriend }) => {
       </div>
 
       <div className='post-btn'>
-        <IconButton>
-          <MailOutlineIcon />
-        </IconButton>
+        <Link to={`/messages/${id}`}>
+          <IconButton name={id} onClick={createChat}>
+            <MailOutlineIcon />
+          </IconButton>
+        </Link>
         {isFriend ? (
           <IconButton value={photo} name={id} onClick={DeleteFriend}>
             <CloseIcon />

@@ -1,23 +1,53 @@
 // React
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 // Styles and material ui
 import './MessagesList.scss';
 
 // Components
 import UserChatItem from '../../components/UserChatItem/UserChatItem';
+import { auth } from '../../api/firebaseAPI';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
+import { GetUsersChatsThunk } from '../../Redux/Actions/chatsAction';
+
+interface IChatItem {
+  name: string;
+  id: string;
+  photo: string;
+}
 
 export default function Messages() {
+  const state = useSelector((state: RootReducerInterface) => state.chats);
+  const dispatch = useDispatch();
+  const [userId, setUserId] = useState<string | undefined>('');
+  const [chats, setChats] = useState<IChatItem[]>([]);
+  const [loaded, setLoaded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setUserId(auth.currentUser?.uid);
+    if (userId) {
+      if (!loaded && state.count === 0) {
+        setLoaded(true);
+        dispatch(GetUsersChatsThunk(userId!));
+      }
+    }
+  }, [userId, dispatch, state, chats, loaded]);
+  useEffect(() => {
+    setChats(state.chats);
+  }, [state, chats]);
   return (
     <section className='main'>
       <div className='container'>
-        <UserChatItem
-          id={'lJFZuJB1auOwDlHDt93wQoMKqox1'}
-          name={'Arthur moore'}
-          photo={
-            'https://firebasestorage.googleapis.com/v0/b/lite-screen.appspot.com/o/users%2FlJFZuJB1auOwDlHDt93wQoMKqox1%2Fphoto?alt=media&token=7719778c-4b40-4755-bbca-4df7237b4eca'
-          }
-        />
+        {chats &&
+          chats.map((chat, index) => (
+            <UserChatItem
+              id={chat.id}
+              name={chat.name}
+              photo={chat.photo}
+              key={index}
+            />
+          ))}
       </div>
     </section>
   );

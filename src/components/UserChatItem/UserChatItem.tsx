@@ -24,12 +24,6 @@ const UserChatItem: React.FC<IChatItem> = ({ id, photo, name }) => {
           <div className='user-chat-name'>
             <h4>{name}</h4>
           </div>
-          <div className='user-chat-last-message'>
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Blanditiis, quod!
-            </p>
-          </div>
         </div>
       </div>
     </Link>

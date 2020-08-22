@@ -25,6 +25,10 @@
   }
   &-btn {
     margin-left: auto;
+    display: flex;
+    a {
+      display: block;
+    }
   }
 }
 
