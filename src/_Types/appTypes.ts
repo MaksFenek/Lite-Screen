@@ -1,7 +1,7 @@
 export interface IFriend {
   name: string;
   user: string;
-  photo: string;
+  photo?: string;
 }
 
 export interface IUserInfo {

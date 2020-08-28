@@ -134,7 +134,6 @@ export const getFollowingCount = async (userId: string, name: string) => {
       .then((user) => {
         // Set followers array length
         count = user.docs.length;
-        console.log(name);
       });
 
     return count;

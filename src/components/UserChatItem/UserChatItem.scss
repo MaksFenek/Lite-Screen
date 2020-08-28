@@ -7,7 +7,8 @@
   box-shadow: 2px 3px 6px #e0e0e0;
   background: #bbdefb;
   border-radius: 5px;
-  transition-duration: 0.5s;
+  transition: background 0.5s ease-in;
+  animation: apper 0.1s ease-in;
   .user-image {
     height: 48px;
     width: 48px;
@@ -37,5 +38,14 @@
   &:hover {
     background: #9dd7f1;
     box-shadow: 3px 4px 6px #e0e0e0;
+  }
+}
+
+@keyframes apper {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
   }
 }

@@ -17,7 +17,7 @@ import { createChat } from '../../api/messagesAPI';
 
 // ==== Typescript ====
 interface IUserListItem {
-  isFriend: boolean;
+  isFriend?: boolean;
   name: string;
   id: string;
 }
@@ -42,15 +42,16 @@ const UserListItem: React.FC<IUserListItem> = ({ id, name, isFriend }) => {
             <MailOutlineIcon />
           </IconButton>
         </Link>
-        {isFriend ? (
-          <IconButton value={photo} name={id} onClick={DeleteFriend}>
-            <CloseIcon />
-          </IconButton>
-        ) : (
-          <IconButton name={id} value={photo} onClick={AddFriend}>
-            <AddIcon />
-          </IconButton>
-        )}
+        {isFriend !== undefined &&
+          (isFriend ? (
+            <IconButton value={photo} name={id} onClick={DeleteFriend}>
+              <CloseIcon />
+            </IconButton>
+          ) : (
+            <IconButton name={id} value={photo} onClick={AddFriend}>
+              <AddIcon />
+            </IconButton>
+          ))}
       </div>
     </div>
   );

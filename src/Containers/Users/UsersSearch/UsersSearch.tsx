@@ -15,18 +15,20 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 
 // Types
-import { IUserSearch } from '../../../_Types/appTypes';
+import { IFriend, IUserSearch } from '../../../_Types/appTypes';
 import {
   getUsersInSearchSelector,
   getUsersLoadedSelector,
 } from '../../../Redux/Selectors/searchSelector';
+import { getStorageItem } from '../../../api/localstorageAPI';
 
 export default function UsersSearch() {
   const state = useSelector((store: RootReducerInterface) => store.search);
 
   const dispatch = useDispatch();
   // Create state for array of users
-  const [users, setUsers] = useState<IUserSearch[] | undefined>(undefined);
+  const [users, setUsers] = useState<IUserSearch[]>();
+  const [friends, setFriends] = useState<IFriend[]>();
 
   // Create state loaded for stop loading from database
   const [loaded] = useState<boolean>(getUsersLoadedSelector(state));
@@ -34,6 +36,7 @@ export default function UsersSearch() {
   useEffect(() => {
     if (!loaded) {
       dispatch(AddUserInSearchThunk());
+      setFriends(getStorageItem('friends'));
     }
   }, [dispatch, loaded]);
 
@@ -62,7 +65,11 @@ export default function UsersSearch() {
                     key={index}
                     name={user.name}
                     id={user.id}
-                    isFriend={false}
+                    isFriend={
+                      friends?.find((friend) => friend.user === user.id)
+                        ? true
+                        : false
+                    }
                   />
                 );
               })

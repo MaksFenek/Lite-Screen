@@ -26,10 +26,9 @@ interface IFriends {
 
 const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
   const [users, setUsers] = useState<any[]>([]);
-  const [own, setOwn] = useState<boolean>(true);
+  const [own, setOwn] = useState<boolean | undefined>(true);
   const [userId, setUserId] = useState<string>('');
 
-  console.log(users);
   useEffect(() => {
     // Get user id from http path
     setUserId(
@@ -44,7 +43,7 @@ const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
     if (type === 'followers') {
       if (people) {
         setUsers(people);
-        setOwn(false);
+        setOwn(undefined);
       }
     } else if (type === 'following') {
       if (userId === auth.currentUser?.uid) {

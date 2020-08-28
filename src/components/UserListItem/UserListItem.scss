@@ -4,6 +4,8 @@
   display: flex;
   align-items: center;
   box-shadow: 2px 3px 6px #e0e0e0;
+  animation: apper 0.1s ease-in;
+
   .user-image {
     height: 48px;
     width: 48px;
@@ -50,5 +52,14 @@
         }
       }
     }
+  }
+}
+
+@keyframes apper {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
   }
 }

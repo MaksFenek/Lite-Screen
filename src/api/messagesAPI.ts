@@ -45,7 +45,30 @@ export const createChat = (
   }
 };
 
-export const getAllMessages = (userId: string, setMessages: any) => {
+export const setAllChats = (userId: string) => {
+  if (userId) {
+    getUsersChatCollection
+      .where('users', 'array-contains-any', [userId])
+      .onSnapshot((result) =>
+        // Take every chat and find the chats and get another user id
+        result.docs.forEach((chat) => {
+          const user = chat
+            .data()
+            .users.find((user: string) => user !== userId);
+          if (user) {
+            // Update the chats array in user document
+            getUserDoc(userId).update({
+              chats: firestore.FieldValue.arrayUnion({ id: chat.id, user }),
+            });
+          }
+        })
+      );
+  }
+};
+export const getAllMessages = (
+  userId: string,
+  setMessages: (data: any) => void
+) => {
   // Get current user id
   const currentUserId = auth.currentUser?.uid;
   // Get user document by id
@@ -67,8 +90,6 @@ export const getAllMessages = (userId: string, setMessages: any) => {
 };
 
 export const sendMessage = (userId: string, text: string, date: any) => {
-  console.log('hi');
-
   // Get current user id
   const currentUserId = auth.currentUser?.uid;
   getUserDoc(currentUserId!)
@@ -79,12 +100,14 @@ export const sendMessage = (userId: string, text: string, date: any) => {
         .data()
         ?.chats.find((chat: any) => chat.user === userId);
       // Add in chat a new message with author as current user id
-      getUsersChatCollection.doc(needChat.id).update({
-        messages: firestore.FieldValue.arrayUnion({
-          author: currentUserId,
-          text,
-          date,
-        }),
-      });
+      if (needChat) {
+        getUsersChatCollection.doc(needChat.id).update({
+          messages: firestore.FieldValue.arrayUnion({
+            author: currentUserId,
+            text,
+            date,
+          }),
+        });
+      }
     });
 };

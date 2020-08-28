@@ -8,7 +8,7 @@ import SendIcon from '@material-ui/icons/Send';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 // Components
-import Message from '../Message/Message';
+import Message from '../../../components/UserChatItem/Message/Message';
 import { getAllMessages, sendMessage } from '../../../api/messagesAPI';
 import { getUserDoc } from '../../../api/firebaseAPI';
 
@@ -37,8 +37,8 @@ const Chat = () => {
 
   const handleClick = () => {
     const hours = new Date().getHours();
-    const minutes = new Date().getMinutes();
-    const date = `${hours}:${minutes}`;
+    const minutes = new Date().getMinutes().valueOf();
+    const date = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
     if (inputRef.current!.value !== '') {
       sendMessage(userId, inputRef.current!.value, date);
       inputRef.current!.value = '';
@@ -74,6 +74,7 @@ const Chat = () => {
           </div>
           <div className='chat-input'>
             <InputBase
+              autoFocus
               onKeyPress={handlePress}
               multiline
               rowsMax='2'

@@ -17,18 +17,19 @@ import { GetUserThunk } from './Redux/Actions/currentUserActions';
 // Firebase
 import { auth } from './api/firebaseAPI';
 import Messages from './containers/MessagesList/MessagesList';
-import Chat from './components/UserChatItem/Chat/Chat';
+import Chat from './containers/MessagesList/Chat/Chat';
 import Followers from './containers/Users/Followers/Followers';
 import Following from './containers/Users/Followers/Following';
+import { setAllChats } from './api/messagesAPI';
 // Pages
 const Auth = React.lazy(() => import('./containers/Auth/Auth'));
 const Main = React.lazy(() => import('./containers/News/News'));
 const Profile = React.lazy(() => import('./containers/Profile/Profile'));
-const UsersProfile = React.lazy(() =>
-  import('./containers/Users/UsersProfile/UsersProfile')
+const UsersProfile = React.lazy(
+  () => import('./containers/Users/UsersProfile/UsersProfile')
 );
-const UsersSearch = React.lazy(() =>
-  import('./containers/Users/UsersSearch/UsersSearch')
+const UsersSearch = React.lazy(
+  () => import('./containers/Users/UsersSearch/UsersSearch')
 );
 
 // ==== Main function ====
@@ -47,11 +48,14 @@ function App() {
     setUserID(auth.currentUser?.uid);
     // If there is a logged in user, set it in user state
     dispatch(GetUserThunk(userId));
+
+    setAllChats(userId!);
   }, [userId, dispatch]);
 
   useEffect(() => {
     setLoaded(state.loaded);
   }, [state.loaded]);
+
   return (
     <React.Suspense fallback={<></>}>
       <Router>

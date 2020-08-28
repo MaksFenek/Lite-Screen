@@ -38,6 +38,7 @@ import { getStorageItem } from '../../../api/localstorageAPI';
 
 // Types
 import { IUserInfo } from '../../../_Types/appTypes';
+import { createChat } from '../../../api/messagesAPI';
 
 const UsersProfile = () => {
   const state = useSelector((store: RootReducerInterface) => store);
@@ -136,7 +137,7 @@ const UsersProfile = () => {
       status: '',
       photo: '',
     });
-  }, [location]);
+  }, []);
 
   return (
     <>
@@ -213,9 +214,17 @@ const UsersProfile = () => {
               />
             </div>
             <div className='column'>
-              <Button className='messages' variant='contained' color='primary'>
-                Messages
-              </Button>
+              <Link to={`/messages/${userId}`}>
+                <Button
+                  name={userId}
+                  className='messages'
+                  variant='contained'
+                  color='primary'
+                  onClick={createChat}
+                >
+                  Messages
+                </Button>
+              </Link>
               <div className='dls'>
                 <div className='date'>Date: {userInfo.birthday}</div>
               </div>
