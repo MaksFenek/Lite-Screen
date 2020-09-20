@@ -1,0 +1,15 @@
+.user-post {
+  margin: 10px 0;
+  box-shadow: 2px 3px 6px #e0e0e0;
+  background: #bbdefb;
+  border-radius: 5px;
+  width: 100%;
+  height: fit-content;
+
+  &-photo {
+    height: auto;
+    border: 0px solid black;
+    border-radius: 20px;
+    padding: 0 10px;
+  }
+}

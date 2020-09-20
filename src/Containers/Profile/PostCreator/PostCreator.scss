@@ -1,0 +1,49 @@
+.post-creator {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+
+  &-photo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    .image {
+      height: 250px;
+      width: 250px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 20px;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        max-width: 400px;
+        max-height: 400px;
+      }
+    }
+    .img-input {
+      display: none;
+    }
+  }
+
+  &-editor {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-evenly;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .post-creator {
+    flex-direction: column;
+
+    &-btn {
+      margin-top: 20px;
+    }
+  }
+}

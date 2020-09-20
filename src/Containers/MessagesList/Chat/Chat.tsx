@@ -68,7 +68,7 @@ const Chat = () => {
                 text={item.text}
                 author={item.author}
                 date={item.date}
-                key={index}
+                key={index} 
               />
             ))}
           </div>

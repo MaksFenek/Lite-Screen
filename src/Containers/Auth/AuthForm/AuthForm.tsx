@@ -13,6 +13,7 @@ import {
   createAccount,
   getUserDoc,
   putUserPhoto,
+  getPostsCollection,
 } from '../../../api/firebaseAPI';
 import { FirebaseError } from 'firebase';
 
@@ -59,6 +60,7 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
             // Set user information in document
             userInfo: { firstName, secondName },
           });
+          getPostsCollection.doc(userId).set({ posts: [] });
           fetch('https://semantic-ui.com/images/wireframe/white-image.png')
             .then(function (response) {
               return response.blob();

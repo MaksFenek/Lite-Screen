@@ -3,6 +3,9 @@ import {
   ADD_USERS_DATE,
   ADD_USERS_STATUS,
   ADD_USERS_PHOTO,
+  ADD_USERS_FOLLOWERS_COUNT,
+  ADD_USERS_FOLLOWING_COUNT,
+  ADD_USERS_IS_FRIEND,
 } from '../Constants';
 
 export interface IUsersInitialState {
@@ -11,6 +14,9 @@ export interface IUsersInitialState {
   date: string;
   status: string;
   photo: string;
+  isFriend: boolean;
+  followersCount: number;
+  followingCount: number;
 }
 
 const initialState: IUsersInitialState = {
@@ -19,6 +25,9 @@ const initialState: IUsersInitialState = {
   date: '',
   status: '',
   photo: '',
+  isFriend: false,
+  followersCount: 0,
+  followingCount: 0,
 };
 
 export default (state = initialState, { type, payload }: any) => {
@@ -46,6 +55,24 @@ export default (state = initialState, { type, payload }: any) => {
       return {
         ...state,
         photo: payload,
+      };
+
+    case ADD_USERS_FOLLOWERS_COUNT:
+      return {
+        ...state,
+        followersCount: payload,
+      };
+
+    case ADD_USERS_FOLLOWING_COUNT:
+      return {
+        ...state,
+        followingCount: payload,
+      };
+
+    case ADD_USERS_IS_FRIEND:
+      return {
+        ...state,
+        isFriend: payload,
       };
 
     default:

@@ -9,7 +9,6 @@ import {
 } from '../Constants';
 
 import { getUserDoc, getUserPhoto } from '../../api/firebaseAPI';
-import { IFriend } from '../../_Types/appTypes';
 import { getStorageItem, setStorageItem } from '../../api/localstorageAPI';
 
 // ==== TypeScript ====
@@ -74,11 +73,12 @@ export const AddUserPhoto = (photo: string) => ({
 });
 
 // ==== Thunks ====
-export const GetUserThunk = (userId: string | undefined) => (dispatch: any) => {
-  dispatch(AddLoaded(true));
+export const GetUserThunk = (userId: string | undefined) => async (
+  dispatch: any
+) => {
   if (userId) {
     dispatch(AddUserId(userId!));
-    getUserDoc(userId)
+    await getUserDoc(userId)
       // Get found document
       .get()
       .then((snapshot) => {
@@ -102,11 +102,12 @@ export const GetUserThunk = (userId: string | undefined) => (dispatch: any) => {
               secondName,
             })
           );
+
           dispatch(AddUserDate(birthday));
           dispatch(AddUserStatus(status));
         }
       });
-
+    dispatch(AddLoaded(true));
     // Get the current user document from firebase
     getUserDoc(userId)
       .get()
@@ -116,7 +117,7 @@ export const GetUserThunk = (userId: string | undefined) => (dispatch: any) => {
           const friends = getStorageItem('friends');
           if (user.data()?.friends) {
             // Take every friend
-            user.data()?.friends.map((friend: IFriend) => {});
+            setStorageItem('friends', user.data()?.friends);
           }
 
           if (

@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { getUserDoc } from '../../../api/firebaseAPI';
-import { getAllFollowing } from '../../../api/friendsAPI';
+import { getAllFollowers } from '../../../api/friendsAPI';
 
 import Friends from '../../../components/CurrentUser/Friends/Friends';
 
+export interface IPeople {
+  user: string;
+  name: string;
+}
+
 const Followers = () => {
-  const [people, setPeople] = useState<any>();
+  const [people, setPeople] = useState<IPeople[]>();
   const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
@@ -18,28 +23,34 @@ const Followers = () => {
     getUserDoc(userId)
       .get()
       .then((user) => {
-        // Get user fullname
-        const name = `${user.data()?.userInfo.firstName} ${
-          user.data()?.userInfo.secondName
-        }`;
         // Set user Firstname in state
         setUserName(user.data()?.userInfo.firstName);
         // Get all followers by user id and user name
-        getAllFollowing(userId, name)?.then((users) => {
-          // Create array for followers
-          let array: any[] = [];
-
+        getAllFollowers(userId)?.then((users) => {
+          // Set all followers in state
           users.forEach((aUser) => {
-            // Add in recently created array new followers
-            array.push(...array, {
-              name:
-                aUser.data().userInfo.firstName +
-                ' ' +
-                aUser.data().userInfo.secondName,
-              user: aUser.ref.id,
-            });
-            // Set the array in state
-            setPeople(array);
+            setPeople((all) =>
+              all
+                ? [
+                    ...all,
+                    {
+                      name:
+                        aUser.data().userInfo.firstName +
+                        ' ' +
+                        aUser.data().userInfo.secondName,
+                      user: aUser.ref.id,
+                    },
+                  ]
+                : [
+                    {
+                      name:
+                        aUser.data().userInfo.firstName +
+                        ' ' +
+                        aUser.data().userInfo.secondName,
+                      user: aUser.ref.id,
+                    },
+                  ]
+            );
           });
         });
       });

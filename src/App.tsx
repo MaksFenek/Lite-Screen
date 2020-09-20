@@ -8,6 +8,7 @@ import {
 } from 'react-router-dom';
 
 import Navbar from './containers/Generic/Navbar/Navbar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -55,9 +56,22 @@ function App() {
   useEffect(() => {
     setLoaded(state.loaded);
   }, [state.loaded]);
-
   return (
-    <React.Suspense fallback={<></>}>
+    <React.Suspense
+      fallback={
+        <div
+          style={{
+            height: '100vh',
+            width: '100vw',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <CircularProgress color='primary' />
+        </div>
+      }
+    >
       <Router>
         <Switch>
           {loaded && (
@@ -69,7 +83,7 @@ function App() {
                     <Redirect exact from='/signup' to='/' />
                   </Route>
                   <Route exact path='/'>
-                    <Main />
+                    <Main id={userId} />
                   </Route>
                   <Route path={`/${auth.currentUser?.uid}`}>
                     <Profile />

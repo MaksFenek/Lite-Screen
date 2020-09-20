@@ -4,9 +4,14 @@ import {
   ADD_USERS_DATE,
   ADD_USERS_STATUS,
   ADD_USERS_PHOTO,
+  ADD_USERS_IS_FRIEND,
+  ADD_USERS_FOLLOWING_COUNT,
+  ADD_USERS_FOLLOWERS_COUNT,
 } from '../Constants';
 
 import { getUserDoc, getUserPhoto } from '../../api/firebaseAPI';
+import { getStorageItem } from '../../api/localstorageAPI';
+import { getFollowingCount, getFriendsCount } from '../../api/friendsAPI';
 
 // ==== TypeScript ====
 
@@ -61,9 +66,25 @@ export const AddUsersPhoto = (photo: string) => ({
   payload: photo,
 });
 
+export const AddUsersFollowingCount = (followersCount: number) => ({
+  type: ADD_USERS_FOLLOWING_COUNT,
+  payload: followersCount,
+});
+
+export const AddUsersFollowersCount = (followingCount: number) => ({
+  type: ADD_USERS_FOLLOWERS_COUNT,
+  payload: followingCount,
+});
+
+export const AddUsersIsFriend = (isFriend: boolean) => ({
+  type: ADD_USERS_IS_FRIEND,
+  payload: isFriend,
+});
+
 // ==== Thunks ====
 export const GetUsersThunk = (userId: string | undefined) => (
-  dispatch: any
+  dispatch: any,
+  getState: any
 ) => {
   dispatch(
     AddUsersFirstAndSecondNamesAction({
@@ -84,18 +105,47 @@ export const GetUsersThunk = (userId: string | undefined) => (
           // Get data from document fields
           const firstName: string = snapshot.data()?.userInfo.firstName;
           const secondName: string = snapshot.data()?.userInfo.secondName;
-          const birthday: string = snapshot.data()?.userInfo.birthday;
+          const birthday: number[] = snapshot
+            .data()
+            ?.userInfo.birthday.replaceAll('-', ' ')
+            .split(' ');
           const status: string = snapshot.data()?.userInfo.status;
+
+          const monthNames = [
+            'January',
+            'February',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December',
+          ];
+          if (birthday[1].toString()[0] === '0') {
+            birthday[1] = +birthday[1].toString()[1];
+          }
 
           // Create new action with user info
           // Dispatch action to reducer
-          dispatch(AddUsersDate(birthday));
+          dispatch(
+            AddUsersDate(
+              `${birthday[2]} ${monthNames[--birthday[1]]} ${birthday[0]}`
+            )
+          );
           dispatch(AddUsersStatus(status));
           dispatch(
             AddUsersFirstAndSecondNamesAction({
               firstName,
               secondName,
             })
+          );
+          getFollowingCount(userId!).then(
+            (FollowingCount) =>
+              FollowingCount && dispatch(AddUsersFollowingCount(FollowingCount))
           );
 
           // Get user info and set it to state
@@ -105,4 +155,20 @@ export const GetUsersThunk = (userId: string | undefined) => (
       dispatch(AddUsersPhoto(img));
     });
   }
+  const friends = getStorageItem('friends');
+
+  // Check if there is array of friends in local storage
+  if (friends) {
+    // Get all friends
+    if (friends.find((friend: any) => friend.user === userId)) {
+      dispatch(AddUsersIsFriend(true));
+    }
+  }
+  if (userId === getState().auth.userId) {
+    dispatch(AddUsersIsFriend(true));
+  }
+  getFriendsCount(userId!).then(
+    (FriendsCount) =>
+      FriendsCount && dispatch(AddUsersFollowersCount(FriendsCount))
+  );
 };

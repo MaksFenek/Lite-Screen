@@ -17,3 +17,14 @@ export interface IUserSearch {
   id: string;
   photo: string;
 }
+
+export interface IUserPost {
+  photo: string;
+  name: string;
+  content: any;
+  likes: number;
+  comments: any[];
+  author: string;
+  date: string[];
+  id: string;
+}

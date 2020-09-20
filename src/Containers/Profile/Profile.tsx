@@ -25,8 +25,10 @@ import {
   getCurrentUserSecondNameSelector,
   getCurrentUserStatusSelector,
 } from '../../Redux/Selectors/currentUserSelector';
+import PostCreator from './PostCreator/PostCreator';
+import PostList from '../PostList/PostList';
 
-const Profile = () => {
+const Profile: React.FC = () => {
   function Alert(props: AlertProps) {
     return <MuiAlert elevation={6} variant='filled' {...props} />;
   }
@@ -55,6 +57,8 @@ const Profile = () => {
     photo: '',
   });
 
+  const userId = getCurrentUserIdSelector(state);
+
   useEffect(() => {
     // Set user information
     setUserInfo({
@@ -70,7 +74,6 @@ const Profile = () => {
     // Get image from input
     const img = e.currentTarget.files![0];
 
-    const userId = getCurrentUserIdSelector(state);
     putUserPhoto(userId, img).then(() => {
       getUserPhoto(userId).then((photo) => {
         setUserInfo({ ...userInfo, photo });
@@ -175,7 +178,6 @@ const Profile = () => {
                 <TextField
                   onChange={handleChangeBirthday}
                   type='date'
-                  required
                   label='Birthday'
                   value={userInfo.birthday}
                   InputLabelProps={{
@@ -193,11 +195,15 @@ const Profile = () => {
           >
             Save
           </Button>
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+          <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
             <Alert onClose={handleClose} severity='success'>
               All saved
             </Alert>
           </Snackbar>
+          <PostCreator author={userInfo.firstName} id={userId} />
+          <div className='posts'>
+            <PostList author={userId} type='single' />
+          </div>
         </div>
       </div>
     </>

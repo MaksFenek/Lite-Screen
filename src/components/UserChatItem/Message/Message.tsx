@@ -15,9 +15,9 @@ interface IMessage {
 const Message: React.FC<IMessage> = ({ text, date, author }) => {
   const userId = auth.currentUser?.uid;
   return (
-    <div className={userId === author ? 'message own' : 'message'}>
-      <p>{text}</p>
-      <span>{date}</span>
+    <div data-testid='message' className={userId === author ? 'message own' : 'message'} >
+      <p data-testid='message-text'>{text}</p>
+      <span data-testid='message-date'>{date}</span>
     </div>
   );
 };

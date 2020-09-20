@@ -14,14 +14,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 import { GetUsersThunk } from '../../../Redux/Actions/usersActions';
 import {
-  getCurrentUserDateSelector,
-  getCurrentUserFirstNameSelector,
-  getCurrentUserPhotoSelector,
-  getCurrentUserIdSelector,
-  getCurrentUserSecondNameSelector,
-  getCurrentUserStatusSelector,
-} from '../../../Redux/Selectors/currentUserSelector';
-import {
   getUserFirstNameSelector,
   getUserSecondNameSelector,
   getUserDateSelector,
@@ -29,50 +21,33 @@ import {
   getUserStatusSelector,
 } from '../../../Redux/Selectors/usersSelector';
 // API
-import {
-  AddFriend,
-  getFollowingCount,
-  getFriendsCount,
-} from '../../../api/friendsAPI';
-import { getStorageItem } from '../../../api/localstorageAPI';
+import { AddFriend } from '../../../api/friendsAPI';
 
 // Types
-import { IUserInfo } from '../../../_Types/appTypes';
 import { createChat } from '../../../api/messagesAPI';
+import PostList from '../../PostList/PostList';
+import { IUsersInitialState } from '../../../Redux/Reducers/usersReducer';
 
 const UsersProfile = () => {
-  const state = useSelector((store: RootReducerInterface) => store);
-  const userState = state.auth;
-  const otherUsersState = state.users;
+  const state = useSelector((store: RootReducerInterface) => store.users);
 
   const dispatch = useDispatch();
   // Create state for user ID
   const [userId, setUserId] = useState<undefined | string>(undefined);
 
   // Create state for user info
-  const [userInfo, setUserInfo] = useState<IUserInfo>({
+  const [userInfo, setUserInfo] = useState<IUsersInitialState>({
     firstName: '',
     secondName: '',
-    birthday: '',
+    date: '',
     status: '',
     photo: '',
+    isFriend: false,
+    followersCount: 0,
+    followingCount: 0,
   });
 
-  // Create state for initialize a friend
-  const [isFriend, setIsFriend] = useState<boolean>(false);
-
-  const [friendsCount, setFriendsCount] = useState<number>(0);
-  const [followingCount, setFollowingCount] = useState<number>(0);
-
   let location = useLocation();
-
-  useEffect(() => {
-    getFriendsCount(userId!).then((count) => setFriendsCount(count!));
-    getFollowingCount(
-      userId!,
-      userInfo.firstName + ' ' + userInfo.secondName
-    ).then((count) => setFollowingCount(count!));
-  }, [userId, userInfo.firstName, userInfo.secondName]);
 
   useEffect(() => {
     setUserId(
@@ -82,62 +57,24 @@ const UsersProfile = () => {
         .filter((item: string, index: number) => index > 6 && item)
         .join('')
     );
-    const friends = getStorageItem('friends');
-
-    // Check if there is array of friends in local storage
-    if (friends) {
-      // Get all friends
-      if (friends.find((friend: any) => friend.user === userId)) {
-        setIsFriend(true);
-      }
-    }
-    if (userId === getCurrentUserIdSelector(userState)) {
-      setIsFriend(true);
-    }
-  }, [location, userInfo, userId, userState]);
+  }, [location]);
 
   useEffect(() => {
     dispatch(GetUsersThunk(userId));
-  }, [location, dispatch, userId]);
-
-  useEffect(() => {
-    if (userInfo.firstName === '' || userInfo.photo === '') {
-      if (userId !== getCurrentUserIdSelector(userState)) {
-        setUserInfo({
-          firstName: getUserFirstNameSelector(otherUsersState),
-          secondName: getUserSecondNameSelector(otherUsersState),
-          birthday: getUserDateSelector(otherUsersState),
-          status: getUserStatusSelector(otherUsersState),
-          photo: getUserPhotoSelector(otherUsersState),
-        });
-      } else {
-        setUserInfo({
-          firstName: getCurrentUserFirstNameSelector(userState),
-          secondName: getCurrentUserSecondNameSelector(userState),
-          birthday: getCurrentUserDateSelector(userState),
-          status: getCurrentUserStatusSelector(userState),
-          photo: getCurrentUserPhotoSelector(userState),
-        });
-      }
-    }
-  }, [
-    userId,
-    userInfo,
-    otherUsersState,
-    userState,
-    dispatch,
-    location.pathname,
-  ]);
+  }, [dispatch, userId]);
 
   useEffect(() => {
     setUserInfo({
-      firstName: '',
-      secondName: '',
-      birthday: '',
-      status: '',
-      photo: '',
+      firstName: getUserFirstNameSelector(state),
+      secondName: getUserSecondNameSelector(state),
+      date: getUserDateSelector(state),
+      status: getUserStatusSelector(state),
+      photo: getUserPhotoSelector(state),
+      isFriend: state.isFriend,
+      followersCount: state.followersCount,
+      followingCount: state.followingCount,
     });
-  }, []);
+  }, [userId, state, dispatch, location]);
 
   return (
     <>
@@ -165,13 +102,13 @@ const UsersProfile = () => {
               <div className='people'>
                 <div className='friends'>
                   <Link to={`/following/${userId}`}>
-                    <p>{friendsCount} Following</p>
+                    <p>{userInfo.followersCount} Following</p>
                   </Link>
                 </div>
 
                 <div className='subscribers'>
                   <Link to={`/followers/${userId}`}>
-                    <p>{followingCount} Followers</p>
+                    <p>{userInfo.followingCount} Followers</p>
                   </Link>
                 </div>
                 <div className='groups'>
@@ -181,7 +118,7 @@ const UsersProfile = () => {
             </div>
           </div>
           <div className='second-row'>
-            {isFriend ? (
+            {userInfo.isFriend ? (
               <Button
                 className='subscribe'
                 variant='contained'
@@ -193,7 +130,6 @@ const UsersProfile = () => {
             ) : (
               <Button
                 name={userId}
-                value={otherUsersState.photo}
                 onClick={AddFriend}
                 className='subscribe'
                 variant='contained'
@@ -226,11 +162,13 @@ const UsersProfile = () => {
                 </Button>
               </Link>
               <div className='dls'>
-                <div className='date'>Date: {userInfo.birthday}</div>
+                <div className='date'>Date: {userInfo.date}</div>
               </div>
             </div>
 
-            <div className='posts'></div>
+            <div className='posts'>
+              {userId && <PostList author={userId} type='single' />}
+            </div>
           </div>
         </div>
       </div>

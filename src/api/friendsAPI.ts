@@ -105,7 +105,9 @@ export const getFriendsCount = async (userId: string) => {
       .get()
       .then((user) => {
         // Get friends array length
-        count = user.data()?.friends.length;
+        if (user.data()?.friends) {
+          count = user.data()?.friends.length;
+        }
       });
     return count;
   }
@@ -120,34 +122,34 @@ export const getAllFriends = (userId: string) => {
   }
 };
 
-export const getFollowingCount = async (userId: string, name: string) => {
+export const getFollowingCount = async (userId: string) => {
   if (userId) {
     let count = 0;
     // Get collection 'users'
     await getUsersCollection
       // Search an user which has a searching user in friends array
       .where('friends', 'array-contains', {
-        name: name,
         user: userId,
       })
       .get()
       .then((user) => {
         // Set followers array length
-        count = user.docs.length;
+        if (user.docs) {
+          count = user.docs.length;
+        }
       });
 
     return count;
   }
 };
 
-export const getAllFollowing = (userId: string, name: string) => {
+export const getAllFollowers = (userId: string) => {
   if (userId) {
     // Get collection 'users'
     return (
       getUsersCollection
         // Search an user which has a searching user in friends array
         .where('friends', 'array-contains', {
-          name: name,
           user: userId,
         })
         .get()
