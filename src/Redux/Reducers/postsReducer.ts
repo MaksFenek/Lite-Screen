@@ -6,7 +6,7 @@ export interface IPost {
   author: string;
   name: string;
   date: string[];
-  likes: number;
+  likes: any;
   comments: any[];
   content: string;
   id: string;

@@ -10,6 +10,7 @@ import { getStorageItem } from '../../api/localstorageAPI';
 
 import NoDataImg from '../../Icons/undraw_no_data_qbuo.svg';
 import { getUsersPostsThunk } from '../../Redux/Actions/usersPostsActions';
+import { likePost } from '../../api/postsAPI';
 
 export interface IPostList {
   author: string;
@@ -27,6 +28,8 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
   const dispatch = useDispatch();
   // Create state for posts
   const [posts, setPosts] = useState<IPost[]>();
+
+  
   useEffect(() => {
     setPosts([]);
   }, []);
@@ -70,6 +73,9 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
           content={post.content}
           likes={post.likes}
           comments={post.comments}
+          id={post.id}
+          userId={author}
+          likePost={likePost}
           key={index}
         />
       ))}

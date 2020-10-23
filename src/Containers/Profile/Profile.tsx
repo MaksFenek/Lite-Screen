@@ -200,7 +200,7 @@ const Profile: React.FC = () => {
               All saved
             </Alert>
           </Snackbar>
-          <PostCreator author={userInfo.firstName} id={userId} />
+          <PostCreator author={userInfo.firstName + ' ' + userInfo.secondName} id={userId} />
           <div className='posts'>
             <PostList author={userId} type='single' />
           </div>

@@ -1,4 +1,4 @@
-import { firestore, getPostsCollection } from './firebaseAPI';
+import { firestore, getPostsCollection, getUserDoc } from './firebaseAPI';
 
 export const createPost = (
   id: string,
@@ -9,29 +9,35 @@ export const createPost = (
 ) => {
   // Check if description and photo exist
   if (description && photo) {
-    // Update post document and there a new post
-    getPostsCollection.doc(id).update({
-      posts: firestore.FieldValue.arrayUnion({
-        name,
-        date,
-        likes: 0,
-        photo,
-        content: description,
-        comments: [],
-        id: `${new Date().getTime()}`,
-      }),
-    });
+    getPostsCollection.add({
+      userId:id,
+      name,
+      date,
+      likes: [],
+      photo,
+      content: description,
+      comments: [],
+      id: `${new Date().getTime()}`,
+    }).then((post)=>{
+      getUserDoc(id).update({posts: firestore.FieldValue.arrayUnion(post.id)})
+    })
+    
   } else if (description) {
-    getPostsCollection.doc(id).update({
-      posts: firestore.FieldValue.arrayUnion({
-        name,
-        date,
-        likes: 0,
-        photo: '',
-        content: description,
-        comments: [],
-        id: `${new Date().getTime()}`,
-      }),
-    });
+    getPostsCollection.add({
+      name,
+      userId:id,
+      date,
+      likes: [],
+      photo:'',
+      content: description,
+      comments: [],
+      id: `${new Date().getTime()}`,
+    }).then((post)=>{
+      getUserDoc(id).update({posts: firestore.FieldValue.arrayUnion(post.id)})
+    })
   }
 };
+ 
+export const likePost = (postId:string, author:string) => {
+  getPostsCollection.doc(postId).update({likes: firestore.FieldValue.arrayUnion(author)})
+}

@@ -20,11 +20,13 @@ export interface IPost {
   authorPhoto: string;
   name: string;
   content: any;
-  likes: number;
+  likes: string[];
   comments: any[];
   author: string;
   date: string[];
-  id?: string;
+  likePost?: any
+  id: string;
+  userId?:string
 }
 
 const Post: React.FC<IPost> = ({
@@ -34,9 +36,20 @@ const Post: React.FC<IPost> = ({
   content,
   likes,
   author,
+  likePost,
   authorPhoto,
   date,
+  id,
+  userId
 }) => {
+
+  const [liked, setLiked] =React.useState(false)
+
+  const handleLike =()=> {
+    likePost(id, userId)
+    setLiked(true)
+  }
+
   return (
     <Card className='user-post'>
       <CardHeader
@@ -63,8 +76,10 @@ const Post: React.FC<IPost> = ({
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {likes}
+        {likes.length}
         <IconButton
+        color={likes.find(like=> like === userId) || liked ? 'secondary' : 'inherit'}
+          onClick={handleLike}
           aria-label='add to favorites'
           style={{ marginRight: '20px' }}
         >
