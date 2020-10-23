@@ -24,15 +24,13 @@
     line-height: 0;
   }
 
-  &-last-message {
-    p {
-      display: block;
-      background: #e3f2fd;
-      border-radius: 5px;
-      padding: 5px 10px;
-      margin-left: 5px;
-      line-height: 15px;
-    }
+  p {
+    display: block;
+    background: #e3f2fd;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin-left: 5px;
+    line-height: 15px;
   }
 
   &:hover {

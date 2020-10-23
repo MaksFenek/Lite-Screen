@@ -15,6 +15,7 @@ interface IChatItem {
   name: string;
   id: string;
   photo: string;
+  lastMessage: string
 }
 
 export default function Messages() {
@@ -36,6 +37,7 @@ export default function Messages() {
   useEffect(() => {
     setChats(state.chats);
   }, [state, chats]);
+  
   return (
     <section className='main'>
       <div className='container'>
@@ -45,6 +47,7 @@ export default function Messages() {
               id={chat.id}
               name={chat.name}
               photo={chat.photo}
+              lastMessage={chat.lastMessage}
               key={index}
             />
           ))}

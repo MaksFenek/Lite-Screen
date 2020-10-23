@@ -4,6 +4,7 @@ export interface IChatItem {
   name: string;
   id: string;
   photo: string;
+  lastMessage: string
 }
 export interface IInitialChatsState {
   chats: IChatItem[];
@@ -18,7 +19,7 @@ export default (state = initialChatsState, { type, payload }: any) => {
       return Object.assign({}, state, {
         chats: [
           ...state.chats,
-          { name: payload.name, id: payload.id, photo: payload.photo },
+          { name: payload.name, id: payload.id, photo: payload.photo, lastMessage: payload.lastMessage },
         ],
         count: 1 + state.count,
       });

@@ -1,6 +1,6 @@
 {
   "name": "lite-screen",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "private": true,
   "dependencies": {
     "firebase": "^7.17.2",
