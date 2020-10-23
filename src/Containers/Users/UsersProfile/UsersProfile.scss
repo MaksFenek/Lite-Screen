@@ -158,6 +158,10 @@
       margin-top: 10px;
       margin-left: 20px;
       grid-area: posts;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
     }
   }
   .right {

@@ -11,8 +11,7 @@ import Navbar from './containers/Generic/Navbar/Navbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { RootReducerInterface } from './Redux/Reducers/rootReducer';
+import {  useDispatch } from 'react-redux';
 import { GetUserThunk } from './Redux/Actions/currentUserActions';
 
 // Firebase
@@ -35,12 +34,10 @@ const UsersSearch = React.lazy(
 
 // ==== Main function ====
 function App() {
-  const state = useSelector((store: RootReducerInterface) => store.auth);
   // Create dispatch
   const dispatch = useDispatch();
 
   const [userId, setUserID] = useState<string | undefined>(undefined);
-  const [loaded, setLoaded] = useState<boolean | undefined>(undefined);
 
   useEffect(() => {
     auth.onAuthStateChanged((person) => {
@@ -53,9 +50,6 @@ function App() {
     setAllChats(userId!);
   }, [userId, dispatch]);
 
-  useEffect(() => {
-    setLoaded(state.loaded);
-  }, [state.loaded]);
   return (
     <React.Suspense
       fallback={
@@ -74,7 +68,6 @@ function App() {
     >
       <Router>
         <Switch>
-          {loaded && (
             <>
               {auth.currentUser ? (
                 <>
@@ -114,7 +107,6 @@ function App() {
                 </>
               )}
             </>
-          )}
         </Switch>
       </Router>
     </React.Suspense>

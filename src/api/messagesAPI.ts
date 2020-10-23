@@ -1,3 +1,4 @@
+import { IReply } from '../containers/MessagesList/Chat/Chat';
 import { auth, firestore, getUserDoc } from './firebaseAPI';
 import { getUsersChatCollection } from './firebaseAPI';
 
@@ -89,25 +90,77 @@ export const getAllMessages = (
     });
 };
 
-export const sendMessage = (userId: string, text: string, date: any) => {
+export const sendMessage = (userId: string, text: string, date: any, reply?:IReply) => {
   // Get current user id
   const currentUserId = auth.currentUser?.uid;
   getUserDoc(currentUserId!)
     .get()
     .then((user) => {
+      // Get current time
+      const messageId = new Date().getTime()
       // Find need chat
       const needChat = user
         .data()
         ?.chats.find((chat: any) => chat.user === userId);
       // Add in chat a new message with author as current user id
       if (needChat) {
+        if(reply){
         getUsersChatCollection.doc(needChat.id).update({
           messages: firestore.FieldValue.arrayUnion({
             author: currentUserId,
             text,
             date,
+            messageId,
+            reply
           }),
-        });
+        });}
+        else {
+          getUsersChatCollection.doc(needChat.id).update({
+            messages: firestore.FieldValue.arrayUnion({
+              author: currentUserId,
+              text,
+              date,
+              messageId,
+            }),
+          })
+        }
       }
     });
 };
+
+
+export const deleteMessage = ( messageId:number, userId: string, author: string, date:string,text:string, reply?:any, ) => {
+  // console.log();
+  
+// Get current user id
+const currentUserId = auth.currentUser?.uid;
+getUserDoc(currentUserId!)
+  .get()
+  .then((user) => {
+    // Find need chat
+    const needChat = user
+      .data()
+      ?.chats.find((chat: any) => chat.user === userId);
+    // Add in chat a new message with author as current user id
+    
+    if (needChat) {
+      if(reply){
+      getUsersChatCollection.doc(needChat.id).update({messages:firestore.FieldValue.arrayRemove({
+        messageId,
+        author,
+        date,
+        reply,
+        text
+      })})
+    }
+    else {
+      getUsersChatCollection.doc(needChat.id).update({messages:firestore.FieldValue.arrayRemove({
+        messageId,
+        author,
+        date,
+        text
+      })})
+    }
+    }
+  });
+}

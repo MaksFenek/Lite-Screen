@@ -19,6 +19,7 @@ h5,
 h6 {
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
+  color: #616161;
 }
 p {
   font-family: 'Roboto', sans-serif;
@@ -29,6 +30,7 @@ body {
   box-sizing: border-box;
 }
 .container {
+  position: relative;
   max-width: 1140px;
   padding: 0 10px;
   margin: 0 auto;

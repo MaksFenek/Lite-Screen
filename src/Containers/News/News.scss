@@ -2,5 +2,9 @@
   margin-top: 80px;
   .main-content {
     z-index: -1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
   }
 }
