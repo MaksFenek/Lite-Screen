@@ -11,9 +11,12 @@ import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import CommentIcon from '@material-ui/icons/Comment';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
+import { InputBase, Paper } from '@material-ui/core';
+import { commentPost } from '../../api/postsAPI';
 
 export interface IPost {
   photo: string;
@@ -43,14 +46,37 @@ const Post: React.FC<IPost> = ({
   userId
 }) => {
 
-  const [liked, setLiked] =React.useState(false)
+  const [liked, setLiked] = React.useState(false)
+
+  const [openComments, setOpenComments] = React.useState(false)
+
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const handleLike =()=> {
     likePost(id, userId)
     setLiked(true)
   }
 
-  return (
+  const handleOpenComments =()=> {
+    setOpenComments(value => !value)
+  }
+
+  const handleClick = () => {
+
+    if (inputRef.current!.value !== '') {
+      commentPost(userId!, id, inputRef.current!.value)
+      inputRef.current!.value = '';
+    }
+  };
+
+  const handlePress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleClick();
+    }
+  };
+
+  return (<>
     <Card className='user-post'>
       <CardHeader
         avatar={
@@ -86,11 +112,37 @@ const Post: React.FC<IPost> = ({
           <FavoriteIcon />
         </IconButton>
         {comments.length}
-        <IconButton aria-label='share'>
-          <ShareIcon />
+        
+        <IconButton aria-label='comments' onClick={handleOpenComments}>
+          <CommentIcon />
         </IconButton>
       </CardActions>
+      
     </Card>
+    {openComments && 
+    <Paper elevation={2} className='comments'>
+      {comments.length === 0 ? <p>  There is no comments</p> : comments.map(comment => <div className='comment'>
+        <Link to={`/users/${comment.author}`}><Avatar src={comment.authorPhoto}/></Link>
+        <p>{comment.text}</p><span>{comment.date}</span>
+
+      </div>)}<div className='comments-input' >
+        <InputBase
+              autoFocus
+              onKeyPress={handlePress}
+              multiline
+              rowsMax='2'
+              inputRef={inputRef}
+              className='comments-input-field'
+              placeholder='Write a comment'
+              inputProps={{ 'aria-label': 'write' }}
+            />
+            
+              <SendIcon className='comments-input-icon' onClick={handleClick}/>
+            </div>
+      </Paper>
+    }
+    
+       </>
   );
 };
 

@@ -1,4 +1,4 @@
-import { firestore, getPostsCollection, getUserDoc } from './firebaseAPI';
+import { firestore, getPostsCollection, getUserDoc, getUserPhotoRef } from './firebaseAPI';
 
 export const createPost = (
   id: string,
@@ -36,8 +36,45 @@ export const createPost = (
       getUserDoc(id).update({posts: firestore.FieldValue.arrayUnion(post.id)})
     })
   }
+  else if (photo) {
+    getPostsCollection.add({
+      name,
+      userId:id,
+      date,
+      likes: [],
+      photo,
+      content: '',
+      comments: [],
+      id: `${new Date().getTime()}`,
+    }).then((post)=>{
+      getUserDoc(id).update({posts: firestore.FieldValue.arrayUnion(post.id)})
+    })
+  }
 };
  
 export const likePost = (postId:string, author:string) => {
   getPostsCollection.doc(postId).update({likes: firestore.FieldValue.arrayUnion(author)})
+}
+
+export const commentPost = (currentUserId:string, postId:string, text:string) => {
+
+  const commentId = new Date().getTime()
+
+  const hours = new Date().getHours();
+  const minutes = new Date().getMinutes().valueOf();
+  const date = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`;
+
+  getUserPhotoRef(currentUserId).getDownloadURL().then(authorPhoto => {
+    getPostsCollection.doc(postId).update({
+    comments: firestore.FieldValue.arrayUnion({
+      author: currentUserId,
+      authorPhoto,
+      commentId,
+      date,
+      text,
+      
+    })
+  })
+  })
+  
 }
