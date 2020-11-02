@@ -1,6 +1,6 @@
 // React
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 // Style and material ui
@@ -33,7 +33,7 @@ const UsersProfile = () => {
 
   const dispatch = useDispatch();
   // Create state for user ID
-  const [userId, setUserId] = useState<undefined | string>(undefined);
+  const userId = useParams<{id:string}>().id
 
   // Create state for user info
   const [userInfo, setUserInfo] = useState<IUsersInitialState>({
@@ -47,17 +47,7 @@ const UsersProfile = () => {
     followingCount: 0,
   });
 
-  let location = useLocation();
 
-  useEffect(() => {
-    setUserId(
-      // Get pathname of the page and delele '/users/'
-      document.location.pathname
-        .split('')
-        .filter((item: string, index: number) => index > 6 && item)
-        .join('')
-    );
-  }, [location]);
 
   useEffect(() => {
     dispatch(GetUsersThunk(userId));
@@ -74,7 +64,7 @@ const UsersProfile = () => {
       followersCount: state.followersCount,
       followingCount: state.followingCount,
     });
-  }, [userId, state, dispatch, location]);
+  }, [userId, state, dispatch]);
 
   return (
     <>

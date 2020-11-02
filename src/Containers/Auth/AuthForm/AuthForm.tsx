@@ -8,7 +8,6 @@ import Button from '@material-ui/core/Button';
 
 // Firebase
 import {
-  auth,
   signinInAccount,
   createAccount,
   getUserDoc,
@@ -51,10 +50,10 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
 
     // Create new user with email and password in firebase
     createAccount(email, password)
-      .then(() => {
-        if (auth.currentUser?.uid) {
+      .then((user) => {
+        if (user.user?.uid) {
           // Get a user id
-          const userId: string = auth.currentUser?.uid;
+          const userId: string = user.user?.uid;
           // Create new document in users collection with name as user id
           getUserDoc(userId).set({
             // Set user information in document
@@ -108,7 +107,7 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
               inputRef={secondNameRef}
               required
               className='auth-form-input'
-              placeholder='Second name'
+              placeholder='Last name'
               inputProps={{ 'aria-label': 'SecondName' }}
             />
           </>

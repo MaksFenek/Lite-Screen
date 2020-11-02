@@ -31,9 +31,6 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
 
   
   useEffect(() => {
-    setPosts([]);
-  }, []);
-  useEffect(() => {
     if (type === 'single') {
       // Get post from firebase
       dispatch(getPostThunk(author));

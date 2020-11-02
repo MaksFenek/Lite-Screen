@@ -169,7 +169,7 @@ const Profile: React.FC = () => {
                   onChange={handleChangeSecondName}
                   type='text'
                   required
-                  label='Second name'
+                  label='Last name'
                   value={userInfo.secondName}
                 />
               </div>
@@ -183,6 +183,7 @@ const Profile: React.FC = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  
                 />
               </div>
             </div>

@@ -1,6 +1,6 @@
 // React
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 // Styles and material ui
 import './Chat.scss';
 import { InputBase } from '@material-ui/core';
@@ -47,22 +47,19 @@ const Chat = () => {
   const state = useSelector((state: RootReducerInterface) => state);
   const stateChats = state.chats.chats;
   const currentUser = state.auth.userId;
-  const [chats, setChats] = React.useState<IChatItem[]>([]);
-  const [messages, setMessages] = React.useState<IMessageItem[]>([]);
-  const [name, setName] = React.useState<string>('');
+  const [chats, setChats] = useState<IChatItem[]>([]);
+  const [messages, setMessages] = useState<IMessageItem[]>([]);
+  const [name, setName] = useState<string>('');
 
-  const [reply, setReply] = React.useState<IReply>()
+  const [reply, setReply] = useState<IReply>()
 
   const dispatch = useDispatch()
 
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const userId = document.location.pathname
-    .split('')
-    .filter((item: string, index: number) => index > 9 && item)
-    .join('');
+  const userId = useParams<{id:string}>().id
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Get all messages from firebase
     getAllMessages(userId, setMessages);
     getUserDoc(userId)
@@ -78,14 +75,14 @@ const Chat = () => {
   }, [userId]);
   
   
-  React.useEffect(()=> {
+  useEffect(()=> {
     if(stateChats.length === 0){
     // Get user chats
     dispatch(GetUsersChatsThunk(currentUser!))
     }
   }, [currentUser, dispatch, stateChats.length])
 
-  React.useEffect(()=> {
+  useEffect(()=> {
     setChats(stateChats)
   }, [stateChats])
 

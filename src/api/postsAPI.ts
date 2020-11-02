@@ -78,3 +78,7 @@ export const commentPost = (currentUserId:string, postId:string, text:string) =>
   })
   
 }
+
+export const deletePost = (postId:string) => {
+  getPostsCollection.doc(postId).delete()
+}

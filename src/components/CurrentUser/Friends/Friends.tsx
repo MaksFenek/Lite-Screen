@@ -1,6 +1,11 @@
 // React
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+
+// Redux 
+import { useSelector } from 'react-redux';
+import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
+
 
 // Styles and Material ui
 import './Friends.scss';
@@ -16,7 +21,6 @@ import UserListItem from '../../UserListItem/UserListItem';
 
 // API
 import { getStorageItem } from '../../../api/localstorageAPI';
-import { auth } from '../../../api/firebaseAPI';
 
 interface IFriends {
   userName: string;
@@ -25,19 +29,16 @@ interface IFriends {
 }
 
 const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
+
+  const state = useSelector((store: RootReducerInterface) => store.auth);
+
   const [users, setUsers] = useState<any[]>([]);
   const [own, setOwn] = useState<boolean | undefined>(true);
-  const [userId, setUserId] = useState<string>('');
 
-  useEffect(() => {
-    // Get user id from http path
-    setUserId(
-      document.location.pathname
-        .split('')
-        .filter((item: string, index: number) => index > 10 && item)
-        .join('')
-    );
-  }, [userId]);
+  const currentUserId = state.userId
+
+  const userId = useParams<{id:string}>().id
+
 
   useEffect(() => {
     if (type === 'followers') {
@@ -46,7 +47,7 @@ const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
         setOwn(undefined);
       }
     } else if (type === 'following') {
-      if (userId === auth.currentUser?.uid) {
+      if (userId === currentUserId) {
         // Get all friends from local storage
         const friends = getStorageItem('friends');
         setUsers(friends);
@@ -56,7 +57,7 @@ const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
         setOwn(false);
       }
     }
-  }, [people, userId, type]);
+  }, [people, userId, type, currentUserId]);
 
   return (
     <div className='container'>

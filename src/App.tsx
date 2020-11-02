@@ -7,6 +7,7 @@ import {
   Redirect,
 } from 'react-router-dom';
 
+// Components
 import Navbar from './containers/Generic/Navbar/Navbar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -14,26 +15,23 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import {  useDispatch } from 'react-redux';
 import { GetUserThunk } from './Redux/Actions/currentUserActions';
 
-// Firebase
+// API
 import { auth } from './api/firebaseAPI';
+import { setAllChats } from './api/messagesAPI';
+
+// Pages
+import Auth from './containers/Auth/Auth'
+import Main from './containers/News/News'
+import Profile from './containers/Profile/Profile'
+import UsersProfile from './containers/Users/UsersProfile/UsersProfile'
+import UsersSearch from './containers/Users/UsersSearch/UsersSearch'
 import Messages from './containers/MessagesList/MessagesList';
 import Chat from './containers/MessagesList/Chat/Chat';
 import Followers from './containers/Users/Followers/Followers';
 import Following from './containers/Users/Followers/Following';
-import { setAllChats } from './api/messagesAPI';
-// Pages
-const Auth = React.lazy(() => import('./containers/Auth/Auth'));
-const Main = React.lazy(() => import('./containers/News/News'));
-const Profile = React.lazy(() => import('./containers/Profile/Profile'));
-const UsersProfile = React.lazy(
-  () => import('./containers/Users/UsersProfile/UsersProfile')
-);
-const UsersSearch = React.lazy(
-  () => import('./containers/Users/UsersSearch/UsersSearch')
-);
 
 // ==== Main function ====
-function App() {
+ const App:React.FC = () => {
   // Create dispatch
   const dispatch = useDispatch();
 
@@ -43,11 +41,15 @@ function App() {
     auth.onAuthStateChanged((person) => {
       setUserID(person?.uid);
     });
+
+    if(userId) {
     setUserID(auth.currentUser?.uid);
     // If there is a logged in user, set it in user state
     dispatch(GetUserThunk(userId));
 
     setAllChats(userId!);
+    }
+    
   }, [userId, dispatch]);
 
   return (
@@ -69,7 +71,7 @@ function App() {
       <Router>
         <Switch>
             <>
-              {auth.currentUser ? (
+              {userId ? (
                 <>
                   <Navbar user={userId} />
                   <Route path='/signup'>
@@ -78,7 +80,7 @@ function App() {
                   <Route exact path='/'>
                     <Main id={userId} />
                   </Route>
-                  <Route path={`/${auth.currentUser?.uid}`}>
+                  <Route path={`/${userId}`}>
                     <Profile />
                   </Route>
                   <Route path='/search'>
@@ -93,8 +95,12 @@ function App() {
                   <Route path='/following/:id'>
                     <Following />
                   </Route>
-                  <Route path='/messages/:id' component={Chat} />
-                  <Route path='/users/:id' component={UsersProfile} />
+                  <Route path='/messages/:id'>
+                    <Chat/>
+                  </Route>
+                  <Route path='/users/:id'>
+                    <UsersProfile/>
+                  </Route>
                 </>
               ) : (
                 <>

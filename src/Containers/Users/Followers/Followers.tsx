@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getUserDoc } from '../../../api/firebaseAPI';
 import { getAllFollowers } from '../../../api/friendsAPI';
 
@@ -13,12 +14,10 @@ const Followers = () => {
   const [people, setPeople] = useState<IPeople[]>();
   const [userName, setUserName] = useState<string>('');
 
+  const userId = useParams<{id:string}>().id
   useEffect(() => {
     // Get page pathname
-    const userId = document.location.pathname
-      .split('')
-      .filter((item: string, index: number) => index > 10 && item)
-      .join('');
+    
 
     getUserDoc(userId)
       .get()
@@ -54,7 +53,7 @@ const Followers = () => {
           });
         });
       });
-  }, []);
+  }, [userId]);
 
   return <Friends people={people} type='followers' userName={userName} />;
 };

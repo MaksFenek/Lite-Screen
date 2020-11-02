@@ -6,7 +6,6 @@ import './MessagesList.scss';
 
 // Components
 import UserChatItem from '../../components/UserChatItem/UserChatItem';
-import { auth } from '../../api/firebaseAPI';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootReducerInterface } from '../../Redux/Reducers/rootReducer';
 import { GetUsersChatsThunk } from '../../Redux/Actions/chatsAction';
@@ -19,24 +18,25 @@ interface IChatItem {
 }
 
 export default function Messages() {
-  const state = useSelector((state: RootReducerInterface) => state.chats);
+  const state = useSelector((state: RootReducerInterface) => state);
+  const chatsState = state.chats
   const dispatch = useDispatch();
-  const [userId, setUserId] = useState<string | undefined>('');
+  const userId = state.auth.userId
   const [chats, setChats] = useState<IChatItem[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    setUserId(auth.currentUser?.uid);
     if (userId) {
-      if (!loaded && state.count === 0) {
+      if (!loaded && chatsState.count === 0) {
         setLoaded(true);
         dispatch(GetUsersChatsThunk(userId!));
       }
     }
-  }, [userId, dispatch, state, chats, loaded]);
+  }, [userId, dispatch, chatsState, loaded]);
+
   useEffect(() => {
-    setChats(state.chats);
-  }, [state, chats]);
+    setChats(chatsState.chats);
+  }, [chatsState, chats]);
   
   return (
     <section className='main'>

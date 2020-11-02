@@ -15,8 +15,8 @@ import CommentIcon from '@material-ui/icons/Comment';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
-import { InputBase, Paper } from '@material-ui/core';
-import { commentPost } from '../../api/postsAPI';
+import { InputBase, Menu, MenuItem, Paper } from '@material-ui/core';
+import { commentPost, deletePost } from '../../api/postsAPI';
 
 export interface IPost {
   photo: string;
@@ -52,6 +52,21 @@ const Post: React.FC<IPost> = ({
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  const handleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = (): void => {
+    setAnchorEl(null);
+  };
+
+  const handleDelete = () => {
+    deletePost(id)
+    handleClose()
+  }
+
   const handleLike =()=> {
     likePost(id, userId)
     setLiked(true)
@@ -85,9 +100,29 @@ const Post: React.FC<IPost> = ({
           </Link>
         }
         action={
-          <IconButton aria-label='settings'>
-            <MoreVertIcon />
-          </IconButton>
+          <><IconButton
+          aria-controls='simple-menu'
+          aria-haspopup='true'
+          onClick={handleMenu}
+        >
+          <MoreVertIcon />
+        </IconButton>
+        <Menu
+          keepMounted
+          id='simple-menu'
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleClose}
+        >
+          {author === userId && <>
+          <MenuItem onClick={handleDelete}>Delete</MenuItem></>}
+
+          {author !== userId && <MenuItem onClick={handleClose}>Report</MenuItem>}
+            
+          
+          
+        </Menu></>
+          
         }
         title={name}
         subheader={`${date[3]} ${date[0]} ${date[1]}, ${date[2]}`}

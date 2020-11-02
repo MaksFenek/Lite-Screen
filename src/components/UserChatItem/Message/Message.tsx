@@ -25,7 +25,6 @@ interface IMessage {
 
 const Message: React.FC<IMessage> = ({ text, date, author, answerId,userId, reply,name, setReply }) => {
 
-
   // Create state for menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 

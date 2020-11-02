@@ -19,8 +19,7 @@ interface IAuth {
   type: 'login' | 'signup';
 }
 
-const Auth: React.FC<IAuth> = (props) => {
-  const type = props.type;
+const Auth: React.FC<IAuth> = ({type}) => {
 
   return (
     <>
