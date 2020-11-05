@@ -126,6 +126,7 @@ const Chat = () => {
           <div className='chat-messages' style={reply && { marginBottom: '60px'}}>
             {messages.map((item: any, index: number) => (
               <Message
+              currentUserId={currentUser}
                 text={item.text}
                 author={item.author}
                 userId={userId}

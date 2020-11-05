@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getUserDoc } from '../../../api/firebaseAPI';
 import { getAllFollowers } from '../../../api/friendsAPI';
 
 import Friends from '../../../components/CurrentUser/Friends/Friends';
+import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 
 export interface IPeople {
   user: string;
@@ -11,6 +13,9 @@ export interface IPeople {
 }
 
 const Followers = () => {
+  const state = useSelector((store: RootReducerInterface) => store.auth);
+  const currentUserId = state.userId
+
   const [people, setPeople] = useState<IPeople[]>();
   const [userName, setUserName] = useState<string>('');
 
@@ -55,7 +60,7 @@ const Followers = () => {
       });
   }, [userId]);
 
-  return <Friends people={people} type='followers' userName={userName} />;
+  return <Friends people={people} type='followers' userName={userName} currentUserId={currentUserId}/>;
 };
 
 export default Followers;

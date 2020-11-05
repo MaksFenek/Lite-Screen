@@ -2,11 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
-// Redux 
-import { useSelector } from 'react-redux';
-import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
-
-
 // Styles and Material ui
 import './Friends.scss';
 import InputBase from '@material-ui/core/InputBase';
@@ -24,18 +19,15 @@ import { getStorageItem } from '../../../api/localstorageAPI';
 
 interface IFriends {
   userName: string;
+  currentUserId: string;
   people?: any;
   type?: 'followers' | 'following';
 }
 
-const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
-
-  const state = useSelector((store: RootReducerInterface) => store.auth);
+const Friends: React.FC<IFriends> = ({ userName, currentUserId, people, type }) => {
 
   const [users, setUsers] = useState<any[]>([]);
   const [own, setOwn] = useState<boolean | undefined>(true);
-
-  const currentUserId = state.userId
 
   const userId = useParams<{id:string}>().id
 
@@ -67,7 +59,7 @@ const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
             <Link to={`/users/${userId}`}>
               <ArrowBackIcon />
             </Link>
-            <span>
+            <span aria-label='user-friends'>
               {userName}'s {type}
             </span>
           </div>
@@ -81,7 +73,7 @@ const Friends: React.FC<IFriends> = ({ userName, people, type }) => {
               <SearchIcon />
             </div>
           </div>
-          <div className='friends'>
+          <div className='friends' aria-label='friends-list'>
             {users !== null &&
               users!.map((user: IFriend, index: number) => {
                 return (

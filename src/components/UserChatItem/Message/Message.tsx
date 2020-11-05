@@ -6,12 +6,10 @@ import { IReply } from '../../../containers/MessagesList/Chat/Chat';
 import './Message.scss';
 import { Menu, MenuItem } from '@material-ui/core';
 
-// API
-import { auth } from '../../../api/firebaseAPI';
-import { deleteMessage } from '../../../api/messagesAPI';
 
 // ==== TypeScript ====
 interface IMessage {
+  currentUserId:string;
   text: string;
   date: string;
   author: string;
@@ -23,7 +21,7 @@ interface IMessage {
   deleteMessage: any
 }
 
-const Message: React.FC<IMessage> = ({ text, date, author, answerId,userId, reply,name, setReply }) => {
+const Message: React.FC<IMessage> = ({ text, date, author, answerId,userId, reply,name, setReply,currentUserId, deleteMessage }) => {
 
   // Create state for menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -44,27 +42,27 @@ const Message: React.FC<IMessage> = ({ text, date, author, answerId,userId, repl
     
     handleClose()
   }
-  const currentUserId = auth.currentUser?.uid;
   return (<>
-    <div data-testid='message' className={currentUserId === author ? 'message own' : 'message'} onClick={handleClick}>
+    <div aria-label='message' className={currentUserId === author ? 'message own' : 'message'} onClick={handleClick}>
       {reply && 
         <div className='reply'>
-          {reply.author === 'you' ? <h3>You:</h3> : <h3>{name}:</h3>}
-          <p data-testid='message-text'>{reply?.text.substring(0,60)}{reply?.text.length > 60 && '....'}</p>
+          {reply.author === 'you' ? <h3 aria-label='reply-author'>You:</h3> : <h3 aria-label='reply-author'>{name}:</h3>}
+          <p aria-label='reply-text'>{reply?.text.substring(0,60)}{reply?.text.length > 60 && '....'}</p>
       </div>
       }
-      <p data-testid='message-text'>{text}</p>
-      <span data-testid='message-date'>{date}</span>
+      <p aria-label='message-text'>{text}</p>
+      <span aria-label='message-date'>{date}</span>
     </div>
     <Menu
+    aria-label='menu'
       keepMounted
       id='simple-menu'
       anchorEl={anchorEl}
       open={Boolean(anchorEl)}
       onClose={handleClose}
     >
-      <MenuItem onClick={handleReply}> Reply </MenuItem>      
-      <MenuItem onClick={handleDelete}> Delete </MenuItem>
+      <MenuItem onClick={handleReply} aria-label='reply' > Reply </MenuItem>      
+      <MenuItem onClick={handleDelete} aria-label='delete'> Delete </MenuItem>
     </Menu>
     </>
   );

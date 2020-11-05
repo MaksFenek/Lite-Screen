@@ -101,7 +101,8 @@ export const getFriendsCount = async (userId: string) => {
   if (userId) {
     let count = 0;
     // Get user doucment by id
-    await getUserDoc(userId)
+    try {
+      await getUserDoc(userId)
       .get()
       .then((user) => {
         // Get friends array length
@@ -110,6 +111,11 @@ export const getFriendsCount = async (userId: string) => {
         }
       });
     return count;
+    }
+    catch(error) {
+      console.log(error);
+    }
+    
   }
 };
 
@@ -125,7 +131,8 @@ export const getAllFriends = (userId: string) => {
 export const getFollowingCount = async (userId: string) => {
   if (userId) {
     let count = 0;
-    // Get collection 'users'
+    try {
+      // Get collection 'users'
     await getUsersCollection
       // Search an user which has a searching user in friends array
       .where('friends', 'array-contains', {
@@ -140,6 +147,11 @@ export const getFollowingCount = async (userId: string) => {
       });
 
     return count;
+    } catch (error) {
+      console.log(error);
+      
+    }
+    
   }
 };
 

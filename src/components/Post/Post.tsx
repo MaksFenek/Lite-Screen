@@ -16,7 +16,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
 import { InputBase, Menu, MenuItem, Paper } from '@material-ui/core';
-import { commentPost, deletePost } from '../../api/postsAPI';
 
 export interface IPost {
   photo: string;
@@ -30,6 +29,8 @@ export interface IPost {
   likePost?: any
   id: string;
   userId?:string
+  commentPost?: any;
+  deletePost?:any
 }
 
 const Post: React.FC<IPost> = ({
@@ -43,7 +44,9 @@ const Post: React.FC<IPost> = ({
   authorPhoto,
   date,
   id,
-  userId
+  userId,
+  commentPost,
+  deletePost
 }) => {
 
   const [liked, setLiked] = React.useState(false)
@@ -95,14 +98,15 @@ const Post: React.FC<IPost> = ({
     <Card className='user-post'>
       <CardHeader
         avatar={
-          <Link to={`/users/${author}`}>
-            <Avatar src={authorPhoto} />
+          <Link to={`/users/${author}`} >
+            <Avatar src={authorPhoto} imgProps={{"aria-label":'avatar'}} />
           </Link>
         }
         action={
           <><IconButton
           aria-controls='simple-menu'
           aria-haspopup='true'
+          aria-label='menu'
           onClick={handleMenu}
         >
           <MoreVertIcon />
@@ -110,58 +114,61 @@ const Post: React.FC<IPost> = ({
         <Menu
           keepMounted
           id='simple-menu'
+          aria-label='menu-window'
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
+          
           {author === userId && <>
-          <MenuItem onClick={handleDelete}>Delete</MenuItem></>}
-
-          {author !== userId && <MenuItem onClick={handleClose}>Report</MenuItem>}
-            
-          
-          
+          <MenuItem onClick={handleDelete} aria-label='menu-delete'>Delete</MenuItem></>}
+          <MenuItem onClick={handleClose}>Report</MenuItem>
         </Menu></>
           
         }
         title={name}
+        titleTypographyProps={{'aria-label': 'title'}}
         subheader={`${date[3]} ${date[0]} ${date[1]}, ${date[2]}`}
+        subheaderTypographyProps={{'aria-label': 'date'}}
       />
       {photo && (
-        <CardMedia image={photo} component='img' className='user-post-photo' />
+        <CardMedia image={photo} component='img' className='user-post-photo'  />
       )}
 
       <CardContent>
-        <Typography variant='h5' color='textPrimary' component='p'>
+        <Typography variant='h5' color='textPrimary' component='p' aria-label='content'>
           {content}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {likes.length}
+        <p aria-label='likes'>{likes.length}</p>
+        
         <IconButton
         color={likes.find(like=> like === userId) || liked ? 'secondary' : 'inherit'}
           onClick={handleLike}
-          aria-label='add to favorites'
+          aria-label='addToFavorites'
           style={{ marginRight: '20px' }}
         >
           <FavoriteIcon />
         </IconButton>
-        {comments.length}
+        <p aria-label='comments'>{comments.length}</p>
         
-        <IconButton aria-label='comments' onClick={handleOpenComments}>
+        
+        <IconButton aria-label='btn-comments' onClick={handleOpenComments}>
           <CommentIcon />
         </IconButton>
       </CardActions>
       
     </Card>
     {openComments && 
-    <Paper elevation={2} className='comments'>
-      {comments.length === 0 ? <p>  There is no comments</p> : comments.map(comment => <div className='comment'>
-        <Link to={`/users/${comment.author}`}><Avatar src={comment.authorPhoto}/></Link>
-        <p>{comment.text}</p><span>{comment.date}</span>
+    <Paper elevation={2} className='comments' aria-label='comments-paper'>
+      {comments.length === 0 ? <p>  There is no comments</p> : comments.map((comment, index) => <div key={index} className='comment' aria-label='comment-item'>
+        <Link to={`/users/${comment.author}`}><Avatar src={comment.authorPhoto} imgProps={{'aria-label':'comment-avatar'}}/></Link>
+        <p aria-label='comment-text'>{comment.text}</p><span aria-label='comment-date'>{comment.date}</span>
 
       </div>)}<div className='comments-input' >
         <InputBase
+              inputComponent='input'
               autoFocus
               onKeyPress={handlePress}
               multiline
@@ -169,10 +176,10 @@ const Post: React.FC<IPost> = ({
               inputRef={inputRef}
               className='comments-input-field'
               placeholder='Write a comment'
-              inputProps={{ 'aria-label': 'write' }}
+              inputProps={{ 'aria-label': 'input' }}
             />
             
-              <SendIcon className='comments-input-icon' onClick={handleClick}/>
+              <SendIcon className='comments-input-icon' onClick={handleClick} aria-label='btn-send'/>
             </div>
       </Paper>
     }
