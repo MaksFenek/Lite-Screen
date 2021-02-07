@@ -19,8 +19,7 @@ interface IAuth {
   type: 'login' | 'signup';
 }
 
-const Auth: React.FC<IAuth> = ({type}) => {
-
+const Auth: React.FC<IAuth> = ({ type }) => {
   return (
     <>
       <Navbar>
@@ -49,4 +48,4 @@ const Auth: React.FC<IAuth> = ({type}) => {
   );
 };
 
-export default Auth;
+export default React.memo(Auth);

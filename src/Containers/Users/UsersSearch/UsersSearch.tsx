@@ -22,7 +22,7 @@ import {
 } from '../../../Redux/Selectors/searchSelector';
 import { getStorageItem } from '../../../api/localstorageAPI';
 
-export default function UsersSearch() {
+const UsersSearch = () => {
   const state = useSelector((store: RootReducerInterface) => store.search);
 
   const dispatch = useDispatch();
@@ -58,24 +58,25 @@ export default function UsersSearch() {
           </div>
         </div>
         <div className='posts'>
-          {users !== undefined
-            ? users!.map((user, index) => {
-                return (
-                  <UserListItem
-                    key={index}
-                    name={user.name}
-                    id={user.id}
-                    isFriend={
-                      friends?.find((friend) => friend.user === user.id)
-                        ? true
-                        : false
-                    }
-                  />
-                );
-              })
-            : ''}
+          {users !== undefined &&
+            users!.map((user, index) => {
+              return (
+                <UserListItem
+                  key={index}
+                  name={user.name}
+                  id={user.id}
+                  isFriend={
+                    friends?.find((friend) => friend.user === user.id)
+                      ? true
+                      : false
+                  }
+                />
+              );
+            })}
         </div>
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(UsersSearch);

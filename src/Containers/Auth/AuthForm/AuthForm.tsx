@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useCallback } from 'react';
 
 // Styles and Material ui
 import './AuthForm.scss';
@@ -30,7 +30,7 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
   const firstNameRef = React.useRef<HTMLInputElement>(null);
   const secondNameRef = React.useRef<HTMLInputElement>(null);
 
-  const handleClickLogin = (): void => {
+  const handleClickLogin = useCallback((): void => {
     // Get user email and password
     const email: string = emailRef.current!.value;
     const password: string = passwordRef.current!.value;
@@ -40,9 +40,9 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
       // if there is an error set error state as true for render the error in form
       setError(e.message);
     });
-  };
+  }, []);
 
-  const handleClickSignup = (): void => {
+  const handleClickSignup = useCallback((): void => {
     const email: string = emailRef.current!.value;
     const password: string = passwordRef.current!.value;
     const firstName: string = firstNameRef.current!.value;
@@ -73,7 +73,7 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
         // Checking if there is an error and then set it in error state for render
         setError(e.message);
       });
-  };
+  }, []);
 
   return (
     <div className='auth-forms'>
@@ -117,8 +117,7 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
         <Button
           color='primary'
           variant='contained'
-          onClick={type === 'login' ? handleClickLogin : handleClickSignup}
-        >
+          onClick={type === 'login' ? handleClickLogin : handleClickSignup}>
           Send
         </Button>
         {error ? <p>{error}</p> : null}
@@ -127,4 +126,4 @@ const AuthForm: React.FC<IAuthForm> = ({ type }) => {
   );
 };
 
-export default AuthForm;
+export default React.memo(AuthForm);

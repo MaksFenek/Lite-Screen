@@ -1,5 +1,5 @@
 // react
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // Style and material ui
 import './Profile.scss';
@@ -35,13 +35,16 @@ const Profile: React.FC = () => {
 
   const [open, setOpen] = useState(false);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason === 'clickaway') {
-      return;
-    }
+  const handleClose = useCallback(
+    (event?: React.SyntheticEvent, reason?: string) => {
+      if (reason === 'clickaway') {
+        return;
+      }
 
-    setOpen(false);
-  };
+      setOpen(false);
+    },
+    []
+  );
 
   const state = useSelector((store: RootReducerInterface) => store.auth);
 
@@ -70,52 +73,67 @@ const Profile: React.FC = () => {
     });
   }, [state]);
   // Handle actions
-  const handleImg = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    // Get image from input
-    const img = e.currentTarget.files![0];
+  const handleImg = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      // Get image from input
+      const img = e.currentTarget.files![0];
 
-    putUserPhoto(userId, img).then(() => {
-      getUserPhoto(userId).then((photo) => {
-        setUserInfo({ ...userInfo, photo });
+      putUserPhoto(userId, img).then(() => {
+        getUserPhoto(userId).then((photo) => {
+          setUserInfo({ ...userInfo, photo });
+        });
       });
-    });
-  };
+    },
+    [userId, userInfo]
+  );
 
   // Handle actions
-  const handleClick = (): void => {
+  const handleClick = useCallback((): void => {
     // Get user info from inputs
     const status: string = userInfo.status;
     const firstName: string = userInfo.firstName;
     const secondName: string = userInfo.secondName;
     const birthday: string = userInfo.birthday;
 
-    if (firstName !== '' && secondName !== '') {
+    if (firstName && secondName) {
       setOpen(true);
 
       dispatch(SetUserInfoThunk(firstName, secondName, birthday, status));
     }
-  };
+  }, [setOpen, dispatch, userInfo]);
 
   // Handle actions
-  const handleChangeStatus = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const statusValue: string = e.currentTarget.value;
-    setUserInfo({ ...userInfo, status: statusValue });
-  };
+  const handleChangeStatus = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const statusValue: string = e.currentTarget.value;
+      setUserInfo({ ...userInfo, status: statusValue });
+    },
+    [setUserInfo, userInfo]
+  );
 
-  const handleChangeFirstName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const firstNameValue: string = e.currentTarget.value;
-    setUserInfo({ ...userInfo, firstName: firstNameValue });
-  };
+  const handleChangeFirstName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const firstNameValue: string = e.currentTarget.value;
+      setUserInfo({ ...userInfo, firstName: firstNameValue });
+    },
+    [userInfo]
+  );
 
-  const handleChangeSecondName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const secondNameValue: string = e.currentTarget.value;
-    setUserInfo({ ...userInfo, secondName: secondNameValue });
-  };
+  const handleChangeSecondName = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const secondNameValue: string = e.currentTarget.value;
+      setUserInfo({ ...userInfo, secondName: secondNameValue });
+    },
+    [userInfo]
+  );
 
-  const handleChangeBirthday = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const birthdayValue: string = e.currentTarget.value;
-    setUserInfo({ ...userInfo, birthday: birthdayValue });
-  };
+  const handleChangeBirthday = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      const birthdayValue: string = e.currentTarget.value;
+      setUserInfo({ ...userInfo, birthday: birthdayValue });
+    },
+    [userInfo]
+  );
 
   return (
     <>
@@ -183,7 +201,6 @@ const Profile: React.FC = () => {
                   InputLabelProps={{
                     shrink: true,
                   }}
-                  
                 />
               </div>
             </div>
@@ -192,8 +209,7 @@ const Profile: React.FC = () => {
             onClick={handleClick}
             className='right'
             variant='contained'
-            color='secondary'
-          >
+            color='secondary'>
             Save
           </Button>
           <Snackbar open={open} autoHideDuration={1500} onClose={handleClose}>
@@ -201,7 +217,10 @@ const Profile: React.FC = () => {
               All saved
             </Alert>
           </Snackbar>
-          <PostCreator author={userInfo.firstName + ' ' + userInfo.secondName} id={userId} />
+          <PostCreator
+            author={userInfo.firstName + ' ' + userInfo.secondName}
+            id={userId}
+          />
           <div className='posts'>
             <PostList author={userId} type='single' />
           </div>

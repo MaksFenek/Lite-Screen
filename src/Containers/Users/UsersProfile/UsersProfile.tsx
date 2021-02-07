@@ -28,12 +28,12 @@ import { createChat } from '../../../api/messagesAPI';
 import PostList from '../../PostList/PostList';
 import { IUsersInitialState } from '../../../Redux/Reducers/usersReducer';
 
-const UsersProfile = () => {
+const UsersProfile: React.FC = () => {
   const state = useSelector((store: RootReducerInterface) => store.users);
 
   const dispatch = useDispatch();
   // Create state for user ID
-  const userId = useParams<{id:string}>().id
+  const userId = useParams<{ id: string }>().id;
 
   // Create state for user info
   const [userInfo, setUserInfo] = useState<IUsersInitialState>({
@@ -46,8 +46,6 @@ const UsersProfile = () => {
     followersCount: 0,
     followingCount: 0,
   });
-
-
 
   useEffect(() => {
     dispatch(GetUsersThunk(userId));
@@ -113,8 +111,7 @@ const UsersProfile = () => {
                 className='subscribe'
                 variant='contained'
                 color='default'
-                disabled
-              >
+                disabled>
                 Friend
               </Button>
             ) : (
@@ -123,8 +120,7 @@ const UsersProfile = () => {
                 onClick={AddFriend}
                 className='subscribe'
                 variant='contained'
-                color='primary'
-              >
+                color='primary'>
                 Subscribe
               </Button>
             )}
@@ -146,8 +142,7 @@ const UsersProfile = () => {
                   className='messages'
                   variant='contained'
                   color='primary'
-                  onClick={createChat}
-                >
+                  onClick={createChat}>
                   Messages
                 </Button>
               </Link>

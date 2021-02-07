@@ -6,18 +6,17 @@ import { getUserDoc } from '../../../api/firebaseAPI';
 import Friends from '../../../components/CurrentUser/Friends/Friends';
 import { RootReducerInterface } from '../../../Redux/Reducers/rootReducer';
 
-const Following = () => {
+const Following: React.FC = () => {
   const state = useSelector((store: RootReducerInterface) => store.auth);
-  const currentUserId = state.userId
+  const currentUserId = state.userId;
 
   const [people, setPeople] = useState<any>();
   const [userName, setUserName] = useState<string>('');
 
-  const userId =  useParams<{id:string}>().id
+  const userId = useParams<{ id: string }>().id;
 
   useEffect(() => {
     // Get user document
- 
     getUserDoc(userId)
       .get()
       .then((user) => {
@@ -26,7 +25,14 @@ const Following = () => {
         setPeople(user.data()?.friends);
       });
   }, [userId]);
-  return <Friends people={people} type='following' userName={userName} currentUserId={currentUserId} />;
+  return (
+    <Friends
+      people={people}
+      type='following'
+      userName={userName}
+      currentUserId={currentUserId}
+    />
+  );
 };
 
-export default Following;
+export default React.memo(Following);

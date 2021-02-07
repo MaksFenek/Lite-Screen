@@ -12,18 +12,16 @@ export interface IPeople {
   name: string;
 }
 
-const Followers = () => {
+const Followers: React.FC = () => {
   const state = useSelector((store: RootReducerInterface) => store.auth);
-  const currentUserId = state.userId
+  const currentUserId = state.userId;
 
   const [people, setPeople] = useState<IPeople[]>();
   const [userName, setUserName] = useState<string>('');
 
-  const userId = useParams<{id:string}>().id
+  const userId = useParams<{ id: string }>().id;
   useEffect(() => {
     // Get page pathname
-    
-
     getUserDoc(userId)
       .get()
       .then((user) => {
@@ -60,7 +58,14 @@ const Followers = () => {
       });
   }, [userId]);
 
-  return <Friends people={people} type='followers' userName={userName} currentUserId={currentUserId}/>;
+  return (
+    <Friends
+      people={people}
+      type='followers'
+      userName={userName}
+      currentUserId={currentUserId}
+    />
+  );
 };
 
-export default Followers;
+export default React.memo(Followers);

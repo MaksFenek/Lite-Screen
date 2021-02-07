@@ -21,4 +21,4 @@ const Main: React.FC<IMain> = ({ id }) => {
     </>
   );
 };
-export default Main;
+export default React.memo(Main);

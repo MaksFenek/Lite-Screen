@@ -30,7 +30,6 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
   // Create state for posts
   const [posts, setPosts] = useState<IPost[]>();
 
-  
   useEffect(() => {
     if (type === 'single') {
       // Get post from firebase
@@ -83,4 +82,4 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
   );
 };
 
-export default PostList;
+export default React.memo(PostList);

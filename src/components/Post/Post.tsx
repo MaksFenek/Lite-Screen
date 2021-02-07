@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 // Styles and material ui
 import Avatar from '@material-ui/core/Avatar';
@@ -26,11 +26,11 @@ export interface IPost {
   comments: any[];
   author: string;
   date: string[];
-  likePost?: any
+  likePost?: any;
   id: string;
-  userId?:string
+  userId?: string;
   commentPost?: any;
-  deletePost?:any
+  deletePost?: any;
 }
 
 const Post: React.FC<IPost> = ({
@@ -46,128 +46,155 @@ const Post: React.FC<IPost> = ({
   id,
   userId,
   commentPost,
-  deletePost
+  deletePost,
 }) => {
+  const [liked, setLiked] = React.useState(false);
 
-  const [liked, setLiked] = React.useState(false)
-
-  const [openComments, setOpenComments] = React.useState(false)
+  const [openComments, setOpenComments] = React.useState(false);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleMenu = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>): void => {
+      setAnchorEl(e.currentTarget);
+    },
+    []
+  );
 
-  const handleClose = (): void => {
+  const handleClose = useCallback((): void => {
     setAnchorEl(null);
-  };
+  }, [setAnchorEl]);
 
-  const handleDelete = () => {
-    deletePost(id)
-    handleClose()
-  }
+  const handleDelete = useCallback((): void => {
+    deletePost(id);
+    handleClose();
+  }, [id, deletePost, handleClose]);
 
-  const handleLike =()=> {
-    likePost(id, userId)
-    setLiked(true)
-  }
+  const handleLike = useCallback((): void => {
+    likePost(id, userId);
+    setLiked(true);
+  }, [id, userId, likePost, setLiked]);
 
-  const handleOpenComments =()=> {
-    setOpenComments(value => !value)
-  }
+  const handleOpenComments = useCallback((): void => {
+    setOpenComments((value) => !value);
+  }, []);
 
-  const handleClick = () => {
-
+  const handleClick = useCallback((): void => {
     if (inputRef.current!.value !== '') {
-      commentPost(userId!, id, inputRef.current!.value)
+      commentPost(userId!, id, inputRef.current!.value);
       inputRef.current!.value = '';
     }
-  };
+  }, [inputRef.current?.value, id, commentPost, userId]);
 
-  const handlePress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleClick();
-    }
-  };
+  const handlePress = useCallback(
+    (e: React.KeyboardEvent): void => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleClick();
+      }
+    },
+    [handleClick]
+  );
 
-  return (<>
-    <Card className='user-post'>
-      <CardHeader
-        avatar={
-          <Link to={`/users/${author}`} >
-            <Avatar src={authorPhoto} imgProps={{"aria-label":'avatar'}} />
-          </Link>
-        }
-        action={
-          <><IconButton
-          aria-controls='simple-menu'
-          aria-haspopup='true'
-          aria-label='menu'
-          onClick={handleMenu}
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          keepMounted
-          id='simple-menu'
-          aria-label='menu-window'
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          
-          {author === userId && <>
-          <MenuItem onClick={handleDelete} aria-label='menu-delete'>Delete</MenuItem></>}
-          <MenuItem onClick={handleClose}>Report</MenuItem>
-        </Menu></>
-          
-        }
-        title={name}
-        titleTypographyProps={{'aria-label': 'title'}}
-        subheader={`${date[3]} ${date[0]} ${date[1]}, ${date[2]}`}
-        subheaderTypographyProps={{'aria-label': 'date'}}
-      />
-      {photo && (
-        <CardMedia image={photo} component='img' className='user-post-photo'  />
-      )}
+  return (
+    <>
+      <Card className='user-post'>
+        <CardHeader
+          avatar={
+            <Link to={`/users/${author}`}>
+              <Avatar src={authorPhoto} imgProps={{ 'aria-label': 'avatar' }} />
+            </Link>
+          }
+          action={
+            <>
+              <IconButton
+                aria-controls='simple-menu'
+                aria-haspopup='true'
+                aria-label='menu'
+                onClick={handleMenu}>
+                <MoreVertIcon />
+              </IconButton>
+              <Menu
+                keepMounted
+                id='simple-menu'
+                aria-label='menu-window'
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}>
+                {author === userId && (
+                  <MenuItem onClick={handleDelete} aria-label='menu-delete'>
+                    Delete
+                  </MenuItem>
+                )}
+                <MenuItem onClick={handleClose}>Report</MenuItem>
+              </Menu>
+            </>
+          }
+          title={name}
+          titleTypographyProps={{ 'aria-label': 'title' }}
+          subheader={`${date[3]} ${date[0]} ${date[1]}, ${date[2]}`}
+          subheaderTypographyProps={{ 'aria-label': 'date' }}
+        />
+        {photo && (
+          <CardMedia
+            image={photo}
+            component='img'
+            className='user-post-photo'
+          />
+        )}
 
-      <CardContent>
-        <Typography variant='h5' color='textPrimary' component='p' aria-label='content'>
-          {content}
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing>
-        <p aria-label='likes'>{likes.length}</p>
-        
-        <IconButton
-        color={likes.find(like=> like === userId) || liked ? 'secondary' : 'inherit'}
-          onClick={handleLike}
-          aria-label='addToFavorites'
-          style={{ marginRight: '20px' }}
-        >
-          <FavoriteIcon />
-        </IconButton>
-        <p aria-label='comments'>{comments.length}</p>
-        
-        
-        <IconButton aria-label='btn-comments' onClick={handleOpenComments}>
-          <CommentIcon />
-        </IconButton>
-      </CardActions>
-      
-    </Card>
-    {openComments && 
-    <Paper elevation={2} className='comments' aria-label='comments-paper'>
-      {comments.length === 0 ? <p>  There is no comments</p> : comments.map((comment, index) => <div key={index} className='comment' aria-label='comment-item'>
-        <Link to={`/users/${comment.author}`}><Avatar src={comment.authorPhoto} imgProps={{'aria-label':'comment-avatar'}}/></Link>
-        <p aria-label='comment-text'>{comment.text}</p><span aria-label='comment-date'>{comment.date}</span>
+        <CardContent>
+          <Typography
+            variant='h5'
+            color='textPrimary'
+            component='p'
+            aria-label='content'>
+            {content}
+          </Typography>
+        </CardContent>
+        <CardActions disableSpacing>
+          <p aria-label='likes'>{likes.length}</p>
 
-      </div>)}<div className='comments-input' >
-        <InputBase
+          <IconButton
+            color={
+              likes.find((like) => like === userId) || liked
+                ? 'secondary'
+                : 'inherit'
+            }
+            onClick={handleLike}
+            aria-label='addToFavorites'
+            style={{ marginRight: '20px' }}>
+            <FavoriteIcon />
+          </IconButton>
+          <p aria-label='comments'>{comments.length}</p>
+
+          <IconButton aria-label='btn-comments' onClick={handleOpenComments}>
+            <CommentIcon />
+          </IconButton>
+        </CardActions>
+      </Card>
+      {openComments && (
+        <Paper elevation={2} className='comments' aria-label='comments-paper'>
+          {comments.length === 0 ? (
+            <p> There is no comments</p>
+          ) : (
+            comments.map((comment, index) => (
+              <div key={index} className='comment' aria-label='comment-item'>
+                <Link to={`/users/${comment.author}`}>
+                  <Avatar
+                    src={comment.authorPhoto}
+                    imgProps={{ 'aria-label': 'comment-avatar' }}
+                  />
+                </Link>
+                <p aria-label='comment-text'>{comment.text}</p>
+                <span aria-label='comment-date'>{comment.date}</span>
+              </div>
+            ))
+          )}
+          <div className='comments-input'>
+            <InputBase
               inputComponent='input'
               autoFocus
               onKeyPress={handlePress}
@@ -178,14 +205,17 @@ const Post: React.FC<IPost> = ({
               placeholder='Write a comment'
               inputProps={{ 'aria-label': 'input' }}
             />
-            
-              <SendIcon className='comments-input-icon' onClick={handleClick} aria-label='btn-send'/>
-            </div>
-      </Paper>
-    }
-    
-       </>
+
+            <SendIcon
+              className='comments-input-icon'
+              onClick={handleClick}
+              aria-label='btn-send'
+            />
+          </div>
+        </Paper>
+      )}
+    </>
   );
 };
 
-export default Post;
+export default React.memo(Post);

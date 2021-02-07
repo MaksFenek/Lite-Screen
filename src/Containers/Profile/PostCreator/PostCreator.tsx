@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import './PostCreator.scss';
 import { Button, TextField } from '@material-ui/core';
 import { createPost } from '../../../api/postsAPI';
@@ -20,19 +20,22 @@ const PostCreator: React.FC<IPostCreator> = ({ id, author }) => {
 
   const descriptionRef = useRef<HTMLInputElement>(null);
 
-  const handlePhoto = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Get image from input
-    const photo = e.currentTarget.files![0];
+  const handlePhoto = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>): void => {
+      // Get image from input
+      const photo = e.currentTarget.files![0];
 
-    setFile(photo);
-    let reader = new FileReader();
-    reader.onload = function (ev: any) {
-      setPostPhoto(ev.target.result);
-    };
-    reader.readAsDataURL(photo);
-  };
+      setFile(photo);
+      let reader = new FileReader();
+      reader.onload = function (ev: any) {
+        setPostPhoto(ev.target.result);
+      };
+      reader.readAsDataURL(photo);
+    },
+    []
+  );
 
-  const handleCreate = () => {
+  const handleCreate = useCallback(() => {
     // Get the text from form
     const description = descriptionRef.current!.value;
     // Get current date
@@ -56,15 +59,14 @@ const PostCreator: React.FC<IPostCreator> = ({ id, author }) => {
       descriptionRef.current!.value = '';
       setPostPhoto('');
     }
-  };
+  }, [id, author, descriptionRef.current?.value, file, postPhoto]);
   return (
     <>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls='panel1a-content'
-          id='panel1a-header'
-        >
+          id='panel1a-header'>
           <Typography>Create post</Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -111,8 +113,7 @@ const PostCreator: React.FC<IPostCreator> = ({ id, author }) => {
                   variant='contained'
                   color='secondary'
                   component='span'
-                  onClick={handleCreate}
-                >
+                  onClick={handleCreate}>
                   Create post
                 </Button>
               </div>
@@ -124,4 +125,4 @@ const PostCreator: React.FC<IPostCreator> = ({ id, author }) => {
   );
 };
 
-export default PostCreator;
+export default React.memo(PostCreator);

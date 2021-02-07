@@ -1,5 +1,5 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Styles and material ui
@@ -27,21 +27,24 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
   // Create state for menu
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      setAnchorEl(event.currentTarget);
+    },
+    []
+  );
 
   useEffect((): void => {
     setUserId(user);
   }, [user]);
 
   // Handle for sign out
-  const handleSignOut = (): void => {
+  const handleSignOut = useCallback((): void => {
     auth.signOut();
-  };
-  const handleClose = (): void => {
+  }, []);
+  const handleClose = useCallback((): void => {
     setAnchorEl(null);
-  };
+  }, []);
 
   return (
     <nav className='nav'>
@@ -85,8 +88,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                 <IconButton
                   aria-controls='simple-menu'
                   aria-haspopup='true'
-                  onClick={handleClick}
-                >
+                  onClick={handleClick}>
                   <MoreVertIcon />
                 </IconButton>
                 <Menu
@@ -94,8 +96,7 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                   id='simple-menu'
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
+                  onClose={handleClose}>
                   <Link to={`/${userId}`}>
                     <MenuItem onClick={handleClose}>Edit profile</MenuItem>
                   </Link>
@@ -127,8 +128,7 @@ function Icon() {
       height='48'
       viewBox='0 0 64 64'
       width='48'
-      xmlns='http://www.w3.org/2000/svg'
-    >
+      xmlns='http://www.w3.org/2000/svg'>
       <g id='Tempered_Glass-Smartphone' data-name='Tempered Glass-Smartphone'>
         <rect fill='#3d9ae2' height='54' rx='4' width='30' x='5' y='7' />
         <path

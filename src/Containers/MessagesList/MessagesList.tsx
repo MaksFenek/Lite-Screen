@@ -14,14 +14,14 @@ interface IChatItem {
   name: string;
   id: string;
   photo: string;
-  lastMessage: string
+  lastMessage: string;
 }
 
-export default function Messages() {
+const Messages: React.FC = () => {
   const state = useSelector((state: RootReducerInterface) => state);
-  const chatsState = state.chats
+  const chatsState = state.chats;
   const dispatch = useDispatch();
-  const userId = state.auth.userId
+  const userId = state.auth.userId;
   const [chats, setChats] = useState<IChatItem[]>([]);
   const [loaded, setLoaded] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ export default function Messages() {
   useEffect(() => {
     setChats(chatsState.chats);
   }, [chatsState, chats]);
-  
+
   return (
     <section className='main'>
       <div className='container'>
@@ -54,4 +54,6 @@ export default function Messages() {
       </div>
     </section>
   );
-}
+};
+
+export default React.memo(Messages);
