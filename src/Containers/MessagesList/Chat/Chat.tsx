@@ -24,7 +24,6 @@ import {
   sendMessage,
 } from '../../../api/messagesAPI';
 import { getUserDoc } from '../../../api/firebaseAPI';
-import moment from 'moment';
 
 export interface IMessageItem {
   author: string;
@@ -98,7 +97,7 @@ const Chat = () => {
       sendMessage(userId, inputRef.current!.value, date, reply);
       inputRef.current!.value = '';
     }
-  }, [inputRef, setReply, sendMessage, userId, reply]);
+  }, [inputRef, setReply, userId, reply]);
 
   const handlePress = useCallback(
     (e: React.KeyboardEvent): void => {
@@ -136,7 +135,7 @@ const Chat = () => {
                   text={item.text}
                   author={item.author}
                   userId={userId}
-                  date={moment(item.date).format('hh:mm')}
+                  date={item.date}
                   key={index}
                   answerId={item.messageId}
                   setReply={setReply}

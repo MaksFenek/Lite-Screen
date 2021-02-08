@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Styles Material ui
@@ -24,9 +24,12 @@ interface IUserListItem {
 
 const UserListItem: React.FC<IUserListItem> = ({ id, name, isFriend }) => {
   const [photo, setPhoto] = React.useState<string>('');
-  getUserPhoto(id).then((url) => {
-    setPhoto(url);
-  });
+  useEffect(() => {
+    getUserPhoto(id).then((url) => {
+      setPhoto(url);
+    });
+  }, [id]);
+
   return (
     <div className='post'>
       <Link to={`/users/${id}`}>
