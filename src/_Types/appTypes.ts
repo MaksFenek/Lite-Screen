@@ -7,7 +7,7 @@ export interface IFriend {
 export interface IUserInfo {
   firstName: string;
   secondName: string;
-  birthday: string;
+  birthday: string | number;
   status: string;
   photo: string;
 }

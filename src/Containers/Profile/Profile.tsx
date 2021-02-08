@@ -14,7 +14,7 @@ import { SetUserInfoThunk } from '../../Redux/Actions/currentUserActions';
 
 // API
 import { getUserPhoto, putUserPhoto } from '../../api/firebaseAPI';
-
+import moment from 'moment';
 // Types
 import { IUserInfo } from '../../_Types/appTypes';
 import {
@@ -93,7 +93,7 @@ const Profile: React.FC = () => {
     const status: string = userInfo.status;
     const firstName: string = userInfo.firstName;
     const secondName: string = userInfo.secondName;
-    const birthday: string = userInfo.birthday;
+    const birthday: number = moment(userInfo.birthday, 'YYYY-MM-DD').valueOf();
 
     if (firstName && secondName) {
       setOpen(true);
@@ -196,6 +196,7 @@ const Profile: React.FC = () => {
                 <TextField
                   onChange={handleChangeBirthday}
                   type='date'
+                  datatype='timestamp'
                   label='Birthday'
                   value={userInfo.birthday}
                   InputLabelProps={{

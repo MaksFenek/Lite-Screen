@@ -15,7 +15,7 @@ export interface InitialStateInterface {
   userId: string;
   firstName: string;
   secondName: string;
-  date: string;
+  date: number | string;
   status: string;
   photo: string;
   loaded: boolean;
@@ -26,7 +26,7 @@ const initialState: InitialStateInterface = {
   userId: '',
   firstName: '',
   secondName: '',
-  date: '',
+  date: 0,
   status: '',
   photo: '',
   loaded: false,

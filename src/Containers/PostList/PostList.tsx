@@ -10,7 +10,7 @@ import { getStorageItem } from '../../api/localstorageAPI';
 
 import NoDataImg from '../../Icons/undraw_no_data_qbuo.svg';
 import { getUsersPostsThunk } from '../../Redux/Actions/usersPostsActions';
-import { likePost } from '../../api/postsAPI';
+import { likePost, unlikePost } from '../../api/postsAPI';
 import { commentPost, deletePost } from '../../api/postsAPI';
 
 export interface IPostList {
@@ -73,6 +73,7 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
           id={post.id}
           userId={author}
           likePost={likePost}
+          unlikePost={unlikePost}
           key={index}
           commentPost={commentPost}
           deletePost={deletePost}

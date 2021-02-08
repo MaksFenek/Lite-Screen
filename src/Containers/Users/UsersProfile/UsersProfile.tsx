@@ -27,6 +27,7 @@ import { AddFriend } from '../../../api/friendsAPI';
 import { createChat } from '../../../api/messagesAPI';
 import PostList from '../../PostList/PostList';
 import { IUsersInitialState } from '../../../Redux/Reducers/usersReducer';
+import moment from 'moment';
 
 const UsersProfile: React.FC = () => {
   const state = useSelector((store: RootReducerInterface) => store.users);
@@ -147,7 +148,9 @@ const UsersProfile: React.FC = () => {
                 </Button>
               </Link>
               <div className='dls'>
-                <div className='date'>Date: {userInfo.date}</div>
+                <div className='date'>
+                  Date: {moment(userInfo.date).format('DD MMMM YYYY')}
+                </div>
               </div>
             </div>
 

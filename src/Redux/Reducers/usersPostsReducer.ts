@@ -5,7 +5,7 @@ export interface IPost {
   authorPhoto: string;
   author: string;
   name: string;
-  date: string[];
+  date: number;
   likes: number;
   comments: any[];
   content: string;

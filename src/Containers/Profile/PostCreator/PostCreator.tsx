@@ -39,7 +39,7 @@ const PostCreator: React.FC<IPostCreator> = ({ id, author }) => {
     // Get the text from form
     const description = descriptionRef.current!.value;
     // Get current date
-    const date = new Date().toString().split(' ').slice(1, 5);
+    const date = new Date().getTime();
     // Create id for photo through taking a time
     const photoId = new Date().getTime().toString();
     if (postPhoto) {

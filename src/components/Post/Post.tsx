@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 // Styles and material ui
 import Avatar from '@material-ui/core/Avatar';
@@ -16,7 +16,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import SendIcon from '@material-ui/icons/Send';
 import { Link } from 'react-router-dom';
 import { InputBase, Menu, MenuItem, Paper } from '@material-ui/core';
-
+import moment from 'moment';
 export interface IPost {
   photo: string;
   authorPhoto: string;
@@ -25,8 +25,9 @@ export interface IPost {
   likes: string[];
   comments: any[];
   author: string;
-  date: string[];
+  date: number;
   likePost?: any;
+  unlikePost?: any;
   id: string;
   userId?: string;
   commentPost?: any;
@@ -41,6 +42,7 @@ const Post: React.FC<IPost> = ({
   likes,
   author,
   likePost,
+  unlikePost,
   authorPhoto,
   date,
   id,
@@ -50,11 +52,23 @@ const Post: React.FC<IPost> = ({
 }) => {
   const [liked, setLiked] = React.useState(false);
 
+  const [likesList, setLikesList] = React.useState<string[]>([]);
+
   const [openComments, setOpenComments] = React.useState(false);
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+
+  useEffect(() => {
+    if (likesList?.find((like) => like === userId)) {
+      setLiked(true);
+    }
+  }, [likesList, setLiked, userId]);
+
+  useEffect(() => {
+    setLikesList(likes);
+  }, [likes, setLikesList]);
 
   const handleMenu = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>): void => {
@@ -73,16 +87,23 @@ const Post: React.FC<IPost> = ({
   }, [id, deletePost, handleClose]);
 
   const handleLike = useCallback((): void => {
-    likePost(id, userId);
-    setLiked(true);
-  }, [id, userId, likePost, setLiked]);
+    if (!liked || !likes.find((like) => like === userId)) {
+      likePost(id, userId);
+      setLiked(true);
+      likesList?.push(userId!);
+    } else {
+      unlikePost(id, userId);
+      setLiked(false);
+      setLikesList((prev) => prev?.filter((like) => like !== userId));
+    }
+  }, [id, userId, likePost, setLiked, unlikePost, liked, likes, likesList]);
 
   const handleOpenComments = useCallback((): void => {
     setOpenComments((value) => !value);
   }, []);
 
   const handleClick = useCallback((): void => {
-    if (inputRef.current!.value !== '') {
+    if (inputRef.current!.value) {
       commentPost(userId!, id, inputRef.current!.value);
       inputRef.current!.value = '';
     }
@@ -134,7 +155,7 @@ const Post: React.FC<IPost> = ({
           }
           title={name}
           titleTypographyProps={{ 'aria-label': 'title' }}
-          subheader={`${date[3]} ${date[0]} ${date[1]}, ${date[2]}`}
+          subheader={moment(date).format('DD MMM hh:mm:ss YYYY')}
           subheaderTypographyProps={{ 'aria-label': 'date' }}
         />
         {photo && (
@@ -155,14 +176,10 @@ const Post: React.FC<IPost> = ({
           </Typography>
         </CardContent>
         <CardActions disableSpacing>
-          <p aria-label='likes'>{likes.length}</p>
+          <p aria-label='likes'>{likesList?.length || 0}</p>
 
           <IconButton
-            color={
-              likes.find((like) => like === userId) || liked
-                ? 'secondary'
-                : 'inherit'
-            }
+            color={liked ? 'secondary' : 'inherit'}
             onClick={handleLike}
             aria-label='addToFavorites'
             style={{ marginRight: '20px' }}>

@@ -10,6 +10,7 @@ import {
 
 import { getUserDoc, getUserPhoto } from '../../api/firebaseAPI';
 import { getStorageItem, setStorageItem } from '../../api/localstorageAPI';
+import moment from 'moment';
 
 // ==== TypeScript ====
 
@@ -57,7 +58,7 @@ export const AddLoaded = (loadedStatus: boolean) => ({
   payload: loadedStatus,
 });
 
-export const AddUserDate = (date: string | undefined) => ({
+export const AddUserDate = (date: number | string) => ({
   type: ADD_USER_DATE,
   payload: date,
 });
@@ -86,7 +87,9 @@ export const GetUserThunk = (userId: string | undefined) => async (
           // Get data from document fields
           const firstName: string = snapshot.data()?.userInfo.firstName;
           const secondName: string = snapshot.data()?.userInfo.secondName;
-          const birthday: string = snapshot.data()?.userInfo.birthday;
+          const birthday: string = moment(
+            snapshot.data()?.userInfo.birthday
+          ).format('YYYY-MM-DD');
           const status: string = snapshot.data()?.userInfo.status;
 
           // Get user info and set it to state
@@ -139,13 +142,13 @@ export const GetUserThunk = (userId: string | undefined) => async (
 export const SetUserInfoThunk = (
   firstName: string,
   secondName: string,
-  birthday: string,
+  birthday: number,
   status: string
 ) => (dispatch: any, getState: any) => {
   const state = getState().auth;
   // Set info in store
   dispatch(AddFirstAndSecondNamesAction({ firstName, secondName }));
-  dispatch(AddUserDate(birthday));
+  dispatch(AddUserDate(moment(birthday).format('YYYY-MM-DD')));
   dispatch(AddUserStatus(status));
 
   if (state.userId) {

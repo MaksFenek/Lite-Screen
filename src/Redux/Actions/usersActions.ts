@@ -25,7 +25,7 @@ export interface AddUsersFirstAndSecondNamesActionInterface {
 
 export interface AddUsersDateInterface {
   type: typeof ADD_USERS_DATE;
-  payload: string | undefined;
+  payload: number | undefined;
 }
 
 export interface AddUsersStatusInterface {
@@ -50,7 +50,7 @@ export const AddUsersFirstAndSecondNamesAction = ({
 });
 
 export const AddUsersDate = (
-  date: string | undefined
+  date: number | undefined
 ): AddUsersDateInterface => ({
   type: ADD_USERS_DATE,
   payload: date,
@@ -92,7 +92,7 @@ export const GetUsersThunk = (userId: string | undefined) => (
       secondName: '',
     })
   );
-  dispatch(AddUsersDate(''));
+  dispatch(AddUsersDate(undefined));
   dispatch(AddUsersStatus(''));
   dispatch(AddUsersPhoto(''));
 
@@ -105,37 +105,12 @@ export const GetUsersThunk = (userId: string | undefined) => (
           // Get data from document fields
           const firstName: string = snapshot.data()?.userInfo.firstName;
           const secondName: string = snapshot.data()?.userInfo.secondName;
-          const birthday: number[] = snapshot
-            .data()
-            ?.userInfo.birthday.replaceAll('-', ' ')
-            .split(' ');
+          const birthday: number = snapshot.data()?.userInfo.birthday;
           const status: string = snapshot.data()?.userInfo.status;
-
-          const monthNames = [
-            'January',
-            'February',
-            'March',
-            'April',
-            'May',
-            'June',
-            'July',
-            'August',
-            'September',
-            'October',
-            'November',
-            'December',
-          ];
-          if (birthday[1].toString()[0] === '0') {
-            birthday[1] = +birthday[1].toString()[1];
-          }
 
           // Create new action with user info
           // Dispatch action to reducer
-          dispatch(
-            AddUsersDate(
-              `${birthday[2]} ${monthNames[--birthday[1]]} ${birthday[0]}`
-            )
-          );
+          dispatch(AddUsersDate(birthday));
           dispatch(AddUsersStatus(status));
           dispatch(
             AddUsersFirstAndSecondNamesAction({
