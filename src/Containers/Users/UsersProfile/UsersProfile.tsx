@@ -1,5 +1,5 @@
 // React
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ import { createChat } from '../../../api/messagesAPI';
 import PostList from '../../PostList/PostList';
 import { IUsersInitialState } from '../../../Redux/Reducers/usersReducer';
 import moment from 'moment';
+import { debounce } from '../../../api/utils';
 
 const UsersProfile: React.FC = () => {
   const state = useSelector((store: RootReducerInterface) => store.users);
@@ -36,6 +37,9 @@ const UsersProfile: React.FC = () => {
   // Create state for user ID
   const userId = useParams<{ id: string }>().id;
 
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const [query, setQuery] = useState<string | undefined>('');
   // Create state for user info
   const [userInfo, setUserInfo] = useState<IUsersInitialState>({
     firstName: '',
@@ -64,6 +68,13 @@ const UsersProfile: React.FC = () => {
       followingCount: state.followingCount,
     });
   }, [userId, state, dispatch]);
+
+  const handleChange = useCallback(
+    debounce(() => {
+      setQuery(searchRef.current?.value);
+    }, 500),
+    []
+  );
 
   return (
     <>
@@ -131,9 +142,11 @@ const UsersProfile: React.FC = () => {
                 <SearchIcon />
               </div>
               <InputBase
+                inputRef={searchRef}
                 className='search-input'
                 placeholder='Search…'
                 inputProps={{ 'aria-label': 'search' }}
+                onChange={handleChange}
               />
             </div>
             <div className='column'>
@@ -155,7 +168,9 @@ const UsersProfile: React.FC = () => {
             </div>
 
             <div className='posts'>
-              {userId && <PostList author={userId} type='single' />}
+              {userId && (
+                <PostList author={userId} type='single' query={query} />
+              )}
             </div>
           </div>
         </div>

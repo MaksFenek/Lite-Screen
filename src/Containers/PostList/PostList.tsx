@@ -16,9 +16,10 @@ import { commentPost, deletePost } from '../../api/postsAPI';
 export interface IPostList {
   author: string;
   type: 'single' | 'multiple';
+  query?: string;
 }
 
-const PostList: React.FC<IPostList> = ({ author, type }) => {
+const PostList: React.FC<IPostList> = ({ author, type, query }) => {
   // Create selector
   const state = useSelector((store: RootReducerInterface) => store.posts.posts);
   const usersState = useSelector(
@@ -60,25 +61,50 @@ const PostList: React.FC<IPostList> = ({ author, type }) => {
         </>
       )}
 
-      {posts?.map((post, index) => (
-        <Post
-          date={post.date}
-          authorPhoto={post.authorPhoto}
-          author={post.author}
-          name={post.name}
-          photo={post.photo}
-          content={post.content}
-          likes={post.likes}
-          comments={post.comments}
-          id={post.id}
-          userId={author}
-          likePost={likePost}
-          unlikePost={unlikePost}
-          key={index}
-          commentPost={commentPost}
-          deletePost={deletePost}
-        />
-      ))}
+      {posts?.map((post) => {
+        const reg = new RegExp(query!, 'ig');
+        if (post.content.match(reg)?.length) {
+          return (
+            <Post
+              date={post.date}
+              authorPhoto={post.authorPhoto}
+              author={post.author}
+              name={post.name}
+              photo={post.photo}
+              content={post.content}
+              likes={post.likes}
+              comments={post.comments}
+              id={post.id}
+              userId={author}
+              likePost={likePost}
+              unlikePost={unlikePost}
+              key={post.date}
+              commentPost={commentPost}
+              deletePost={deletePost}
+            />
+          );
+        } else if (!query) {
+          return (
+            <Post
+              date={post.date}
+              authorPhoto={post.authorPhoto}
+              author={post.author}
+              name={post.name}
+              photo={post.photo}
+              content={post.content}
+              likes={post.likes}
+              comments={post.comments}
+              id={post.id}
+              userId={author}
+              likePost={likePost}
+              unlikePost={unlikePost}
+              key={post.date}
+              commentPost={commentPost}
+              deletePost={deletePost}
+            />
+          );
+        }
+      })}
     </>
   );
 };
