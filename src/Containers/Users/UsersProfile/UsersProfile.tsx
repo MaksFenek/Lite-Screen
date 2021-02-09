@@ -111,9 +111,6 @@ const UsersProfile: React.FC = () => {
                     <p>{userInfo.followingCount} Followers</p>
                   </Link>
                 </div>
-                <div className='groups'>
-                  <p>Groups</p>
-                </div>
               </div>
             </div>
           </div>

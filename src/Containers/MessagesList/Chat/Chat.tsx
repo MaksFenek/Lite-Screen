@@ -24,6 +24,7 @@ import {
   sendMessage,
 } from '../../../api/messagesAPI';
 import { getUserDoc } from '../../../api/firebaseAPI';
+import moment from 'moment';
 
 export interface IMessageItem {
   author: string;
@@ -154,7 +155,7 @@ const Chat = () => {
                     {reply?.text.length > 60 && '....'}
                   </p>
                   <span className='date' data-testid='message-date'>
-                    {reply?.date}
+                    {moment(reply?.date).format('hh:mm')}
                   </span>
                   <span className='times' onClick={handleClearReply}>
                     &times;

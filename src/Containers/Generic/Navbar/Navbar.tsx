@@ -103,8 +103,6 @@ const Navbar: React.FC<INavbarChildren> = ({ children, user }) => {
                   <Link to={`/following/${userId}`}>
                     <MenuItem onClick={handleClose}> Friends </MenuItem>
                   </Link>
-                  <MenuItem onClick={handleClose}> Groups </MenuItem>
-                  <MenuItem onClick={handleClose}> Setting </MenuItem>
                   <Link to='/' onClick={handleSignOut}>
                     <MenuItem onClick={handleClose}>Logout</MenuItem>
                   </Link>

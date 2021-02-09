@@ -149,7 +149,6 @@ const Post: React.FC<IPost> = ({
                     Delete
                   </MenuItem>
                 )}
-                <MenuItem onClick={handleClose}>Report</MenuItem>
               </Menu>
             </>
           }
