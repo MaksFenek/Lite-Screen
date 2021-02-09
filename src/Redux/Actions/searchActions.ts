@@ -1,5 +1,9 @@
 import { getUserPhoto, getUsersCollection } from '../../api/firebaseAPI';
-import { ADD_USER_IN_SEARCH, ADD_USER_SEARCH_LOADED } from '../Constants';
+import {
+  ADD_USER_IN_SEARCH,
+  ADD_USER_SEARCH_LOADED,
+  CLEAR_USER_SEARCH,
+} from '../Constants';
 
 export interface PostAction {
   type: typeof ADD_USER_IN_SEARCH;
@@ -23,28 +27,33 @@ export const AddUserInSearch = (
   },
 });
 
+export const ClearUserSearch = {
+  type: CLEAR_USER_SEARCH,
+};
+
 export const AddUserSearchLoaded = {
   type: ADD_USER_SEARCH_LOADED,
 };
 
-export const AddUserInSearchThunk = () => (dispatch: any) => {
+export const AddUserInSearchThunk = (query: string) => (dispatch: any) => {
   dispatch(AddUserSearchLoaded);
-
+  dispatch(ClearUserSearch);
   // Get the users collection from firebase
   getUsersCollection.get().then((snapshot) => {
     snapshot.docs.forEach((doc) => {
+      const reg = new RegExp(query, 'i');
       // Get name from user info
       const name: string = `${doc.data().userInfo.firstName} ${
         doc.data().userInfo.secondName
       }`;
-      //Get user id
-      const id: string = doc.id;
-
-      // Get user photo
-      getUserPhoto(id).then((url) => {
-        // Create new user in search page
-        dispatch(AddUserInSearch(name, id, url));
-      });
+      if (name.match(reg)?.input === name) {
+        //Get user id
+        const id: string = doc.id;
+        getUserPhoto(id).then((url) => {
+          dispatch(AddUserInSearch(name, id, url));
+        });
+        // Get user photo
+      }
     });
   });
 };

@@ -1,4 +1,8 @@
-import { ADD_USER_IN_SEARCH, ADD_USER_SEARCH_LOADED } from '../Constants';
+import {
+  ADD_USER_IN_SEARCH,
+  ADD_USER_SEARCH_LOADED,
+  CLEAR_USER_SEARCH,
+} from '../Constants';
 
 interface IUsers {
   name: string;
@@ -34,6 +38,9 @@ export default (
 
     case ADD_USER_SEARCH_LOADED:
       return { ...state, loaded: true };
+
+    case CLEAR_USER_SEARCH:
+      return { ...state, users: [], count: 0 };
 
     default:
       return state;

@@ -1,5 +1,5 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 // Styles and material ui
 import './UsersSearch.scss';
@@ -21,11 +21,16 @@ import {
   getUsersLoadedSelector,
 } from '../../../Redux/Selectors/searchSelector';
 import { getStorageItem } from '../../../api/localstorageAPI';
+import { debounce } from '../../../api/utils';
 
 const UsersSearch = () => {
   const state = useSelector((store: RootReducerInterface) => store.search);
 
   const dispatch = useDispatch();
+
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  const [query, setQuery] = useState<string>('');
   // Create state for array of users
   const [users, setUsers] = useState<IUserSearch[]>();
   const [friends, setFriends] = useState<IFriend[]>();
@@ -34,24 +39,34 @@ const UsersSearch = () => {
   const [loaded] = useState<boolean>(getUsersLoadedSelector(state));
 
   useEffect(() => {
-    if (!loaded) {
-      dispatch(AddUserInSearchThunk());
+    if (!loaded && query) {
+      dispatch(AddUserInSearchThunk(query));
       setFriends(getStorageItem('friends'));
     }
-  }, [dispatch, loaded]);
+  }, [dispatch, loaded, query]);
 
   useEffect(() => {
     setUsers(getUsersInSearchSelector(state));
   }, [state]);
 
+  const handleChange = useCallback(
+    debounce(() => {
+      if (searchRef.current?.value) {
+        setQuery(searchRef.current?.value);
+      }
+    }, 500),
+    []
+  );
   return (
     <div className='container'>
       <div className='main-search'>
         <div className='search'>
           <InputBase
+            inputRef={searchRef}
             className='search-input'
             placeholder='Search…'
             inputProps={{ 'aria-label': 'search' }}
+            onChange={handleChange}
           />
           <div className='search-icon'>
             <SearchIcon />
